@@ -3,7 +3,7 @@ import { getAllBenefitedUsersServerFn } from "@/integrations/server-functions/qu
 import { fetchMetricsDetailsServeFn } from "@/integrations/server-functions/querry/metrics";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/(public)/")({
+export const Route = createFileRoute("/(public)/(landing-pages)/")({
   component: RouteComponent,
 
   loader: async () => {

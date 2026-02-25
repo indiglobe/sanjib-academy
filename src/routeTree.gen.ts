@@ -12,15 +12,18 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as publicRouteRouteImport } from './routes/(public)/route'
 import { Route as guestRouteRouteImport } from './routes/(guest)/route'
 import { Route as authenticatedRouteRouteImport } from './routes/(authenticated)/route'
-import { Route as publicIndexRouteImport } from './routes/(public)/index'
+import { Route as publiclawsuitPagesRouteRouteImport } from './routes/(public)/(lawsuit-pages)/route'
+import { Route as publiclandingPagesRouteRouteImport } from './routes/(public)/(landing-pages)/route'
 import { Route as authenticatedexistingUserRouteRouteImport } from './routes/(authenticated)/(existing-user)/route'
-import { Route as publicTermsAndConditionsIndexRouteImport } from './routes/(public)/terms-and-conditions/index'
-import { Route as publicRefundPolicyIndexRouteImport } from './routes/(public)/refund-policy/index'
-import { Route as publicPrivacyPolicyIndexRouteImport } from './routes/(public)/privacy-policy/index'
-import { Route as publicCoursesIndexRouteImport } from './routes/(public)/courses/index'
+import { Route as publiclandingPagesIndexRouteImport } from './routes/(public)/(landing-pages)/index'
 import { Route as guestSigninIndexRouteImport } from './routes/(guest)/signin/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as authenticatednewUserRouterRouteImport } from './routes/(authenticated)/(new-user)/router'
+import { Route as publiclawsuitPagesTermsAndConditionsIndexRouteImport } from './routes/(public)/(lawsuit-pages)/terms-and-conditions/index'
+import { Route as publiclawsuitPagesRefundPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/refund-policy/index'
+import { Route as publiclawsuitPagesPrivacyPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/privacy-policy/index'
+import { Route as publiclawsuitPagesDisclaimerIndexRouteImport } from './routes/(public)/(lawsuit-pages)/disclaimer/index'
+import { Route as publiclandingPagesCoursesIndexRouteImport } from './routes/(public)/(landing-pages)/courses/index'
 import { Route as authenticatednewUserWelcomeIndexRouteImport } from './routes/(authenticated)/(new-user)/welcome/index'
 import { Route as authenticatedexistingUserDashboardIndexRouteImport } from './routes/(authenticated)/(existing-user)/dashboard/index'
 
@@ -36,9 +39,12 @@ const authenticatedRouteRoute = authenticatedRouteRouteImport.update({
   id: '/(authenticated)',
   getParentRoute: () => rootRouteImport,
 } as any)
-const publicIndexRoute = publicIndexRouteImport.update({
-  id: '/',
-  path: '/',
+const publiclawsuitPagesRouteRoute = publiclawsuitPagesRouteRouteImport.update({
+  id: '/(lawsuit-pages)',
+  getParentRoute: () => publicRouteRoute,
+} as any)
+const publiclandingPagesRouteRoute = publiclandingPagesRouteRouteImport.update({
+  id: '/(landing-pages)',
   getParentRoute: () => publicRouteRoute,
 } as any)
 const authenticatedexistingUserRouteRoute =
@@ -46,27 +52,10 @@ const authenticatedexistingUserRouteRoute =
     id: '/(existing-user)',
     getParentRoute: () => authenticatedRouteRoute,
   } as any)
-const publicTermsAndConditionsIndexRoute =
-  publicTermsAndConditionsIndexRouteImport.update({
-    id: '/terms-and-conditions/',
-    path: '/terms-and-conditions/',
-    getParentRoute: () => publicRouteRoute,
-  } as any)
-const publicRefundPolicyIndexRoute = publicRefundPolicyIndexRouteImport.update({
-  id: '/refund-policy/',
-  path: '/refund-policy/',
-  getParentRoute: () => publicRouteRoute,
-} as any)
-const publicPrivacyPolicyIndexRoute =
-  publicPrivacyPolicyIndexRouteImport.update({
-    id: '/privacy-policy/',
-    path: '/privacy-policy/',
-    getParentRoute: () => publicRouteRoute,
-  } as any)
-const publicCoursesIndexRoute = publicCoursesIndexRouteImport.update({
-  id: '/courses/',
-  path: '/courses/',
-  getParentRoute: () => publicRouteRoute,
+const publiclandingPagesIndexRoute = publiclandingPagesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => publiclandingPagesRouteRoute,
 } as any)
 const guestSigninIndexRoute = guestSigninIndexRouteImport.update({
   id: '/signin/',
@@ -84,6 +73,36 @@ const authenticatednewUserRouterRoute =
     path: '/router',
     getParentRoute: () => authenticatedRouteRoute,
   } as any)
+const publiclawsuitPagesTermsAndConditionsIndexRoute =
+  publiclawsuitPagesTermsAndConditionsIndexRouteImport.update({
+    id: '/terms-and-conditions/',
+    path: '/terms-and-conditions/',
+    getParentRoute: () => publiclawsuitPagesRouteRoute,
+  } as any)
+const publiclawsuitPagesRefundPolicyIndexRoute =
+  publiclawsuitPagesRefundPolicyIndexRouteImport.update({
+    id: '/refund-policy/',
+    path: '/refund-policy/',
+    getParentRoute: () => publiclawsuitPagesRouteRoute,
+  } as any)
+const publiclawsuitPagesPrivacyPolicyIndexRoute =
+  publiclawsuitPagesPrivacyPolicyIndexRouteImport.update({
+    id: '/privacy-policy/',
+    path: '/privacy-policy/',
+    getParentRoute: () => publiclawsuitPagesRouteRoute,
+  } as any)
+const publiclawsuitPagesDisclaimerIndexRoute =
+  publiclawsuitPagesDisclaimerIndexRouteImport.update({
+    id: '/disclaimer/',
+    path: '/disclaimer/',
+    getParentRoute: () => publiclawsuitPagesRouteRoute,
+  } as any)
+const publiclandingPagesCoursesIndexRoute =
+  publiclandingPagesCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => publiclandingPagesRouteRoute,
+  } as any)
 const authenticatednewUserWelcomeIndexRoute =
   authenticatednewUserWelcomeIndexRouteImport.update({
     id: '/(new-user)/welcome/',
@@ -98,28 +117,30 @@ const authenticatedexistingUserDashboardIndexRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof publicIndexRoute
   '/router': typeof authenticatednewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/signin/': typeof guestSigninIndexRoute
-  '/courses/': typeof publicCoursesIndexRoute
-  '/privacy-policy/': typeof publicPrivacyPolicyIndexRoute
-  '/refund-policy/': typeof publicRefundPolicyIndexRoute
-  '/terms-and-conditions/': typeof publicTermsAndConditionsIndexRoute
+  '/': typeof publiclandingPagesIndexRoute
   '/dashboard/': typeof authenticatedexistingUserDashboardIndexRoute
   '/welcome/': typeof authenticatednewUserWelcomeIndexRoute
+  '/courses/': typeof publiclandingPagesCoursesIndexRoute
+  '/disclaimer/': typeof publiclawsuitPagesDisclaimerIndexRoute
+  '/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
+  '/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
+  '/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof publicIndexRoute
   '/router': typeof authenticatednewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/signin': typeof guestSigninIndexRoute
-  '/courses': typeof publicCoursesIndexRoute
-  '/privacy-policy': typeof publicPrivacyPolicyIndexRoute
-  '/refund-policy': typeof publicRefundPolicyIndexRoute
-  '/terms-and-conditions': typeof publicTermsAndConditionsIndexRoute
+  '/': typeof publiclandingPagesIndexRoute
   '/dashboard': typeof authenticatedexistingUserDashboardIndexRoute
   '/welcome': typeof authenticatednewUserWelcomeIndexRoute
+  '/courses': typeof publiclandingPagesCoursesIndexRoute
+  '/disclaimer': typeof publiclawsuitPagesDisclaimerIndexRoute
+  '/privacy-policy': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
+  '/refund-policy': typeof publiclawsuitPagesRefundPolicyIndexRoute
+  '/terms-and-conditions': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -127,58 +148,66 @@ export interface FileRoutesById {
   '/(guest)': typeof guestRouteRouteWithChildren
   '/(public)': typeof publicRouteRouteWithChildren
   '/(authenticated)/(existing-user)': typeof authenticatedexistingUserRouteRouteWithChildren
-  '/(public)/': typeof publicIndexRoute
+  '/(public)/(landing-pages)': typeof publiclandingPagesRouteRouteWithChildren
+  '/(public)/(lawsuit-pages)': typeof publiclawsuitPagesRouteRouteWithChildren
   '/(authenticated)/(new-user)/router': typeof authenticatednewUserRouterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(guest)/signin/': typeof guestSigninIndexRoute
-  '/(public)/courses/': typeof publicCoursesIndexRoute
-  '/(public)/privacy-policy/': typeof publicPrivacyPolicyIndexRoute
-  '/(public)/refund-policy/': typeof publicRefundPolicyIndexRoute
-  '/(public)/terms-and-conditions/': typeof publicTermsAndConditionsIndexRoute
+  '/(public)/(landing-pages)/': typeof publiclandingPagesIndexRoute
   '/(authenticated)/(existing-user)/dashboard/': typeof authenticatedexistingUserDashboardIndexRoute
   '/(authenticated)/(new-user)/welcome/': typeof authenticatednewUserWelcomeIndexRoute
+  '/(public)/(landing-pages)/courses/': typeof publiclandingPagesCoursesIndexRoute
+  '/(public)/(lawsuit-pages)/disclaimer/': typeof publiclawsuitPagesDisclaimerIndexRoute
+  '/(public)/(lawsuit-pages)/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
+  '/(public)/(lawsuit-pages)/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
+  '/(public)/(lawsuit-pages)/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/router'
     | '/api/auth/$'
     | '/signin/'
+    | '/'
+    | '/dashboard/'
+    | '/welcome/'
     | '/courses/'
+    | '/disclaimer/'
     | '/privacy-policy/'
     | '/refund-policy/'
     | '/terms-and-conditions/'
-    | '/dashboard/'
-    | '/welcome/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/router'
     | '/api/auth/$'
     | '/signin'
+    | '/'
+    | '/dashboard'
+    | '/welcome'
     | '/courses'
+    | '/disclaimer'
     | '/privacy-policy'
     | '/refund-policy'
     | '/terms-and-conditions'
-    | '/dashboard'
-    | '/welcome'
   id:
     | '__root__'
     | '/(authenticated)'
     | '/(guest)'
     | '/(public)'
     | '/(authenticated)/(existing-user)'
-    | '/(public)/'
+    | '/(public)/(landing-pages)'
+    | '/(public)/(lawsuit-pages)'
     | '/(authenticated)/(new-user)/router'
     | '/api/auth/$'
     | '/(guest)/signin/'
-    | '/(public)/courses/'
-    | '/(public)/privacy-policy/'
-    | '/(public)/refund-policy/'
-    | '/(public)/terms-and-conditions/'
+    | '/(public)/(landing-pages)/'
     | '/(authenticated)/(existing-user)/dashboard/'
     | '/(authenticated)/(new-user)/welcome/'
+    | '/(public)/(landing-pages)/courses/'
+    | '/(public)/(lawsuit-pages)/disclaimer/'
+    | '/(public)/(lawsuit-pages)/privacy-policy/'
+    | '/(public)/(lawsuit-pages)/refund-policy/'
+    | '/(public)/(lawsuit-pages)/terms-and-conditions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -211,11 +240,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(public)/': {
-      id: '/(public)/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof publicIndexRouteImport
+    '/(public)/(lawsuit-pages)': {
+      id: '/(public)/(lawsuit-pages)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof publiclawsuitPagesRouteRouteImport
+      parentRoute: typeof publicRouteRoute
+    }
+    '/(public)/(landing-pages)': {
+      id: '/(public)/(landing-pages)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof publiclandingPagesRouteRouteImport
       parentRoute: typeof publicRouteRoute
     }
     '/(authenticated)/(existing-user)': {
@@ -225,33 +261,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedexistingUserRouteRouteImport
       parentRoute: typeof authenticatedRouteRoute
     }
-    '/(public)/terms-and-conditions/': {
-      id: '/(public)/terms-and-conditions/'
-      path: '/terms-and-conditions'
-      fullPath: '/terms-and-conditions/'
-      preLoaderRoute: typeof publicTermsAndConditionsIndexRouteImport
-      parentRoute: typeof publicRouteRoute
-    }
-    '/(public)/refund-policy/': {
-      id: '/(public)/refund-policy/'
-      path: '/refund-policy'
-      fullPath: '/refund-policy/'
-      preLoaderRoute: typeof publicRefundPolicyIndexRouteImport
-      parentRoute: typeof publicRouteRoute
-    }
-    '/(public)/privacy-policy/': {
-      id: '/(public)/privacy-policy/'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy/'
-      preLoaderRoute: typeof publicPrivacyPolicyIndexRouteImport
-      parentRoute: typeof publicRouteRoute
-    }
-    '/(public)/courses/': {
-      id: '/(public)/courses/'
-      path: '/courses'
-      fullPath: '/courses/'
-      preLoaderRoute: typeof publicCoursesIndexRouteImport
-      parentRoute: typeof publicRouteRoute
+    '/(public)/(landing-pages)/': {
+      id: '/(public)/(landing-pages)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publiclandingPagesIndexRouteImport
+      parentRoute: typeof publiclandingPagesRouteRoute
     }
     '/(guest)/signin/': {
       id: '/(guest)/signin/'
@@ -273,6 +288,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/router'
       preLoaderRoute: typeof authenticatednewUserRouterRouteImport
       parentRoute: typeof authenticatedRouteRoute
+    }
+    '/(public)/(lawsuit-pages)/terms-and-conditions/': {
+      id: '/(public)/(lawsuit-pages)/terms-and-conditions/'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions/'
+      preLoaderRoute: typeof publiclawsuitPagesTermsAndConditionsIndexRouteImport
+      parentRoute: typeof publiclawsuitPagesRouteRoute
+    }
+    '/(public)/(lawsuit-pages)/refund-policy/': {
+      id: '/(public)/(lawsuit-pages)/refund-policy/'
+      path: '/refund-policy'
+      fullPath: '/refund-policy/'
+      preLoaderRoute: typeof publiclawsuitPagesRefundPolicyIndexRouteImport
+      parentRoute: typeof publiclawsuitPagesRouteRoute
+    }
+    '/(public)/(lawsuit-pages)/privacy-policy/': {
+      id: '/(public)/(lawsuit-pages)/privacy-policy/'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy/'
+      preLoaderRoute: typeof publiclawsuitPagesPrivacyPolicyIndexRouteImport
+      parentRoute: typeof publiclawsuitPagesRouteRoute
+    }
+    '/(public)/(lawsuit-pages)/disclaimer/': {
+      id: '/(public)/(lawsuit-pages)/disclaimer/'
+      path: '/disclaimer'
+      fullPath: '/disclaimer/'
+      preLoaderRoute: typeof publiclawsuitPagesDisclaimerIndexRouteImport
+      parentRoute: typeof publiclawsuitPagesRouteRoute
+    }
+    '/(public)/(landing-pages)/courses/': {
+      id: '/(public)/(landing-pages)/courses/'
+      path: '/courses'
+      fullPath: '/courses/'
+      preLoaderRoute: typeof publiclandingPagesCoursesIndexRouteImport
+      parentRoute: typeof publiclandingPagesRouteRoute
     }
     '/(authenticated)/(new-user)/welcome/': {
       id: '/(authenticated)/(new-user)/welcome/'
@@ -334,20 +384,54 @@ const guestRouteRouteWithChildren = guestRouteRoute._addFileChildren(
   guestRouteRouteChildren,
 )
 
+interface publiclandingPagesRouteRouteChildren {
+  publiclandingPagesIndexRoute: typeof publiclandingPagesIndexRoute
+  publiclandingPagesCoursesIndexRoute: typeof publiclandingPagesCoursesIndexRoute
+}
+
+const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren =
+  {
+    publiclandingPagesIndexRoute: publiclandingPagesIndexRoute,
+    publiclandingPagesCoursesIndexRoute: publiclandingPagesCoursesIndexRoute,
+  }
+
+const publiclandingPagesRouteRouteWithChildren =
+  publiclandingPagesRouteRoute._addFileChildren(
+    publiclandingPagesRouteRouteChildren,
+  )
+
+interface publiclawsuitPagesRouteRouteChildren {
+  publiclawsuitPagesDisclaimerIndexRoute: typeof publiclawsuitPagesDisclaimerIndexRoute
+  publiclawsuitPagesPrivacyPolicyIndexRoute: typeof publiclawsuitPagesPrivacyPolicyIndexRoute
+  publiclawsuitPagesRefundPolicyIndexRoute: typeof publiclawsuitPagesRefundPolicyIndexRoute
+  publiclawsuitPagesTermsAndConditionsIndexRoute: typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+}
+
+const publiclawsuitPagesRouteRouteChildren: publiclawsuitPagesRouteRouteChildren =
+  {
+    publiclawsuitPagesDisclaimerIndexRoute:
+      publiclawsuitPagesDisclaimerIndexRoute,
+    publiclawsuitPagesPrivacyPolicyIndexRoute:
+      publiclawsuitPagesPrivacyPolicyIndexRoute,
+    publiclawsuitPagesRefundPolicyIndexRoute:
+      publiclawsuitPagesRefundPolicyIndexRoute,
+    publiclawsuitPagesTermsAndConditionsIndexRoute:
+      publiclawsuitPagesTermsAndConditionsIndexRoute,
+  }
+
+const publiclawsuitPagesRouteRouteWithChildren =
+  publiclawsuitPagesRouteRoute._addFileChildren(
+    publiclawsuitPagesRouteRouteChildren,
+  )
+
 interface publicRouteRouteChildren {
-  publicIndexRoute: typeof publicIndexRoute
-  publicCoursesIndexRoute: typeof publicCoursesIndexRoute
-  publicPrivacyPolicyIndexRoute: typeof publicPrivacyPolicyIndexRoute
-  publicRefundPolicyIndexRoute: typeof publicRefundPolicyIndexRoute
-  publicTermsAndConditionsIndexRoute: typeof publicTermsAndConditionsIndexRoute
+  publiclandingPagesRouteRoute: typeof publiclandingPagesRouteRouteWithChildren
+  publiclawsuitPagesRouteRoute: typeof publiclawsuitPagesRouteRouteWithChildren
 }
 
 const publicRouteRouteChildren: publicRouteRouteChildren = {
-  publicIndexRoute: publicIndexRoute,
-  publicCoursesIndexRoute: publicCoursesIndexRoute,
-  publicPrivacyPolicyIndexRoute: publicPrivacyPolicyIndexRoute,
-  publicRefundPolicyIndexRoute: publicRefundPolicyIndexRoute,
-  publicTermsAndConditionsIndexRoute: publicTermsAndConditionsIndexRoute,
+  publiclandingPagesRouteRoute: publiclandingPagesRouteRouteWithChildren,
+  publiclawsuitPagesRouteRoute: publiclawsuitPagesRouteRouteWithChildren,
 }
 
 const publicRouteRouteWithChildren = publicRouteRoute._addFileChildren(

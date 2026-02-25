@@ -1,5 +1,3 @@
-import { Footer } from "@/components/footer/public-footer/footer";
-import { Header } from "@/components/header/public-header/header";
 import { getUserDetailsServerFn } from "@/integrations/server-functions/querry/users";
 import { fetchSession } from "@/lib/auth/session";
 import { BeforeLoadRouterContext } from "@/router";
@@ -25,9 +23,7 @@ export const Route = createFileRoute("/(public)")({
 function RouteComponent() {
   return (
     <>
-      <Header />
       <Outlet />
-      <Footer />
     </>
   );
 }

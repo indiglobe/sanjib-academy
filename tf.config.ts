@@ -14,27 +14,31 @@ export default defineConfig({
     "db:generate": { execute: "drizzle-kit generate" },
     "db:migrate": { execute: "drizzle-kit migrate" },
     "db:pull": { execute: "drizzle-kit pull" },
-    "db:push:dev": {
+    "db:dev:push": {
       execute: "drizzle-kit push",
       envFile: ".env.development",
     },
-    "db:setup:dev": {
+    "db:dev:setup": {
       execute: "tsx src/db/helpers/setup-db.ts",
       envFile: ".env.development",
     },
-    "db:studio:dev": {
+    "db:dev:studio": {
       execute: "drizzle-kit studio",
       envFile: ".env.development",
     },
-    "db:push:prod": {
+    "db:prod:push": {
       execute: "drizzle-kit push",
       envFile: ".env.production",
     },
-    "db:setup:prod": {
+    "db:prod:setup": {
       execute: "tsx src/db/helpers/setup-db.ts",
       envFile: ".env.production",
     },
-    "db:studio:prod": {
+    "db:dev:seed": {
+      execute: "tsx src/db/helpers/seed.ts",
+      envFile: ".env.development",
+    },
+    "db:prod:studio": {
       execute: "drizzle-kit studio",
       envFile: ".env.production",
     },

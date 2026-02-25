@@ -23,7 +23,9 @@ export default function HomePage() {
 }
 
 function HeroSection({ ...props }: ComponentProps<"section">) {
-  const { benefitedUsers } = useLoaderData({ from: "/(public)/" });
+  const { benefitedUsers } = useLoaderData({
+    from: "/(public)/(landing-pages)/",
+  });
   return (
     <section
       {...props}
@@ -52,14 +54,17 @@ function HeroSection({ ...props }: ComponentProps<"section">) {
         <div className={cn(`lg:basis-2/3`)}>
           <div
             className={cn(
-              `bg-foreground/10 mb-4 flex max-w-max items-center gap-2 rounded-full p-2 pr-8 sm:gap-4 md:mb-8`,
+              `bg-foreground/10 group mb-4 flex max-w-max items-center gap-2 rounded-full p-2 pr-8 sm:gap-4 md:mb-8`,
             )}
           >
-            <div className={cn(`group flex`)}>
+            <div className="flex items-center -space-x-4 transition-all duration-300 group-hover:space-x-0">
               {benefitedUsers.map(({ email, name, imageUrl }, idx) => {
                 if (idx >= 4) return null;
                 return (
-                  <Avatar className={cn(`size-10 md:size-12`)} key={email}>
+                  <Avatar
+                    key={email}
+                    className="border-background size-10 border-2 transition-all duration-300 md:size-12"
+                  >
                     <AvatarImage src={imageUrl ?? undefined} alt="avatar" />
                     <AvatarFallback>{name[0]}</AvatarFallback>
                   </Avatar>
@@ -143,7 +148,7 @@ function HeroSection({ ...props }: ComponentProps<"section">) {
 }
 
 function Metrics({ ...props }: ComponentProps<"section">) {
-  const { metrics } = useLoaderData({ from: "/(public)/" });
+  const { metrics } = useLoaderData({ from: "/(public)/(landing-pages)/" });
   return (
     <section {...props} className={cn(`py-10`, props.className)}>
       <div

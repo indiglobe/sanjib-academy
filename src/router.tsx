@@ -46,6 +46,8 @@ export const getRouter = async () => {
     Wrap: ({ children }) => (
       <TanstackQuery.Provider {...rqContext}>{children}</TanstackQuery.Provider>
     ),
+    scrollRestoration: true,
+    scrollRestorationBehavior: "instant",
   });
 
   setupRouterSsrQueryIntegration({

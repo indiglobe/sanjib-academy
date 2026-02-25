@@ -9,7 +9,6 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
       className={cn(
         `px-4 sm:px-10 md:px-20 lg:px-30`,
         `mb-10`,
-        // `bg-red-500 sm:bg-blue-500 md:bg-green-500 lg:bg-yellow-500 xl:bg-pink-500 2xl:bg-purple-500`,
         props.className,
       )}
     >
@@ -19,8 +18,18 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
 
       <UsefulLinks />
 
-      <section className={cn(`mt-10 text-center text-sm`)}>
-        &copy; Sanjib Academy all copyright reserve.
+      <section
+        className={cn(
+          `text-primary-500 mt-10 flex flex-col text-center text-sm font-semibold md:flex-row md:justify-between`,
+        )}
+      >
+        <span>&copy; Sanjib Academy all copyright reserve.</span>
+        <span>
+          Developed by{" "}
+          <a className={cn(`underline`)} href="https://indiglobe.in/">
+            Indiglobe
+          </a>
+        </span>
       </section>
     </footer>
   );
@@ -81,6 +90,9 @@ function UsefulLinks({ ...props }: ComponentProps<"section">) {
       <FooterSectionHeading>Useful Links</FooterSectionHeading>
 
       <FooterSectionList>
+        <FooterSectionItem>
+          <Link to={"/disclaimer"}>Disclaimer</Link>
+        </FooterSectionItem>
         <FooterSectionItem>
           <Link to={"/terms-and-conditions"}>Terms and conditions</Link>
         </FooterSectionItem>

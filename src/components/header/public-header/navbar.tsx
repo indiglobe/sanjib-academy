@@ -315,7 +315,10 @@ function PopoverAndAvatar() {
       <DropdownMenuContent className="z-9999 w-32" sideOffset={6} align="end">
         <DropdownMenuGroup>
           <DropdownMenuItem asChild className={cn(`p-0`)}>
-            <Link to="/dashboard" className={cn(`px-4 py-2 text-base`)}>
+            <Link
+              to="/dashboard"
+              className={cn(`px-4 py-2 text-base focus:text-white`)}
+            >
               Dashboard
             </Link>
           </DropdownMenuItem>

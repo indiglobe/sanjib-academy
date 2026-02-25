@@ -54,6 +54,7 @@ jobs:
               --name sanjib-academy \
               -p 5000:3000 \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              -e NITRO_TRUST_PROXY=true \
               -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
               -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
               -e BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }} \

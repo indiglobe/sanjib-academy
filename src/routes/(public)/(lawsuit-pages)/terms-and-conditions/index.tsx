@@ -1,7 +1,9 @@
-import TermsAndConditions from "@/components/main/public/terms-and-conditions";
+import TermsAndConditions from "@/components/main/public/lawsuit-pages/terms-and-conditions";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/(public)/terms-and-conditions/")({
+export const Route = createFileRoute(
+  "/(public)/(lawsuit-pages)/terms-and-conditions/",
+)({
   component: RouteComponent,
 
   loader: async () => {
