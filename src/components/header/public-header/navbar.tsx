@@ -16,6 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/ui/dropdown-menu";
@@ -23,6 +24,9 @@ import { authClient } from "@/lib/auth/auth-client";
 import { useNavbarState } from "@/hooks/use-navstate";
 import gsap from "gsap";
 
+/**
+ * The main component for the navbar for large screen and small screen both
+ */
 export function Navbar({ ...props }: ComponentProps<"nav">) {
   const navbarRef = useRef<HTMLDivElement>(null);
   const [lastScroll, setLastScroll] = useState(0);
@@ -53,7 +57,6 @@ export function Navbar({ ...props }: ComponentProps<"nav">) {
   return (
     <nav
       {...props}
-      // ref={navbarRef}
       className={cn(
         `fixed top-0 left-0 isolate z-9999 h-0 w-full`,
         props.className,
@@ -171,17 +174,30 @@ function SmallScreenNavbar() {
         <div
           aria-hidden
           className={cn(
-            `bg-background/95 dark:bg-background/80 absolute top-0 right-0 bottom-0 left-0 -z-1 backdrop-blur-xs`,
+            `bg-background/95 dark:bg-background/80 absolute top-0 right-0 bottom-0 left-0 -z-1 h-[110vh] backdrop-blur-xs`,
           )}
         />
       </div>
 
       <ul className={cn(`flex w-full flex-col pt-8`)}>
+        <li tabIndex={-1} />
         <SmallScreenNavItem activationTriggringPathname="" to="/">
           Home
         </SmallScreenNavItem>
+        <SmallScreenNavItem
+          activationTriggringPathname="about-us"
+          to="/about-us"
+        >
+          About Us
+        </SmallScreenNavItem>
         <SmallScreenNavItem activationTriggringPathname="courses" to="/courses">
           Courses
+        </SmallScreenNavItem>
+        <SmallScreenNavItem
+          activationTriggringPathname="contact-us"
+          to="/contact-us"
+        >
+          Contact us
         </SmallScreenNavItem>
       </ul>
     </div>
@@ -216,6 +232,9 @@ function SmallScreenNavItem({
   );
 }
 
+/**
+ * navbar for large screen it contains only the logo
+ */
 function LargeScreenNavbar({ ...props }: ComponentProps<"div">) {
   return (
     <div
@@ -226,8 +245,20 @@ function LargeScreenNavbar({ ...props }: ComponentProps<"div">) {
         <LargeScreenNavItem activationTriggringPathname="" to="/">
           Home
         </LargeScreenNavItem>
+        <LargeScreenNavItem
+          activationTriggringPathname="about-us"
+          to="/about-us"
+        >
+          About Us
+        </LargeScreenNavItem>
         <LargeScreenNavItem activationTriggringPathname="courses" to="/courses">
           Courses
+        </LargeScreenNavItem>
+        <LargeScreenNavItem
+          activationTriggringPathname="contact-us"
+          to="/contact-us"
+        >
+          Contact us
         </LargeScreenNavItem>
       </ul>
     </div>
@@ -296,10 +327,16 @@ function PopoverAndAvatar() {
   const { session } = useRouteContext({ from: "/(public)" });
   const navigate = useNavigate();
 
+  async function logout() {
+    await authClient.signOut();
+
+    navigate({ to: "/signin" });
+  }
+
   if (!session) return null;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -312,32 +349,34 @@ function PopoverAndAvatar() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="z-9999 w-32" sideOffset={6} align="end">
+      <DropdownMenuContent
+        className="top-10 z-9999 w-40"
+        align="end"
+        sideOffset={6}
+      >
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild className={cn(`p-0`)}>
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuItem asChild className="">
             <Link
               to="/dashboard"
-              className={cn(`px-4 py-2 text-base focus:text-white`)}
+              className={cn(`flex h-full w-full items-center justify-start`)}
             >
-              Dashboard
+              <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild variant="destructive" className={cn(`p-0`)}>
-            <Button
-              variant={"ghost"}
+          <DropdownMenuItem variant="destructive" className={cn(`px-0 py-0`)}>
+            <button
+              onClick={logout}
               className={cn(
-                `h-min w-full bg-transparent p-0 px-4 py-2 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0`,
+                `flex h-full w-full items-center justify-center rounded-sm px-2 py-1.5`,
               )}
-              onClick={async () => {
-                await authClient.signOut();
-                navigate({ to: "/" });
-              }}
             >
-              Sign out
-            </Button>
+              Log out
+            </button>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

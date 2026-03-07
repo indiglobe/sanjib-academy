@@ -1,6 +1,7 @@
-import { ThemeSwitchingButtons } from "@/components/main/public/theme-switching-buttons";
+import { ThemeSwitchingButtons } from "@/components/main/theme-switching-buttons";
 import { cn } from "@/utils/cn";
 import { Link } from "@tanstack/react-router";
+import { Image } from "@unpic/react";
 import { ComponentProps } from "react";
 
 export function Footer({ ...props }: ComponentProps<"footer">) {
@@ -8,19 +9,28 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
     <footer
       className={cn(
         `px-4 sm:px-10 md:px-20 lg:px-30`,
-        `mb-10`,
+        `bg-primary-500 text-background dark:text-foreground rounded-tl-4xl rounded-tr-4xl pt-8 pb-10`,
         props.className,
       )}
     >
-      <Theme />
+      {/* footer main section  */}
+      <section
+        className={cn(`grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4`)}
+      >
+        <FooterIntro />
 
-      <QuickPages />
+        <Theme />
 
-      <UsefulLinks />
+        <QuickPages />
 
+        <UsefulLinks />
+      </section>
+      {/* footer main section  */}
+
+      {/* copyright section */}
       <section
         className={cn(
-          `text-primary-500 mt-10 flex flex-col text-center text-sm font-semibold md:flex-row md:justify-between`,
+          `mt-10 flex flex-col text-center text-sm font-semibold md:flex-row md:justify-between`,
         )}
       >
         <span>&copy; Sanjib Academy all copyright reserve.</span>
@@ -31,6 +41,11 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
           </a>
         </span>
       </section>
+      {/* copyright section */}
+
+      {/* background used to increase the size of the footer at bottom */}
+      <div aria-hidden className={cn(`mb-50 md:mb-30`)} />
+      {/* background used to increase the size of the footer at bottom */}
     </footer>
   );
 }
@@ -57,6 +72,21 @@ function FooterSectionItem({ ...props }: ComponentProps<"li">) {
   );
 }
 
+function FooterIntro({ ...props }: ComponentProps<"section">) {
+  return (
+    <section {...props} className={cn(``, props.className)}>
+      <Link className={cn(`relative inline-block size-10`)} to="/">
+        <Image
+          src="/logo256.png"
+          alt="logo"
+          layout="fullWidth"
+          className={cn(`object-cover`)}
+        />
+      </Link>
+    </section>
+  );
+}
+
 function Theme({ ...props }: ComponentProps<"section">) {
   return (
     <section {...props} className={cn(``, props.className)}>
@@ -77,7 +107,13 @@ function QuickPages({ ...props }: ComponentProps<"section">) {
           <Link to={"/"}>Home</Link>
         </FooterSectionItem>
         <FooterSectionItem>
+          <Link to={"/about-us"}>About us</Link>
+        </FooterSectionItem>
+        <FooterSectionItem>
           <Link to={"/courses"}>Courses</Link>
+        </FooterSectionItem>
+        <FooterSectionItem>
+          <Link to={"/contact-us"}>Contact us</Link>
         </FooterSectionItem>
       </FooterSectionList>
     </section>

@@ -71,7 +71,7 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "focus:bg-primary-500 focus:text-foreground [&_svg:not([class*='text-'])]:text-foreground/60 relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-inset:pl-8 data-[variant=destructive]:bg-red-500/20 data-[variant=destructive]:text-red-500 focus:data-[variant=destructive]:bg-red-500 focus:data-[variant=destructive]:text-red-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "focus:bg-primary-500 [&_svg:not([class*='text-'])]:text-foreground/60 relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none hover:text-white focus:text-white active:text-white data-disabled:pointer-events-none data-disabled:opacity-50 data-inset:pl-8 data-[variant=destructive]:bg-red-500/20 data-[variant=destructive]:text-red-500 focus:data-[variant=destructive]:bg-red-500 focus:data-[variant=destructive]:text-red-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -178,7 +178,7 @@ function DropdownMenuShortcut({
     <span
       data-slot="dropdown-menu-shortcut"
       className={cn(
-        "text-foreground/60 ml-auto text-xs tracking-widest",
+        "ml-auto text-xs tracking-widest hover:text-white focus:text-white active:text-white",
         className,
       )}
       {...props}

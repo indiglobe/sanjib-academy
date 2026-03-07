@@ -5,6 +5,7 @@ import {
   mysqlEnum,
   boolean,
   datetime,
+  char,
 } from "drizzle-orm/mysql-core";
 
 export const metricSuffixEnums = mysqlEnum("metric_suffix", ["+", "%"]);
@@ -17,6 +18,10 @@ export const UserTable = mysqlTable("users", {
     length: 255,
   }).notNull(),
   uploadedAvatarImageUrl: varchar("custom_avatar", { length: 255 }),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("USER")),
 });
 
 export const ProfileTable = mysqlTable("profile", {
@@ -28,6 +33,10 @@ export const ProfileTable = mysqlTable("profile", {
       onUpdate: "cascade",
     }),
   role: roleEnums.notNull().$default(() => "basic"),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("PROF")),
 });
 
 export const BenefitedUserTable = mysqlTable("benefited_users", {
@@ -37,6 +46,10 @@ export const BenefitedUserTable = mysqlTable("benefited_users", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("BUSR")),
 });
 
 export const MetricsTable = mysqlTable("metrics", {
@@ -48,6 +61,10 @@ export const MetricsTable = mysqlTable("metrics", {
   isVisible: boolean("is_visible_to_users")
     .$default(() => false)
     .notNull(),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("MTRC")),
 });
 
 export const FaqTable = mysqlTable("faq", {
@@ -56,6 +73,10 @@ export const FaqTable = mysqlTable("faq", {
   isVisible: boolean("is_visible_to_users")
     .$default(() => false)
     .notNull(),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("FAQS")),
 });
 
 export const WebinarDetailsTable = mysqlTable("webinar_details", {
@@ -65,4 +86,70 @@ export const WebinarDetailsTable = mysqlTable("webinar_details", {
   approxDuration: int("webinar_duration"),
   actualPrice: int("actual_price").notNull(),
   discountedPrice: int("discounted_price"),
+
+  prefixedId: char("prefix_id", { length: 42 })
+    .notNull()
+    .$defaultFn(() => prefixId("WBNR")),
 });
+
+/**
+ * This is used to identify which table the data is from,
+ * and if there is any querry we have to do we can understand
+ * in which table we have to do the query.
+ */
+export function prefixId(
+  prefix: /**
+     * UserTable
+     */
+    | "USER"
+    /**
+     * ProfileTable
+     */
+    | "PROF"
+    /**
+     * BenefitedUserTable
+     */
+    | "BUSR"
+    /**
+     * MetricsTable
+     */
+    | "MTRC"
+    /**
+     * FaqTable
+     */
+    | "FAQS"
+    /**
+     * WebinarDetailsTable
+     */
+    | "WBNR",
+) {
+  const uuid = crypto.randomUUID();
+
+  return `${prefix}__${uuid}`;
+}
+/**
+ * This is used to identify which table the data is from,
+ * and if there is any querry we have to do we can understand
+ * in which table we have to do the query.
+ */
+export function identifyTable(prefixedId: string) {
+  const prefix = prefixedId.split("__")[0] as Parameters<typeof prefixId>[0];
+
+  switch (prefix) {
+    case "BUSR":
+      return "BenefitedUserTable" as const;
+    case "FAQS":
+      return "FaqTable" as const;
+    case "MTRC":
+      return "MetricsTable" as const;
+    case "PROF":
+      return "ProfileTable" as const;
+    case "USER":
+      return "UserTable" as const;
+    case "WBNR":
+      return "WebinarDetailsTable" as const;
+
+    default:
+      throw new Error("Provide a valid prefix to identify table name.");
+  }
+}

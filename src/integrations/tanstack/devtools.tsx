@@ -7,6 +7,7 @@ export function DevTools() {
     <TanStackDevtools
       config={{
         position: "bottom-right",
+        hideUntilHover: true,
       }}
       plugins={[
         {

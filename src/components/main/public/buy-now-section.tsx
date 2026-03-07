@@ -1,10 +1,15 @@
 import { useMostUpcomingWebinarData } from "@/hooks/use-most-upcoming-webinar";
 import { Button } from "@/ui/button";
 import { cn } from "@/utils/cn";
-import { ComponentProps } from "react";
+import { ComponentProps, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useEffect, useState } from "react";
+import { useRazorpay, RazorpayOrderOptions } from "react-razorpay";
+import { env } from "@/lib/env";
+import { registerForWebinarServerFn } from "@/integrations/server-functions/payment/webinar";
+import { useServerFn } from "@tanstack/react-start";
+import { VITE_APP_NAME } from "@/utils/const";
 
 export function BuyNowSection({ ...props }: ComponentProps<"section">) {
   const { data } = useMostUpcomingWebinarData();
@@ -26,12 +31,19 @@ export function BuyNowSection({ ...props }: ComponentProps<"section">) {
       id="gsap-buy-now-section"
       className={cn(
         `px-4 sm:px-10 md:px-20 lg:px-30`,
-        `bg-primary-200 dark:bg-primary-50 fixed bottom-0 z-9999 flex w-full flex-col items-center gap-y-4 py-4 text-white md:flex-row md:justify-between`,
+        `border-secondary-500 fixed bottom-0 isolate z-9998 flex w-full flex-col items-center gap-y-4 border-t py-4 text-white md:flex-row md:justify-between`,
         props.className,
       )}
     >
       <Timer />
       <BuyNowButton />
+      <div
+        aria-hidden
+        data-background
+        className={cn(
+          `bg-secondary-900 dark:bg-secondary-50 absolute top-0 left-0 -z-1 h-full w-full backdrop-blur-xs`,
+        )}
+      />
     </section>
   );
 }
@@ -45,7 +57,7 @@ function Timer({ ...props }: ComponentProps<"div">) {
     <div
       {...props}
       className={cn(
-        `text-primary-500 dark:text-primary-950 flex flex-col items-center justify-start space-y-2 md:justify-center`,
+        `text-accent-500 dark:text-accent-950 flex flex-col items-center justify-start space-y-2 md:justify-center`,
         props.className,
       )}
     >
@@ -56,15 +68,18 @@ function Timer({ ...props }: ComponentProps<"div">) {
 
 function BuyNowButton({ ...props }: ComponentProps<"div">) {
   const { data } = useMostUpcomingWebinarData();
+  const buyNowButtonRef = useRef(null);
+  const { Razorpay } = useRazorpay();
+  const registerForWebinar = useServerFn(registerForWebinarServerFn);
 
   useGSAP(
     () => {
       if (!data) return;
 
       gsap.fromTo(
-        "#gsap-buy-now-button",
+        buyNowButtonRef.current,
         {
-          scale: 1,
+          scale: 1.1,
         },
         { yoyo: true, repeat: -1, scale: 0.9 },
       );
@@ -74,21 +89,44 @@ function BuyNowButton({ ...props }: ComponentProps<"div">) {
 
   if (!data) return null;
 
+  const { actualPrice, discountedPrice, id } = data;
+
+  async function buyWebinar() {
+    const order = await registerForWebinar({
+      data: {
+        amount: {
+          rupee: discountedPrice ?? actualPrice,
+          paise: 0,
+        },
+        webinarDetails: { id },
+      },
+    });
+
+    const { amount } = order;
+
+    const razorpayOrderOptions: RazorpayOrderOptions = {
+      amount: Number(amount),
+      currency: "INR",
+      key: env.VITE_RAZOR_PAY_KEY,
+      name: VITE_APP_NAME,
+      order_id: order.id,
+    };
+
+    const razorpayClient = new Razorpay(razorpayOrderOptions);
+
+    razorpayClient.open();
+  }
+
   return (
-    <div
-      {...props}
-      className={cn(
-        `flex flex-col-reverse gap-y-2 md:flex-col`,
-        props.className,
-      )}
-    >
-      <div className={cn(`text-primary-500 dark:text-primary-950 font-bold`)}>
-        {data.webinarTopic}
-      </div>
+    <div {...props} className={cn(`flex flex-col gap-y-2`, props.className)}>
       <Button
-        id="gsap-buy-now-button"
+        ref={buyNowButtonRef}
         variant={"primary"}
-        className={cn(`w-full bg-red-500 text-xl md:w-auto`, props.className)}
+        onClick={buyWebinar}
+        className={cn(
+          `bg-accent-500 w-full text-xl md:w-auto`,
+          props.className,
+        )}
       >
         Register @{" "}
         <span
@@ -98,6 +136,10 @@ function BuyNowButton({ ...props }: ComponentProps<"div">) {
         </span>{" "}
         {data.discountedPrice && <span>₹{data.discountedPrice}</span>}
       </Button>
+
+      <div className={cn(`text-center font-bold text-white`)}>
+        {data.webinarTopic}
+      </div>
     </div>
   );
 }
@@ -170,7 +212,7 @@ function TimeBox({ ...props }: ComponentProps<"div">) {
     <div
       {...props}
       className={cn(
-        `bg-primary-500 flex min-w-16 flex-col items-center rounded-lg px-4 py-2 text-white`,
+        `bg-accent-500 flex min-w-16 flex-col items-center rounded-lg px-4 py-2 text-white`,
         props.className,
       )}
     />

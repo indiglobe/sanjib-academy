@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { Navbar } from "./navbar";
+import { Navbar } from "@/components/header/public-header/navbar";
 import { ComponentProps } from "react";
 
 export function Header({ ...props }: ComponentProps<"header">) {

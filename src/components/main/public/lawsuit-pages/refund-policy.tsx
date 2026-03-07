@@ -1,8 +1,8 @@
 import { ComponentProps } from "react";
-import { Main } from "../main";
+import { Main } from "@/components/main/public/main";
 import { cn } from "@/utils/cn";
 import { env } from "@/lib/env";
-import LawsuitContentWrapper from "./lawsuit-content-wrapper";
+import LawsuitContentWrapper from "@/components/main/public/lawsuit-pages/lawsuit-content-wrapper";
 
 const effectiveDate = "2026-02-25";
 
@@ -10,6 +10,10 @@ const formatedEffectiveDate = new Intl.DateTimeFormat("en-IN", {
   dateStyle: "full",
 }).format(new Date(effectiveDate));
 
+/**
+ * If you ever change the content of the component
+ * REMEBER to CHANGE the `effectiveDate` in `YYYY-MM-DD` format
+ */
 export default function RefundPolicy({
   ...props
 }: ComponentProps<typeof Main>) {

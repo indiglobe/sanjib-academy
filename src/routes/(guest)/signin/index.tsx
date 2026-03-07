@@ -5,13 +5,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
 export const signinSearchParams = z.object({
-  callbackUrl: z.string().catch(""),
+  callbackUrl: z.string().catch("").optional(),
 });
 
 export type SigninSearchParams = z.infer<typeof signinSearchParams>;
 
 export const Route = createFileRoute("/(guest)/signin/")({
   component: RouteComponent,
+
   head: () => ({
     meta: [{ title: "Sign In | Sanjib Academy" }],
   }),

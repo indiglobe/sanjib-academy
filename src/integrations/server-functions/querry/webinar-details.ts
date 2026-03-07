@@ -14,8 +14,6 @@ export const mostUpcomingWebinarServerFn = createServerFn().handler(
       .orderBy(asc(WebinarDetailsTable.scheduledDate))
       .limit(1);
 
-    // await new Promise((res) => setTimeout(res, 2000));
-
     return upcomingWebinar[0];
   },
 );

@@ -1,4 +1,4 @@
-import { Main } from "@/components/main/public/main";
+import Courses from "@/components/main/public/courses/courses";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/(landing-pages)/courses/")({
@@ -6,5 +6,9 @@ export const Route = createFileRoute("/(public)/(landing-pages)/courses/")({
 });
 
 function RouteComponent() {
-  return <Main>Hello "/(public)/courses/"!</Main>;
+  return (
+    <>
+      <Courses />
+    </>
+  );
 }

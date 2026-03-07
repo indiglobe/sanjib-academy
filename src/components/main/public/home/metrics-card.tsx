@@ -7,7 +7,7 @@ export function MetricsCard({ ...props }: {} & ComponentProps<"span">) {
       {...props}
       data-slot={`metrics-card`}
       className={cn(
-        `bg-primary-500/25 dark:bg-primary-500/10 text-primary-500 dark:text-foreground border-primary-500 m-auto flex h-full w-full max-w-75 flex-col items-center justify-start gap-y-4 rounded-lg border px-4 py-10 text-center`,
+        `bg-primary-100 text-primary-500 dark:text-foreground border-primary-500 m-auto flex h-full w-full max-w-75 flex-col items-center justify-start gap-y-4 rounded-lg border px-4 py-10 text-center`,
         props.className,
       )}
     />

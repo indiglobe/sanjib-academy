@@ -26,13 +26,11 @@ export const getRouter = async () => {
   const rqContext = TanstackQuery.getContext();
   const queryClient = rqContext.queryClient;
 
-  const session = await fetchSession();
-
   // ✅ Proper null-safe assignment
-  const userDetails: AppUserDetails | null = session
-    ? await getUserDetails({ data: { email: session.user.email } })
-    : null;
+  const session = null;
+  const userDetails: AppUserDetails | null = null;
 
+  // Initialise router context
   const context: AppRouterContext = {
     queryClient,
     session,

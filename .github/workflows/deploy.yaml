@@ -29,12 +29,18 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/sanjib-academy:latest
           build-args: |
+            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
+            BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }}
+            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-            BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }}
-            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
+            JWT_ENCRYPTION_KEY=${{ secrets.JWT_ENCRYPTION_KEY }}
+            RAZOR_PAY_KEY=${{ secrets.RAZOR_PAY_KEY }}
+            RAZOR_PAY_SECRET=${{ secrets.RAZOR_PAY_SECRET }}
             VITE_APP_HOST=${{ secrets.VITE_APP_HOST }}
+            VITE_RAZOR_PAY_KEY=${{ secrets.VITE_RAZOR_PAY_KEY }}
 
       # 4. SSH into VPS and deploy
       - name: Deploy to VPS
@@ -53,11 +59,17 @@ jobs:
             docker run -d \
               --name sanjib-academy \
               -p 5000:3000 \
+              -e BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }} \
+              -e BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }} \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
-              -e NITRO_TRUST_PROXY=true \
+              -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+              -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
               -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
               -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
-              -e BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }} \
-              -e BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }} \
+              -e NITRO_TRUST_PROXY=true \
+              -e JWT_ENCRYPTION_KEY=${{ secrets.JWT_ENCRYPTION_KEY }} \
+              -e RAZOR_PAY_KEY=${{ secrets.RAZOR_PAY_KEY }} \
+              -e RAZOR_PAY_SECRET=${{ secrets.RAZOR_PAY_SECRET }} \
               -e VITE_APP_HOST=${{ secrets.VITE_APP_HOST }} \
+              -e VITE_RAZOR_PAY_KEY=${{ secrets.VITE_RAZOR_PAY_KEY }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/sanjib-academy:latest

@@ -3,11 +3,15 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    CLOUDINARY_API_SECRET: z.string(),
+    CLOUDINARY_API_KEY: z.string(),
     DATABASE_URL: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_URL: z.string(),
+    RAZOR_PAY_KEY: z.string(),
+    RAZOR_PAY_SECRET: z.string(),
   },
 
   /**
@@ -18,6 +22,7 @@ export const env = createEnv({
 
   client: {
     VITE_APP_HOST: z.string(),
+    VITE_RAZOR_PAY_KEY: z.string(),
   },
 
   /**

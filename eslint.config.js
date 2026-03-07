@@ -5,12 +5,7 @@ import { tanstackConfig } from "@tanstack/eslint-config";
 export default [
   ...tanstackConfig,
   {
-    files: [
-      "./src/**/*.ts",
-      "./src/**/*.tsx",
-      "./src/**/*.js",
-      "./src/**/*.jsx",
-    ],
+    files: ["src/**/*.{ts,tsx,js,jsx}"],
     rules: {
       "import/order": "off",
       "no-shadow": "off",

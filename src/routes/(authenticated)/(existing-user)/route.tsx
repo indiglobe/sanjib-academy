@@ -7,6 +7,10 @@ export const Route = createFileRoute("/(authenticated)/(existing-user)")({
   beforeLoad: async ({ context }) => {
     const { userDetails } = context;
 
+    /**
+     * If the user details is null redirect them to the welcome
+     * page to finish the welcome stuff
+     */
     if (!userDetails) {
       throw redirect({ to: "/welcome" });
     }
