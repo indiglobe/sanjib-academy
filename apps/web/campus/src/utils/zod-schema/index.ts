@@ -9,3 +9,10 @@ export const contactFormSchema = z.object({
 });
 
 export type ContactFormSchema = z.infer<typeof contactFormSchema>;
+
+export const signinSearchParams = z.object({
+  callbackUrl: z.string().catch("").optional(),
+  initiator: z.enum(["landing-page"]).catch("landing-page").optional(),
+});
+
+export type SigninSearchParams = z.infer<typeof signinSearchParams>;

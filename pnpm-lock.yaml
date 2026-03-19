@@ -244,8 +244,8 @@ importers:
         specifier: ^3.19.1
         version: 3.19.1(@types/node@22.19.15)
       taskforge-cli:
-        specifier: ^1.0.1
-        version: 1.0.1(@types/node@22.19.15)(jsdom@27.4.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
+        specifier: ^1.0.2
+        version: 1.0.2(@types/node@22.19.15)(jsdom@27.4.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2)
     devDependencies:
       '@faker-js/faker':
         specifier: ^10.3.0
@@ -5698,6 +5698,10 @@ packages:
 
   taskforge-cli@1.0.1:
     resolution: {integrity: sha512-Y0o65jmECa1rIKprki10nOtm4jb+bffZpEj/4apjykW/XISIQdtBoUsgHI2VF5qSVnMrfFM2u8u0BKHdmMT42w==}
+    hasBin: true
+
+  taskforge-cli@1.0.2:
+    resolution: {integrity: sha512-b5B7Y1NqyjVg8QZ8m//Et0Y8YOPloxqVNc0QcInn/ysETMNg3FZafkJZrTqPVtPiCDDNvWqiFrQHlgdLnHjyiQ==}
     hasBin: true
 
   test-exclude@7.0.2:
@@ -11641,6 +11645,37 @@ snapshots:
   tapable@2.3.0: {}
 
   taskforge-cli@1.0.1(@types/node@22.19.15)(jsdom@27.4.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2):
+    dependencies:
+      dotenv: 17.3.1
+      jiti: 2.6.1
+      vite-tsconfig-paths: 6.1.1(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
+      vitest: 4.0.18(@types/node@22.19.15)(jiti@2.6.1)(jsdom@27.4.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2)
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - '@edge-runtime/vm'
+      - '@opentelemetry/api'
+      - '@types/node'
+      - '@vitest/browser-playwright'
+      - '@vitest/browser-preview'
+      - '@vitest/browser-webdriverio'
+      - '@vitest/ui'
+      - happy-dom
+      - jsdom
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - typescript
+      - vite
+      - yaml
+
+  taskforge-cli@1.0.2(@types/node@22.19.15)(jsdom@27.4.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))(yaml@2.8.2):
     dependencies:
       dotenv: 17.3.1
       jiti: 2.6.1

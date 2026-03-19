@@ -9,6 +9,10 @@ export default defineConfig({
     "db:dev": {
       execute:
         "pnpm db:dev:setup && pnpm db:dev:push && pnpm db:dev:seed && pnpm db:dev:studio",
+      envValues: {
+        STRICT: false,
+        VERBOSE: false,
+      },
     },
     "db:prod": {
       execute:

@@ -8,6 +8,6 @@ export default defineConfig({
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  strict: true,
-  verbose: true,
+  strict: process.env.STRICT === "false" ? false : true,
+  verbose: process.env.VERBOSE === "false" ? false : true,
 });
