@@ -1,0 +1,28 @@
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+count.txt
+.env*
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+todos.json
+.vscode
+ngrok.exe
+.pnpm-store
+.turbo
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# log
+.log
+*.log

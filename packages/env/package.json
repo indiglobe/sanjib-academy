@@ -1,0 +1,44 @@
+{
+  "name": "@repo/env",
+  "version": "0.0.0",
+  "description": "",
+  "type": "module",
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "pnpm format"
+    ]
+  },
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "dev": "pkgroll --watch",
+    "build": "pkgroll",
+    "format": "prettier --write **/* "
+  },
+  "dependencies": {
+    "@t3-oss/env-core": "^0.13.8",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "lint-staged": "^16.2.7",
+    "pkgroll": "^2.27.0",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.1.3",
+    "typescript": "^5.7.2",
+    "vite": "^7.3.1"
+  },
+  "exports": {
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0"
+}
