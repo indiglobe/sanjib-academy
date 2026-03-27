@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getAllBenefitedUsers } from "@repo/data/querries/benefited-users";
+import { readAllBenefitedUsers } from "@repo/data/querries/benefited-users";
 
-export const getAllBenefitedUsersServerFn = createServerFn({
+export const readAllBenefitedUsersServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const users = await getAllBenefitedUsers();
+  const users = await readAllBenefitedUsers();
 
   return users;
 });

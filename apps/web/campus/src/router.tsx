@@ -3,13 +3,13 @@ import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query
 import * as TanstackQuery from "./integrations/tanstack/querry";
 import { routeTree } from "./routeTree.gen";
 import { fetchSession } from "@/lib/auth/session";
-import { getUserDetailsServerFn as getUserDetails } from "@/integrations/server-functions/querry/users";
+import { readUserDetailsServerFn as readUserDetails } from "@/integrations/server-functions/querry/users";
 
 // -----------------------------
 // Types
 // -----------------------------
 export type AppSession = Awaited<ReturnType<typeof fetchSession>>;
-export type AppUserDetails = Awaited<ReturnType<typeof getUserDetails>>;
+export type AppUserDetails = Awaited<ReturnType<typeof readUserDetails>>;
 
 export interface AppRouterContext {
   queryClient: ReturnType<typeof TanstackQuery.getContext>["queryClient"];

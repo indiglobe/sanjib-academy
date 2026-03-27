@@ -1,21 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
 import {
-  mostUpcomingWebinar,
-  upcomingWebinars,
+  readMostUpcomingWebinar,
+  readUpcomingWebinars,
 } from "@repo/data/querries/webinar-details";
 
-export const mostUpcomingWebinarServerFn = createServerFn().handler(
+export const readMostUpcomingWebinarServerFn = createServerFn().handler(
   async () => {
-    const upcomingWebinar = await mostUpcomingWebinar();
+    const upcomingWebinar = await readMostUpcomingWebinar();
 
     return upcomingWebinar;
   },
 );
 
-export const upcomingWebinarsListServerFn = createServerFn().handler(
+export const readUpcomingWebinarsListServerFn = createServerFn().handler(
   async () => {
-    const upcomingWebinarsList = await upcomingWebinars();
+    const readUpcomingWebinarsList = await readUpcomingWebinars();
 
-    return upcomingWebinarsList;
+    return readUpcomingWebinarsList;
   },
 );

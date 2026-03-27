@@ -10,6 +10,8 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/campus/package.json ./apps/web/campus/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
+COPY packages/utils/package.json ./packages/utils/package.json
+
 # Install pnpm and all dependencies (dev + prod)
 RUN corepack enable
 RUN pnpm install
@@ -22,6 +24,7 @@ ARG BETTER_AUTH_SECRET
 ARG BETTER_AUTH_URL
 ARG CLOUDINARY_API_KEY
 ARG CLOUDINARY_API_SECRET
+ARG CLOUDINARY_CLOUD_NAME
 ARG DATABASE_URL
 ARG GOOGLE_CLIENT_ID
 ARG GOOGLE_CLIENT_SECRET
@@ -37,6 +40,7 @@ ENV \
   BETTER_AUTH_URL=$BETTER_AUTH_URL \
   CLOUDINARY_API_KEY=$CLOUDINARY_API_KEY \
   CLOUDINARY_API_SECRET=$CLOUDINARY_API_SECRET \
+  CLOUDINARY_CLOUD_NAME=$CLOUDINARY_CLOUD_NAME \
   DATABASE_URL=$DATABASE_URL \
   GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
   GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
@@ -46,17 +50,19 @@ ENV \
   VITE_RAZOR_PAY_KEY=$VITE_RAZOR_PAY_KEY \
   VITE_APP_HOST=$VITE_APP_HOST 
 
-
 # build local workspace dependencies first
 RUN pnpm build \
   --filter @repo/env \
-  --filter @repo/data
+  --filter @repo/data \
+  --filter @repo/utils
 
 # re-install to add local workspace dependencies files to projects
 RUN pnpm install --frozen-lockfile
 
 # Build app (uses build-time ENV)
 RUN pnpm build --filter campus
+
+
 
 # -----------------------------------------
 # ---------- Stage 2: Production ----------
@@ -73,11 +79,13 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/campus/package.json ./apps/web/campus/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
+COPY packages/utils/package.json ./packages/utils/package.json
 
 # Copy built output from builder
 COPY --from=builder /app/apps/web/campus/dist ./apps/web/campus/dist
-COPY --from=builder /app/packages/data/dist ./packages/data/dist
 COPY --from=builder /app/packages/env/dist ./packages/env/dist
+COPY --from=builder /app/packages/data/dist ./packages/data/dist
+COPY --from=builder /app/packages/utils/dist ./packages/utils/dist
 
 # # install prod deps
 RUN pnpm install --prod

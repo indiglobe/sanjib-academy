@@ -1,6 +1,6 @@
 import Courses from "@/components/main/public/courses/courses";
-import { offeredCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
-import { upcomingWebinarsListServerFn } from "@/integrations/server-functions/querry/webinar-details";
+import { readOfferedCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
+import { readUpcomingWebinarsListServerFn } from "@/integrations/server-functions/querry/webinar-details";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/(landing-pages)/courses/")({
@@ -11,14 +11,14 @@ export const Route = createFileRoute("/(public)/(landing-pages)/courses/")({
   }),
 
   loader: async () => {
-    const [offeredCourses, upcomingWebinarsList] = await Promise.all([
-      offeredCoursesServerFn(),
-      upcomingWebinarsListServerFn(),
+    const [offeredCoursesList, readUpcomingWebinarsList] = await Promise.all([
+      readOfferedCoursesServerFn(),
+      readUpcomingWebinarsListServerFn(),
     ] as const);
 
     return {
-      offeredCourses,
-      upcomingWebinarsList,
+      offeredCoursesList,
+      readUpcomingWebinarsList,
     };
   },
 });

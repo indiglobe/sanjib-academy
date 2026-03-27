@@ -7,7 +7,7 @@ type InsertNewContactMessage = Omit<
   "id" | "createdAt" | "tableIdentifierToken" | "updatedAt"
 >;
 
-export const insertNewContactMessage = async (
+export const createNewContactMessage = async (
   messageDetails: InsertNewContactMessage,
 ) => {
   const insertResult = await db

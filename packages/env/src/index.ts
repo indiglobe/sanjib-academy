@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     CLOUDINARY_API_SECRET: z.string(),
     CLOUDINARY_API_KEY: z.string(),
+    CLOUDINARY_CLOUD_NAME: z.string(),
     DATABASE_URL: z.string(),
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
@@ -12,6 +13,7 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.string(),
     RAZOR_PAY_KEY: z.string(),
     RAZOR_PAY_SECRET: z.string(),
+    REDIS_URL: z.string(),
   },
 
   /**

@@ -1,3 +1,4 @@
+import { Button } from "@/ui/button";
 import { cn } from "@/utils/cn";
 import { Link } from "@tanstack/react-router";
 
@@ -25,15 +26,12 @@ export function RootNotFound() {
             The page you're looking for doesn't exist or may have been moved.
           </p>
 
-          <div className={cn(`pt-2`)}>
-            <Link
-              to="/"
-              className={cn(
-                `bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400 focus-visible:ring-brand-500 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:ring-2 focus-visible:outline-none`,
-              )}
-            >
-              Go home
-            </Link>
+          <div className={cn(`flex w-full pt-2`)}>
+            <Button variant={"primary"} className={cn(`ml-auto`)}>
+              <Link to="/" tabIndex={-1}>
+                Go home
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

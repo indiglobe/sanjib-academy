@@ -13,6 +13,7 @@ import {
   OfferedCoursesTable,
   TestimonialsTable,
   ContactMessageTable,
+  CourseBuyingProfilesTable,
 } from "../schema";
 
 async function seed() {
@@ -69,9 +70,20 @@ async function seed() {
     },
   ] as InsertUser[];
 
+  // THIS IS EXTRA USERS DELETE IT LATER
+  const __dummyUsers = Array.from({ length: 2000 }, (_, idx) => {
+    const name = faker.person.fullName();
+    return {
+      email: `${name.split(" ").join(`_${idx}_`)}@email.com`,
+      name: name,
+      oauthProviderAvatarImageUrl: faker.image.avatar(),
+    } satisfies InsertUser;
+  });
+  // THIS IS EXTRA USERS DELETE IT LATER
+
   async function insertUserTable() {
     console.log(`---INSERTING USERS---`);
-    await db.insert(UserTable).values(users);
+    await db.insert(UserTable).values([...users, ...__dummyUsers]);
     console.log(`---INSERTED USERS---`);
   }
 
@@ -87,9 +99,24 @@ async function seed() {
     { profileOf: "Anita.Cormier@yahoo.com", role: "student" },
   ] as InsertProfile[];
 
+  // THIS IS EXTRA PROFILES DELETE IT LATER
+  const __dummyProfiles = __dummyUsers.map<InsertProfile>(({ email }) => {
+    return {
+      profileOf: email,
+      age: randomInt(18, 100),
+      role:
+        Math.random() > 0.8
+          ? "admin"
+          : Math.random() > 0.6
+            ? "basic"
+            : "student",
+    };
+  });
+  // THIS IS EXTRA PROFILES DELETE IT LATER
+
   async function insertProfileTable() {
     console.log(`---INSERTING PROFILES---`);
-    await db.insert(ProfileTable).values(profiles);
+    await db.insert(ProfileTable).values([...profiles, ...__dummyProfiles]);
     console.log(`---INSERTED PROFILES---`);
   }
 
@@ -99,14 +126,27 @@ async function seed() {
   type InsertBenefitedUser = InferInsertModel<typeof BenefitedUserTable>;
 
   const benefitedUsers: InsertBenefitedUser[] = users
-    .filter(() => Math.random() < 0.7)
+    .filter(({}) => Math.random() < 0.7)
     .map((u) => ({
       userEmail: u.email,
     }));
 
+  // THIS IS EXTRA BENEFITED USERS DELETE IT LATER
+  const __dummyBenefitedUser = __dummyProfiles
+    .filter(({ profileOf, role }) => {
+      if (role === "admin" || Math.random() > 0.5)
+        return { userEmail: profileOf };
+    })
+    .map<InsertBenefitedUser>(({ profileOf }) => {
+      return { userEmail: profileOf };
+    });
+  // THIS IS EXTRA BENEFITED USERS DELETE IT LATER
+
   async function insertBenefitedUserTable() {
     console.log(`---INSERTING BENEFITED USERS---`);
-    await db.insert(BenefitedUserTable).values(benefitedUsers);
+    await db
+      .insert(BenefitedUserTable)
+      .values([...benefitedUsers, ...__dummyBenefitedUser]);
     console.log(`---INSERTED BENEFITED USERS---`);
   }
 
@@ -273,8 +313,8 @@ async function seed() {
         "Learn how big institutions and banks move the market—and how you can trade with them.",
       imageLink:
         "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
-      originalEnrlomentFee: 15000,
-      discountedEnrlomentFee: 5000,
+      originalEnrlomentFee: 14999,
+      discountedEnrlomentFee: 4999,
     },
     {
       id: "fno-hedging",
@@ -284,8 +324,8 @@ async function seed() {
         "Master Futures & Options strategies to protect capital and earn consistently.",
       imageLink:
         "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
-      originalEnrlomentFee: 15000,
-      discountedEnrlomentFee: 5000,
+      originalEnrlomentFee: 14999,
+      discountedEnrlomentFee: 4999,
     },
     {
       id: "fundamental-analysis",
@@ -295,8 +335,8 @@ async function seed() {
         "Learn how to find strong companies and invest like professionals.",
       imageLink:
         "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
-      originalEnrlomentFee: 15000,
-      discountedEnrlomentFee: 5000,
+      originalEnrlomentFee: 14999,
+      discountedEnrlomentFee: 4999,
     },
   ] satisfies InsertOfferedCourses[];
 
@@ -411,10 +451,41 @@ async function seed() {
       };
     });
 
+  // THIS IS EXTRA TESTIMONIALS DELETE IT LATER
+  const __dummyTestimonials = __dummyBenefitedUser.reduce<InsertTestimonials[]>(
+    (acc, { userEmail }) => {
+      if (Math.random() > 0.5) {
+        acc.push({
+          authorEmail: userEmail,
+          authorSocialHandle: faker.word.interjection({
+            length: { min: 5, max: 7 },
+            strategy: faker.helpers.arrayElements(
+              [
+                "fail",
+                "closest",
+                "shortest",
+                "longest",
+                "any-length",
+                undefined,
+              ],
+              1,
+            )[0],
+          }),
+          testimonialText: faker.lorem.paragraph({ min: 1, max: 3 }),
+        });
+      }
+      return acc;
+    },
+    [],
+  );
+  // THIS IS EXTRA TESTIMONIALS DELETE IT LATER
+
   async function insertTestimonialTable() {
     console.log(`---INSERTING TESTIMONIALS---`);
 
-    await db.insert(TestimonialsTable).values(testimonials);
+    await db
+      .insert(TestimonialsTable)
+      .values([...testimonials, ...__dummyTestimonials]);
     console.log(`---INSERTED TESTIMONIALS---`);
   }
 
@@ -451,6 +522,26 @@ async function seed() {
     console.log(`---INSERTED CONTACT---`);
   }
 
+  /**
+   * COURSE BUYING PROFILES
+   */
+  type InsertCourseBuyingProfiles = InferInsertModel<
+    typeof CourseBuyingProfilesTable
+  >;
+
+  const insertCourseBuyingProfiles: InsertCourseBuyingProfiles[] =
+    [] satisfies InsertCourseBuyingProfiles[];
+
+  async function insertInsertCourseBuyingProfiles() {
+    console.log(`---INSERTING COURSE BUYING PROFILES---`);
+
+    // await db
+    //   .insert(CourseBuyingProfilesTable)
+    //   .values(insertCourseBuyingProfiles);
+    insertCourseBuyingProfiles;
+    console.log(`---INSERTED COURSE BUYING PROFILES---`);
+  }
+
   await insertUserTable();
   await insertProfileTable();
   await insertBenefitedUserTable();
@@ -461,6 +552,7 @@ async function seed() {
   await insertOfferedCoursesAdvantages();
   await insertTestimonialTable();
   await insertContactMessage();
+  await insertInsertCourseBuyingProfiles();
 
   console.log("__________ SEEDING COMPLETED __________");
   process.exit(0);

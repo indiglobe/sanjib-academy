@@ -1,4 +1,4 @@
-name: Deploy Dockerized App to VPS
+name: Deploy Dockerized Web App (Campus) to VPS
 
 on:
   push:
@@ -34,6 +34,7 @@ jobs:
             BETTER_AUTH_URL=${{ secrets.BETTER_AUTH_URL }}
             CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
             CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -65,6 +66,7 @@ jobs:
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
               -e CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
               -e CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+              -e CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }} \
               -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
               -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
               -e NITRO_TRUST_PROXY=true \

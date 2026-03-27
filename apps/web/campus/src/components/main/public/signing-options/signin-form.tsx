@@ -6,8 +6,30 @@ import { ArrowLeft } from "lucide-react";
 import { ComponentProps } from "react";
 import signinPageImage from "@/assets/signin-page-image.png";
 import { Image } from "@unpic/react";
+import { useSearch } from "@tanstack/react-router";
+import { env } from "@repo/env";
 
 export default function SigninForm({ ...props }: ComponentProps<"section">) {
+  const { callbackUrl, ...restSearchParams } = useSearch({
+    from: "/(guest)/signin/",
+  });
+  /**
+   * the callback url is type safe search params object so it does not have host
+   * so we need to append the host/baseurl into it.
+   */
+  const callbackUrlWithHost = new URL(callbackUrl ?? "", env.VITE_APP_HOST);
+
+  /**
+   * for other search params append those into the callback url so that
+   * it forwords them into the callback url.
+   */
+  Object.entries(restSearchParams).forEach(([key, value]) => {
+    callbackUrlWithHost.searchParams.set(key, value);
+  });
+
+  // conver the url into string to use in signin button
+  const fullCallbackUrl = callbackUrlWithHost.toString();
+
   return (
     <section {...props} className={cn(`pt-8`, props.className)}>
       {/* navigation menu */}
@@ -50,12 +72,15 @@ export default function SigninForm({ ...props }: ComponentProps<"section">) {
             </span>
           </h1>
 
-          <SigninSubheading className={cn(`text-center md:hidden`)} />
+          <SigninSubheading className={cn(`max-w-100 text-center md:hidden`)} />
 
           <div className={cn(`mt-16 w-full md:mb-10 md:hidden`)}>
             <GoogleSigninButton
               onClick={async () => {
-                await authClient.signIn.social({ provider: "google" });
+                await authClient.signIn.social({
+                  provider: "google",
+                  callbackURL: fullCallbackUrl,
+                });
               }}
             />
           </div>
@@ -78,16 +103,7 @@ export default function SigninForm({ ...props }: ComponentProps<"section">) {
               `border-primary-500 mx-auto flex max-h-max max-w-100 flex-col items-center justify-center rounded-xl border px-8 py-16 max-md:hidden`,
             )}
           >
-            <h2
-              className={cn(
-                `text-primary-500 mb-6 text-3xl font-bold *:text-balance md:text-center`,
-              )}
-            >
-              <span>Uh-uh. Hold on. </span> <br />
-              <span className={cn(`inline-block`)}>
-                You need to sign in first.
-              </span>
-            </h2>
+            <SigninFormHeading />
 
             <SigninSubheading
               className={cn(`text-center text-balance max-md:hidden`)}
@@ -96,7 +112,10 @@ export default function SigninForm({ ...props }: ComponentProps<"section">) {
             <div className={cn(`mt-16 w-full max-md:hidden`)}>
               <GoogleSigninButton
                 onClick={async () => {
-                  await authClient.signIn.social({ provider: "google" });
+                  await authClient.signIn.social({
+                    provider: "google",
+                    callbackURL: fullCallbackUrl,
+                  });
                 }}
               />
             </div>
@@ -112,8 +131,31 @@ export default function SigninForm({ ...props }: ComponentProps<"section">) {
 function SigninSubheading({ ...props }: ComponentProps<"p">) {
   return (
     <p {...props} className={cn(``, props.className)}>
-      Get access to the tools you need to invest, spend, and put your money in
-      motion.
+      Get access to the resources you need to invest, spend, and put your money
+      in motion.
     </p>
+  );
+}
+
+function SigninFormHeading({ ...props }: ComponentProps<"h2">) {
+  const { initiator } = useSearch({ from: "/(guest)/signin/" });
+
+  return (
+    <h2
+      {...props}
+      className={cn(
+        `text-primary-500 mb-6 text-3xl font-bold *:text-balance md:text-center`,
+        props.className,
+      )}
+    >
+      {initiator === "authenticated-routes" && <span>Uh-uh. Hold on. </span>}
+      {initiator === "course-register" && <span>To register in courses </span>}
+      {initiator === "webinar-register" && (
+        <span>To register for webinar </span>
+      )}
+      {initiator === "landing-page" && <span>Welcome back </span>}
+      <br />
+      <span className={cn(`inline-block`)}>You need to sign in first.</span>
+    </h2>
   );
 }

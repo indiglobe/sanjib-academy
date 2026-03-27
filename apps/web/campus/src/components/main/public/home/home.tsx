@@ -10,18 +10,7 @@ import {
   MetricsCard,
   MetricsCardContent,
   MetricsCardHeading,
-} from "@/components/main/public/home/metrics-card";
-import {
-  Course,
-  CourseCardFooter,
-  CourseEnrollNow,
-  CourseHeading,
-  CoursePricing,
-  CourseTopic,
-  DownloadCourseBrochure,
-  LearningTopicItem,
-  LearningTopicList,
-} from "@/components/main/public/home/course";
+} from "@/ui/metrics-card";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
@@ -30,7 +19,7 @@ import {
   MasterClassContent,
   MasterClassHeading,
   MasterClassIcon,
-} from "./master-class";
+} from "../../../../ui/master-class";
 import { Briefcase, GraduationCap, User } from "lucide-react";
 import { Button } from "@/ui/button";
 import { useAnimation } from "@/hooks/use-animaiton";
@@ -40,7 +29,7 @@ import {
   LearningStepCount,
   LearningStepDetails,
   LearningStepHeading,
-} from "./learning-step";
+} from "../../../../ui/learning-step";
 import {
   HorizontalCarousel,
   HorizontalCarouselContent,
@@ -56,8 +45,10 @@ import {
   TestimonialCardHeader,
   TestimonialCardImage,
   TestimonialMessage,
-} from "./testimonials";
-import { FAQ, FAQAnswer, FAQItem, FAQQuestion } from "./faq";
+} from "../../../../ui/testimonials";
+import { FAQ, FAQAnswer, FAQItem, FAQQuestion } from "../../../../ui/faq";
+import lodash from "lodash";
+import { OfferedCourses } from "./offered-courses";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
@@ -181,7 +172,10 @@ export function HeroSection({ ...props }: ComponentProps<"section">) {
               })}
             </div>
             <div className={cn(``)}>
-              {benefitedUsers.length}+ satisfied users
+              {benefitedUsers.length > 1000
+                ? `${lodash.round(benefitedUsers.length / 1000, 2)}k`
+                : benefitedUsers.length}
+              + satisfied users
             </div>
           </div>
           {/* benefited users list with avatar */}
@@ -532,67 +526,6 @@ export function OurMethod({ ...props }: ComponentProps<"section">) {
               mindset of a disciplined trader.
             </LearningStepDetails>
           </LearningStep>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function OfferedCourses({ ...props }: ComponentProps<"section">) {
-  const { offeredCourses } = useLoaderData({
-    from: "/(public)/(landing-pages)/",
-  });
-  return (
-    <section
-      {...props}
-      data-slot={`offered-courses`}
-      className={cn(`pt-10`, props.className)}
-    >
-      <div className={cn(`flex flex-col items-center`)}>
-        <SectionHeading className={cn(`pb-4 text-center`)}>
-          Courses we offer
-        </SectionHeading>
-
-        <div
-          className={cn(
-            `flex w-full flex-wrap items-stretch justify-center gap-4`,
-          )}
-        >
-          {offeredCourses.map(
-            ({
-              id,
-              courseTopic,
-              courseHeading,
-              originalEnrlomentFee,
-              discountedEnrlomentFee,
-              advantages,
-            }) => {
-              return (
-                <Course key={id}>
-                  <CourseTopic>{courseTopic}</CourseTopic>
-                  <CourseHeading>{courseHeading}</CourseHeading>
-                  <CoursePricing
-                    actualPrice={originalEnrlomentFee}
-                    discountedPrice={discountedEnrlomentFee ?? undefined}
-                  />
-                  <LearningTopicList>
-                    {advantages.map(({ id, details, isVisible }) => {
-                      return isVisible ? (
-                        <LearningTopicItem key={id}>
-                          {details}
-                        </LearningTopicItem>
-                      ) : null;
-                    })}
-                  </LearningTopicList>
-
-                  <CourseCardFooter>
-                    <CourseEnrollNow />
-                    <DownloadCourseBrochure />
-                  </CourseCardFooter>
-                </Course>
-              );
-            },
-          )}
         </div>
       </div>
     </section>

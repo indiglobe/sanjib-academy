@@ -2,7 +2,7 @@ import { db } from "@/index";
 import { MetricsTable } from "@/schema";
 import { eq, sql } from "drizzle-orm";
 
-export const fetchMetricsDetails = async () => {
+export const readMetricsDetails = async () => {
   const metrics = await db
     .select({
       content: MetricsTable.metricsContent,

@@ -24,7 +24,7 @@
     "db:dev:studio": "tf run db:dev:studio",
     "db:prod:setup": "tf run db:prod:setup",
     "db:prod:push": "tf run db:prod:push",
-    "db:prod:seed": "tf run db:dev:seed",
+    "db:prod:seed": "tf run db:prod:seed",
     "db:prod:studio": "tf run db:prod:studio"
   },
   "dependencies": {

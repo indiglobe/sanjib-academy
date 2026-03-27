@@ -1,17 +1,25 @@
 import { db } from "@/index";
 import { BenefitedUserTable, UserTable } from "@/schema";
-import { eq, getTableColumns } from "drizzle-orm";
+import { eq, getTableColumns, sql } from "drizzle-orm";
 
-export const getAllBenefitedUsers = async () => {
-  const { name, oauthProviderAvatarImageUrl, uploadedAvatarImageUrl } =
-    getTableColumns(UserTable);
-  const { userEmail } = getTableColumns(BenefitedUserTable);
+export const readAllBenefitedUsers = async () => {
+  const {
+    name,
+    oauthProviderAvatarImageUrl,
+    uploadedAvatarImageUrl,
+    tableIdentifierToken: userTableIdentifierToken,
+  } = getTableColumns(UserTable);
+
+  const { userEmail, tableIdentifierToken: benefitedUserTableIdentifierToken } =
+    getTableColumns(BenefitedUserTable);
 
   const users = await db
     .select({
       name,
       email: userEmail,
-      imageUrl: uploadedAvatarImageUrl ?? oauthProviderAvatarImageUrl,
+      imageUrl: sql<string>`coalesce(${uploadedAvatarImageUrl}, ${oauthProviderAvatarImageUrl})`,
+      userTableIdentifierToken,
+      benefitedUserTableIdentifierToken,
     })
     .from(BenefitedUserTable)
     .innerJoin(UserTable, eq(BenefitedUserTable.userEmail, UserTable.email));

@@ -23,6 +23,7 @@ import {
 import { authClient } from "@/lib/auth/auth-client";
 import { useNavbarState } from "@/hooks/use-navstate";
 import gsap from "gsap";
+import { generateUserNameFromEmail } from "@repo/utils/utility";
 
 /**
  * The main component for the navbar for large screen and small screen both
@@ -75,6 +76,7 @@ export function Navbar({ ...props }: ComponentProps<"nav">) {
         <SignInButtonOrAvatar />
 
         <div
+          data-slot={`navbar-background`}
           className={cn(
             `bg-background/90 absolute top-0 right-0 bottom-0 left-0 -z-1 backdrop-blur-xs`,
           )}
@@ -97,6 +99,7 @@ function LogoHamburger({ ...props }: ComponentProps<"div">) {
   return (
     <div
       {...props}
+      data-slot={`logo-hamburger`}
       className={cn(`relative flex items-center gap-4`, props.className)}
     >
       <Button
@@ -136,6 +139,7 @@ function SmallScreenNavbar() {
 
   return (
     <div
+      data-slot={`small-screen-navbar`}
       className={cn(
         `fixed top-0 left-0 isolate z-9999 h-svh w-full max-w-60 pt-6 transition-all md:hidden`,
         {
@@ -217,7 +221,11 @@ function SmallScreenNavItem({
   const pathnameFirstSlot = pathname.split("/")[1];
 
   return (
-    <li {...props} className={cn(``, props.className)}>
+    <li
+      {...props}
+      data-slot={`small-screen-nav-item`}
+      className={cn(``, props.className)}
+    >
       <Link
         to={to}
         onClick={closeNavBar}
@@ -239,6 +247,7 @@ function LargeScreenNavbar({ ...props }: ComponentProps<"div">) {
   return (
     <div
       {...props}
+      data-slot={`large-screen-navbar`}
       className={cn(`inline-block max-md:hidden`, props.className)}
     >
       <ul className={cn(`flex gap-x-2`)}>
@@ -278,7 +287,11 @@ function LargeScreenNavItem({
   const pathnameFirstSlot = pathname.split("/")[1];
 
   return (
-    <li {...props} className={cn(``, props.className)}>
+    <li
+      data-slot={`large-screen-nav-item`}
+      {...props}
+      className={cn(``, props.className)}
+    >
       <Link
         to={to}
         onClick={closeNavBar}
@@ -299,9 +312,11 @@ function LargeScreenNavItem({
  */
 function SignInButtonOrAvatar({ ...props }: ComponentProps<"div">) {
   const { session } = useRouteContext({ from: "/(public)" });
+  const { href } = useLocation();
 
   return (
     <div
+      data-slot={`sign-in-button-or-avatar`}
       {...props}
       className={cn(`flex items-center justify-center`, props.className)}
     >
@@ -310,8 +325,8 @@ function SignInButtonOrAvatar({ ...props }: ComponentProps<"div">) {
         <Link
           to="/signin"
           search={{
-            // callbackUrl: location.href,
             initiator: "landing-page",
+            redirectUrl: href,
           }}
           tabIndex={-1}
         >
@@ -337,13 +352,19 @@ function PopoverAndAvatar() {
   async function logout() {
     await authClient.signOut();
 
-    navigate({ to: "/signin" });
+    navigate({ to: "/" });
   }
 
   if (!session) return null;
 
+  const {
+    user: { email },
+  } = session;
+
+  const username = generateUserNameFromEmail(email);
+
   return (
-    <DropdownMenu modal={false}>
+    <DropdownMenu modal={false} data-slot={`popover-and-avatar`}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -365,7 +386,8 @@ function PopoverAndAvatar() {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuItem asChild className="">
             <Link
-              to="/dashboard"
+              to="/$username/dashboard"
+              params={{ username }}
               className={cn(`flex h-full w-full items-center justify-start`)}
             >
               <span>Dashboard</span>

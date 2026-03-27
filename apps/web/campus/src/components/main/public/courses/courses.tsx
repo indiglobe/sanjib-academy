@@ -12,7 +12,7 @@ import {
   DownloadCourseBrochure,
   LearningTopicItem,
   LearningTopicList,
-} from "../home/course";
+} from "../../../../ui/course";
 import {
   Table,
   TableBody,
@@ -33,7 +33,7 @@ export default function Courses() {
 }
 
 export function CoursesSection({ ...props }: ComponentProps<"section">) {
-  const { offeredCourses, upcomingWebinarsList } = useLoaderData({
+  const { offeredCoursesList, readUpcomingWebinarsList } = useLoaderData({
     from: "/(public)/(landing-pages)/courses/",
   });
   return (
@@ -49,7 +49,7 @@ export function CoursesSection({ ...props }: ComponentProps<"section">) {
             `flex w-full flex-wrap items-stretch justify-center gap-4`,
           )}
         >
-          {offeredCourses.map(
+          {offeredCoursesList.map(
             ({
               id,
               courseTopic,
@@ -109,7 +109,7 @@ export function CoursesSection({ ...props }: ComponentProps<"section">) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {upcomingWebinarsList.map(
+            {readUpcomingWebinarsList.map(
               ({ id, webinarTopic, webinarJoiningLink, scheduledDate }) => (
                 <TableRow
                   key={id}

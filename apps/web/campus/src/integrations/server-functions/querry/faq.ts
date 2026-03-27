@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { fetchAllFaqs } from "@repo/data/querries/faq";
+import { readAllFaqs } from "@repo/data/querries/faq";
 
-export const fetchAllFaqsServerFn = createServerFn().handler(async () => {
-  const faqData = await fetchAllFaqs();
+export const readAllFaqsServerFn = createServerFn().handler(async () => {
+  const faqData = await readAllFaqs();
 
   return faqData;
 });

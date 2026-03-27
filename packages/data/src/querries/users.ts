@@ -1,8 +1,13 @@
 import { db } from "@/index";
 import { UserTable } from "@/schema";
-import { eq } from "drizzle-orm";
+import { eq, InferInsertModel } from "drizzle-orm";
 
-export const getUserDetails = async ({ email }: { email: string }) => {
+export type TReadUserDetailsParams = Pick<
+  InferInsertModel<typeof UserTable>,
+  "email"
+>;
+
+export const readUserDetails = async ({ email }: TReadUserDetailsParams) => {
   const user = (
     await db.select().from(UserTable).where(eq(UserTable.email, email))
   )[0];
@@ -10,4 +15,15 @@ export const getUserDetails = async ({ email }: { email: string }) => {
   if (!user) return null;
 
   return user;
+};
+
+export type TCreateNewUserParams = Omit<
+  InferInsertModel<typeof UserTable>,
+  "tableIdentifierToken"
+>;
+
+export const createNewUser = async (userDetails: TCreateNewUserParams) => {
+  await db.insert(UserTable).values(userDetails);
+
+  return { ...userDetails, tableIdentifierToken: "USER" };
 };

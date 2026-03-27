@@ -29,6 +29,7 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
 
       {/* copyright section */}
       <section
+        data-slot={`copyright-section`}
         className={cn(
           `mt-10 flex flex-col text-center text-sm font-semibold md:flex-row md:justify-between`,
         )}
@@ -44,7 +45,11 @@ export function Footer({ ...props }: ComponentProps<"footer">) {
       {/* copyright section */}
 
       {/* background used to increase the size of the footer at bottom */}
-      <div aria-hidden className={cn(`mb-50 md:mb-30`)} />
+      <div
+        aria-hidden
+        data-slot={`footer-section-background`}
+        className={cn(`mb-50 md:mb-30`)}
+      />
       {/* background used to increase the size of the footer at bottom */}
     </footer>
   );
@@ -74,7 +79,11 @@ function FooterSectionItem({ ...props }: ComponentProps<"li">) {
 
 function FooterIntro({ ...props }: ComponentProps<"section">) {
   return (
-    <section {...props} className={cn(``, props.className)}>
+    <section
+      {...props}
+      data-slot={`footer-intro`}
+      className={cn(``, props.className)}
+    >
       <Link className={cn(`relative inline-block size-10`)} to="/">
         <Image
           src="/logo256.png"
@@ -89,7 +98,7 @@ function FooterIntro({ ...props }: ComponentProps<"section">) {
 
 function Theme({ ...props }: ComponentProps<"section">) {
   return (
-    <section {...props} className={cn(``, props.className)}>
+    <section {...props} data-slot={`theme`} className={cn(``, props.className)}>
       <FooterSectionHeading>Theme</FooterSectionHeading>
 
       <ThemeSwitchingButtons className={cn(`pt-2`)} />
@@ -99,7 +108,11 @@ function Theme({ ...props }: ComponentProps<"section">) {
 
 function QuickPages({ ...props }: ComponentProps<"section">) {
   return (
-    <section {...props} className={cn(`my-2`, props.className)}>
+    <section
+      {...props}
+      data-slot={`quick-pages`}
+      className={cn(`my-2`, props.className)}
+    >
       <FooterSectionHeading>Quick pages</FooterSectionHeading>
 
       <FooterSectionList>
@@ -122,7 +135,11 @@ function QuickPages({ ...props }: ComponentProps<"section">) {
 
 function UsefulLinks({ ...props }: ComponentProps<"section">) {
   return (
-    <section {...props} className={cn(`my-2`, props.className)}>
+    <section
+      {...props}
+      data-slot={`useful-links`}
+      className={cn(`my-2`, props.className)}
+    >
       <FooterSectionHeading>Useful Links</FooterSectionHeading>
 
       <FooterSectionList>

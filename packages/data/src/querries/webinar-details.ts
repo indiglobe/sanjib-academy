@@ -2,7 +2,7 @@ import { db } from "@/index";
 import { WebinarDetailsTable } from "@/schema";
 import { asc, gt } from "drizzle-orm";
 
-export const mostUpcomingWebinar = async () => {
+export const readMostUpcomingWebinar = async () => {
   const now = new Date();
 
   const upcomingWebinar = await db
@@ -15,14 +15,14 @@ export const mostUpcomingWebinar = async () => {
   return upcomingWebinar[0];
 };
 
-export const upcomingWebinars = async () => {
+export const readUpcomingWebinars = async () => {
   const now = new Date();
 
-  const upcomingWebinars = await db
+  const readUpcomingWebinars = await db
     .select()
     .from(WebinarDetailsTable)
     .where(gt(WebinarDetailsTable.scheduledDate, now))
     .orderBy(asc(WebinarDetailsTable.scheduledDate));
 
-  return upcomingWebinars;
+  return readUpcomingWebinars;
 };

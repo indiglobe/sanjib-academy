@@ -12,13 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as publicRouteRouteImport } from './routes/(public)/route'
 import { Route as guestRouteRouteImport } from './routes/(guest)/route'
 import { Route as authenticatedRouteRouteImport } from './routes/(authenticated)/route'
+import { Route as ApiUploadImageRouteImport } from './routes/api/upload-image'
 import { Route as publiclawsuitPagesRouteRouteImport } from './routes/(public)/(lawsuit-pages)/route'
 import { Route as publiclandingPagesRouteRouteImport } from './routes/(public)/(landing-pages)/route'
-import { Route as authenticatedexistingUserRouteRouteImport } from './routes/(authenticated)/(existing-user)/route'
+import { Route as authenticatednewUsersRouteRouteImport } from './routes/(authenticated)/(new-users)/route'
 import { Route as publiclandingPagesIndexRouteImport } from './routes/(public)/(landing-pages)/index'
 import { Route as guestSigninIndexRouteImport } from './routes/(guest)/signin/index'
+import { Route as authenticatedRedirectSigninIndexRouteImport } from './routes/(authenticated)/redirect-signin/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as authenticatednewUserRouterRouteImport } from './routes/(authenticated)/(new-user)/router'
 import { Route as publiclawsuitPagesTermsAndConditionsIndexRouteImport } from './routes/(public)/(lawsuit-pages)/terms-and-conditions/index'
 import { Route as publiclawsuitPagesRefundPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/refund-policy/index'
 import { Route as publiclawsuitPagesPrivacyPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/privacy-policy/index'
@@ -26,8 +27,8 @@ import { Route as publiclawsuitPagesDisclaimerIndexRouteImport } from './routes/
 import { Route as publiclandingPagesCoursesIndexRouteImport } from './routes/(public)/(landing-pages)/courses/index'
 import { Route as publiclandingPagesContactUsIndexRouteImport } from './routes/(public)/(landing-pages)/contact-us/index'
 import { Route as publiclandingPagesAboutUsIndexRouteImport } from './routes/(public)/(landing-pages)/about-us/index'
-import { Route as authenticatednewUserWelcomeIndexRouteImport } from './routes/(authenticated)/(new-user)/welcome/index'
-import { Route as authenticatedexistingUserDashboardIndexRouteImport } from './routes/(authenticated)/(existing-user)/dashboard/index'
+import { Route as authenticatednewUsersWelcomeIndexRouteImport } from './routes/(authenticated)/(new-users)/welcome/index'
+import { Route as authenticatedexistingUsersUsernameDashboardIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/dashboard/index'
 
 const publicRouteRoute = publicRouteRouteImport.update({
   id: '/(public)',
@@ -41,6 +42,11 @@ const authenticatedRouteRoute = authenticatedRouteRouteImport.update({
   id: '/(authenticated)',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiUploadImageRoute = ApiUploadImageRouteImport.update({
+  id: '/api/upload-image',
+  path: '/api/upload-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const publiclawsuitPagesRouteRoute = publiclawsuitPagesRouteRouteImport.update({
   id: '/(lawsuit-pages)',
   getParentRoute: () => publicRouteRoute,
@@ -49,9 +55,9 @@ const publiclandingPagesRouteRoute = publiclandingPagesRouteRouteImport.update({
   id: '/(landing-pages)',
   getParentRoute: () => publicRouteRoute,
 } as any)
-const authenticatedexistingUserRouteRoute =
-  authenticatedexistingUserRouteRouteImport.update({
-    id: '/(existing-user)',
+const authenticatednewUsersRouteRoute =
+  authenticatednewUsersRouteRouteImport.update({
+    id: '/(new-users)',
     getParentRoute: () => authenticatedRouteRoute,
   } as any)
 const publiclandingPagesIndexRoute = publiclandingPagesIndexRouteImport.update({
@@ -64,17 +70,17 @@ const guestSigninIndexRoute = guestSigninIndexRouteImport.update({
   path: '/signin/',
   getParentRoute: () => guestRouteRoute,
 } as any)
+const authenticatedRedirectSigninIndexRoute =
+  authenticatedRedirectSigninIndexRouteImport.update({
+    id: '/redirect-signin/',
+    path: '/redirect-signin/',
+    getParentRoute: () => authenticatedRouteRoute,
+  } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const authenticatednewUserRouterRoute =
-  authenticatednewUserRouterRouteImport.update({
-    id: '/(new-user)/router',
-    path: '/router',
-    getParentRoute: () => authenticatedRouteRoute,
-  } as any)
 const publiclawsuitPagesTermsAndConditionsIndexRoute =
   publiclawsuitPagesTermsAndConditionsIndexRouteImport.update({
     id: '/terms-and-conditions/',
@@ -117,26 +123,26 @@ const publiclandingPagesAboutUsIndexRoute =
     path: '/about-us/',
     getParentRoute: () => publiclandingPagesRouteRoute,
   } as any)
-const authenticatednewUserWelcomeIndexRoute =
-  authenticatednewUserWelcomeIndexRouteImport.update({
-    id: '/(new-user)/welcome/',
+const authenticatednewUsersWelcomeIndexRoute =
+  authenticatednewUsersWelcomeIndexRouteImport.update({
+    id: '/welcome/',
     path: '/welcome/',
-    getParentRoute: () => authenticatedRouteRoute,
+    getParentRoute: () => authenticatednewUsersRouteRoute,
   } as any)
-const authenticatedexistingUserDashboardIndexRoute =
-  authenticatedexistingUserDashboardIndexRouteImport.update({
-    id: '/dashboard/',
-    path: '/dashboard/',
-    getParentRoute: () => authenticatedexistingUserRouteRoute,
+const authenticatedexistingUsersUsernameDashboardIndexRoute =
+  authenticatedexistingUsersUsernameDashboardIndexRouteImport.update({
+    id: '/(existing-users)/$username/dashboard/',
+    path: '/$username/dashboard/',
+    getParentRoute: () => authenticatedRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/router': typeof authenticatednewUserRouterRoute
+  '/api/upload-image': typeof ApiUploadImageRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/redirect-signin/': typeof authenticatedRedirectSigninIndexRoute
   '/signin/': typeof guestSigninIndexRoute
   '/': typeof publiclandingPagesIndexRoute
-  '/dashboard/': typeof authenticatedexistingUserDashboardIndexRoute
-  '/welcome/': typeof authenticatednewUserWelcomeIndexRoute
+  '/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
   '/about-us/': typeof publiclandingPagesAboutUsIndexRoute
   '/contact-us/': typeof publiclandingPagesContactUsIndexRoute
   '/courses/': typeof publiclandingPagesCoursesIndexRoute
@@ -144,14 +150,15 @@ export interface FileRoutesByFullPath {
   '/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/router': typeof authenticatednewUserRouterRoute
+  '/api/upload-image': typeof ApiUploadImageRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/redirect-signin': typeof authenticatedRedirectSigninIndexRoute
   '/signin': typeof guestSigninIndexRoute
   '/': typeof publiclandingPagesIndexRoute
-  '/dashboard': typeof authenticatedexistingUserDashboardIndexRoute
-  '/welcome': typeof authenticatednewUserWelcomeIndexRoute
+  '/welcome': typeof authenticatednewUsersWelcomeIndexRoute
   '/about-us': typeof publiclandingPagesAboutUsIndexRoute
   '/contact-us': typeof publiclandingPagesContactUsIndexRoute
   '/courses': typeof publiclandingPagesCoursesIndexRoute
@@ -159,21 +166,22 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/terms-and-conditions': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/$username/dashboard': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(authenticated)': typeof authenticatedRouteRouteWithChildren
   '/(guest)': typeof guestRouteRouteWithChildren
   '/(public)': typeof publicRouteRouteWithChildren
-  '/(authenticated)/(existing-user)': typeof authenticatedexistingUserRouteRouteWithChildren
+  '/(authenticated)/(new-users)': typeof authenticatednewUsersRouteRouteWithChildren
   '/(public)/(landing-pages)': typeof publiclandingPagesRouteRouteWithChildren
   '/(public)/(lawsuit-pages)': typeof publiclawsuitPagesRouteRouteWithChildren
-  '/(authenticated)/(new-user)/router': typeof authenticatednewUserRouterRoute
+  '/api/upload-image': typeof ApiUploadImageRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/(authenticated)/redirect-signin/': typeof authenticatedRedirectSigninIndexRoute
   '/(guest)/signin/': typeof guestSigninIndexRoute
   '/(public)/(landing-pages)/': typeof publiclandingPagesIndexRoute
-  '/(authenticated)/(existing-user)/dashboard/': typeof authenticatedexistingUserDashboardIndexRoute
-  '/(authenticated)/(new-user)/welcome/': typeof authenticatednewUserWelcomeIndexRoute
+  '/(authenticated)/(new-users)/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
   '/(public)/(landing-pages)/about-us/': typeof publiclandingPagesAboutUsIndexRoute
   '/(public)/(landing-pages)/contact-us/': typeof publiclandingPagesContactUsIndexRoute
   '/(public)/(landing-pages)/courses/': typeof publiclandingPagesCoursesIndexRoute
@@ -181,15 +189,16 @@ export interface FileRoutesById {
   '/(public)/(lawsuit-pages)/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/(public)/(lawsuit-pages)/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/(public)/(lawsuit-pages)/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/(authenticated)/(existing-users)/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/router'
+    | '/api/upload-image'
     | '/api/auth/$'
+    | '/redirect-signin/'
     | '/signin/'
     | '/'
-    | '/dashboard/'
     | '/welcome/'
     | '/about-us/'
     | '/contact-us/'
@@ -198,13 +207,14 @@ export interface FileRouteTypes {
     | '/privacy-policy/'
     | '/refund-policy/'
     | '/terms-and-conditions/'
+    | '/$username/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/router'
+    | '/api/upload-image'
     | '/api/auth/$'
+    | '/redirect-signin'
     | '/signin'
     | '/'
-    | '/dashboard'
     | '/welcome'
     | '/about-us'
     | '/contact-us'
@@ -213,20 +223,21 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refund-policy'
     | '/terms-and-conditions'
+    | '/$username/dashboard'
   id:
     | '__root__'
     | '/(authenticated)'
     | '/(guest)'
     | '/(public)'
-    | '/(authenticated)/(existing-user)'
+    | '/(authenticated)/(new-users)'
     | '/(public)/(landing-pages)'
     | '/(public)/(lawsuit-pages)'
-    | '/(authenticated)/(new-user)/router'
+    | '/api/upload-image'
     | '/api/auth/$'
+    | '/(authenticated)/redirect-signin/'
     | '/(guest)/signin/'
     | '/(public)/(landing-pages)/'
-    | '/(authenticated)/(existing-user)/dashboard/'
-    | '/(authenticated)/(new-user)/welcome/'
+    | '/(authenticated)/(new-users)/welcome/'
     | '/(public)/(landing-pages)/about-us/'
     | '/(public)/(landing-pages)/contact-us/'
     | '/(public)/(landing-pages)/courses/'
@@ -234,12 +245,14 @@ export interface FileRouteTypes {
     | '/(public)/(lawsuit-pages)/privacy-policy/'
     | '/(public)/(lawsuit-pages)/refund-policy/'
     | '/(public)/(lawsuit-pages)/terms-and-conditions/'
+    | '/(authenticated)/(existing-users)/$username/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   authenticatedRouteRoute: typeof authenticatedRouteRouteWithChildren
   guestRouteRoute: typeof guestRouteRouteWithChildren
   publicRouteRoute: typeof publicRouteRouteWithChildren
+  ApiUploadImageRoute: typeof ApiUploadImageRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/upload-image': {
+      id: '/api/upload-image'
+      path: '/api/upload-image'
+      fullPath: '/api/upload-image'
+      preLoaderRoute: typeof ApiUploadImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(public)/(lawsuit-pages)': {
       id: '/(public)/(lawsuit-pages)'
       path: ''
@@ -280,11 +300,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publiclandingPagesRouteRouteImport
       parentRoute: typeof publicRouteRoute
     }
-    '/(authenticated)/(existing-user)': {
-      id: '/(authenticated)/(existing-user)'
+    '/(authenticated)/(new-users)': {
+      id: '/(authenticated)/(new-users)'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof authenticatedexistingUserRouteRouteImport
+      preLoaderRoute: typeof authenticatednewUsersRouteRouteImport
       parentRoute: typeof authenticatedRouteRoute
     }
     '/(public)/(landing-pages)/': {
@@ -301,19 +321,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof guestSigninIndexRouteImport
       parentRoute: typeof guestRouteRoute
     }
+    '/(authenticated)/redirect-signin/': {
+      id: '/(authenticated)/redirect-signin/'
+      path: '/redirect-signin'
+      fullPath: '/redirect-signin/'
+      preLoaderRoute: typeof authenticatedRedirectSigninIndexRouteImport
+      parentRoute: typeof authenticatedRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/(authenticated)/(new-user)/router': {
-      id: '/(authenticated)/(new-user)/router'
-      path: '/router'
-      fullPath: '/router'
-      preLoaderRoute: typeof authenticatednewUserRouterRouteImport
-      parentRoute: typeof authenticatedRouteRoute
     }
     '/(public)/(lawsuit-pages)/terms-and-conditions/': {
       id: '/(public)/(lawsuit-pages)/terms-and-conditions/'
@@ -364,49 +384,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publiclandingPagesAboutUsIndexRouteImport
       parentRoute: typeof publiclandingPagesRouteRoute
     }
-    '/(authenticated)/(new-user)/welcome/': {
-      id: '/(authenticated)/(new-user)/welcome/'
+    '/(authenticated)/(new-users)/welcome/': {
+      id: '/(authenticated)/(new-users)/welcome/'
       path: '/welcome'
       fullPath: '/welcome/'
-      preLoaderRoute: typeof authenticatednewUserWelcomeIndexRouteImport
+      preLoaderRoute: typeof authenticatednewUsersWelcomeIndexRouteImport
+      parentRoute: typeof authenticatednewUsersRouteRoute
+    }
+    '/(authenticated)/(existing-users)/$username/dashboard/': {
+      id: '/(authenticated)/(existing-users)/$username/dashboard/'
+      path: '/$username/dashboard'
+      fullPath: '/$username/dashboard/'
+      preLoaderRoute: typeof authenticatedexistingUsersUsernameDashboardIndexRouteImport
       parentRoute: typeof authenticatedRouteRoute
     }
-    '/(authenticated)/(existing-user)/dashboard/': {
-      id: '/(authenticated)/(existing-user)/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof authenticatedexistingUserDashboardIndexRouteImport
-      parentRoute: typeof authenticatedexistingUserRouteRoute
-    }
   }
 }
 
-interface authenticatedexistingUserRouteRouteChildren {
-  authenticatedexistingUserDashboardIndexRoute: typeof authenticatedexistingUserDashboardIndexRoute
+interface authenticatednewUsersRouteRouteChildren {
+  authenticatednewUsersWelcomeIndexRoute: typeof authenticatednewUsersWelcomeIndexRoute
 }
 
-const authenticatedexistingUserRouteRouteChildren: authenticatedexistingUserRouteRouteChildren =
+const authenticatednewUsersRouteRouteChildren: authenticatednewUsersRouteRouteChildren =
   {
-    authenticatedexistingUserDashboardIndexRoute:
-      authenticatedexistingUserDashboardIndexRoute,
+    authenticatednewUsersWelcomeIndexRoute:
+      authenticatednewUsersWelcomeIndexRoute,
   }
 
-const authenticatedexistingUserRouteRouteWithChildren =
-  authenticatedexistingUserRouteRoute._addFileChildren(
-    authenticatedexistingUserRouteRouteChildren,
+const authenticatednewUsersRouteRouteWithChildren =
+  authenticatednewUsersRouteRoute._addFileChildren(
+    authenticatednewUsersRouteRouteChildren,
   )
 
 interface authenticatedRouteRouteChildren {
-  authenticatedexistingUserRouteRoute: typeof authenticatedexistingUserRouteRouteWithChildren
-  authenticatednewUserRouterRoute: typeof authenticatednewUserRouterRoute
-  authenticatednewUserWelcomeIndexRoute: typeof authenticatednewUserWelcomeIndexRoute
+  authenticatednewUsersRouteRoute: typeof authenticatednewUsersRouteRouteWithChildren
+  authenticatedRedirectSigninIndexRoute: typeof authenticatedRedirectSigninIndexRoute
+  authenticatedexistingUsersUsernameDashboardIndexRoute: typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 
 const authenticatedRouteRouteChildren: authenticatedRouteRouteChildren = {
-  authenticatedexistingUserRouteRoute:
-    authenticatedexistingUserRouteRouteWithChildren,
-  authenticatednewUserRouterRoute: authenticatednewUserRouterRoute,
-  authenticatednewUserWelcomeIndexRoute: authenticatednewUserWelcomeIndexRoute,
+  authenticatednewUsersRouteRoute: authenticatednewUsersRouteRouteWithChildren,
+  authenticatedRedirectSigninIndexRoute: authenticatedRedirectSigninIndexRoute,
+  authenticatedexistingUsersUsernameDashboardIndexRoute:
+    authenticatedexistingUsersUsernameDashboardIndexRoute,
 }
 
 const authenticatedRouteRouteWithChildren =
@@ -487,6 +507,7 @@ const rootRouteChildren: RootRouteChildren = {
   authenticatedRouteRoute: authenticatedRouteRouteWithChildren,
   guestRouteRoute: guestRouteRouteWithChildren,
   publicRouteRoute: publicRouteRouteWithChildren,
+  ApiUploadImageRoute: ApiUploadImageRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

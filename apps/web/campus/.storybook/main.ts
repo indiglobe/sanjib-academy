@@ -22,7 +22,9 @@ const config: StorybookConfig = {
   },
 
   async viteFinal(config: InlineConfig) {
-    // Keep only Storybook's own plugins, then add back the safe ones we need
+    /**
+     * Keep only Storybook's own plugins, then add back the safe ones we need
+     */
     // @ts-ignore
     const storybookPlugins = (config.plugins ?? [])
       .flat(Infinity)

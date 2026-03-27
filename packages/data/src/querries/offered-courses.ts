@@ -2,13 +2,13 @@ import { db } from "@/index";
 import { CourseAdvantagesTable, OfferedCoursesTable } from "@/schema";
 import { asc, eq, getTableColumns, sql } from "drizzle-orm";
 
-export const offeredCourses = async () => {
+export const readOfferedCourses = async () => {
   const { ...columns } = getTableColumns(OfferedCoursesTable);
   const { id, details, isVisible, tableIdentifierToken } = getTableColumns(
     CourseAdvantagesTable,
   );
 
-  const offeredCourses = await db
+  const offeredCoursesResponse = await db
     .select({
       ...columns,
       advantages: sql<
@@ -37,5 +37,5 @@ export const offeredCourses = async () => {
     .groupBy(OfferedCoursesTable.id)
     .orderBy(asc(OfferedCoursesTable.id));
 
-  return offeredCourses;
+  return offeredCoursesResponse;
 };

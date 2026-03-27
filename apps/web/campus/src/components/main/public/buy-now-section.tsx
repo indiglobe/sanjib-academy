@@ -69,7 +69,6 @@ function Timer({ ...props }: ComponentProps<"div">) {
 function BuyNowButton({ ...props }: ComponentProps<"div">) {
   const { data } = useMostUpcomingWebinarData();
   const buyNowButtonRef = useRef(null);
-  const { Razorpay } = useRazorpay();
   const registerForWebinar = useServerFn(registerForWebinarServerFn);
 
   useGSAP(
@@ -101,20 +100,6 @@ function BuyNowButton({ ...props }: ComponentProps<"div">) {
         webinarDetails: { id },
       },
     });
-
-    const { amount } = order;
-
-    const razorpayOrderOptions: RazorpayOrderOptions = {
-      amount: Number(amount),
-      currency: "INR",
-      key: env.VITE_RAZOR_PAY_KEY,
-      name: VITE_APP_NAME,
-      order_id: order.id,
-    };
-
-    const razorpayClient = new Razorpay(razorpayOrderOptions);
-
-    razorpayClient.open();
   }
 
   return (

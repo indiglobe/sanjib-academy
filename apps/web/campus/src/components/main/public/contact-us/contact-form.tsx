@@ -1,4 +1,4 @@
-import { insertNewContactMessageServerFn } from "@/integrations/server-functions/form-actions/contact-form";
+import { createNewContactMessageServerFn } from "@/integrations/server-functions/form-actions/contact-form";
 import { Button } from "@/ui/button";
 import { cn } from "@/utils/cn";
 import { contactFormSchema, ContactFormSchema } from "@/utils/zod-schema";
@@ -7,8 +7,15 @@ import { useServerFn } from "@tanstack/react-start";
 import { SubmitEvent } from "react";
 
 export default function ConatctForm() {
-  const insertNewContactMessage = useServerFn(insertNewContactMessageServerFn);
+  /**
+   * wrap server functions to use them in client
+   */
+  const createNewContactMessage = useServerFn(createNewContactMessageServerFn);
+
   const { Field, handleSubmit } = useForm({
+    /**
+     * provide default values for the form fields
+     */
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -16,27 +23,29 @@ export default function ConatctForm() {
       phoneNo: "",
       message: "",
     } satisfies ContactFormSchema,
+    /**
+     * run form validation on form submission
+     */
     validators: {
       onSubmit: contactFormSchema,
     },
-    onSubmit: async ({ value, meta: {} }) => {
+    /**
+     * On submit run this function
+     */
+    onSubmit: async ({ value }) => {
       const { email, firstName, lastName, message, phoneNo } = value;
-      return await insertNewContactMessage({
+      return await createNewContactMessage({
         data: { email, firstName, lastName, message, phoneNo },
       });
     },
-    onSubmitMeta: () => {
-      return "";
-    },
+    // This is to identify this form in tanstack-devtool
     formId: "contact-form",
   });
 
   async function onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
-    const submitResult = await handleSubmit();
-
-    console.log(submitResult);
+    await handleSubmit();
   }
 
   return (
@@ -45,11 +54,13 @@ export default function ConatctForm() {
         onSubmit={onSubmit}
         className={cn(`@container flex flex-col gap-y-6`)}
       >
+        {/* name section */}
         <div
           className={cn(
             `flex w-full flex-col flex-wrap gap-4 @sm:flex-row @sm:flex-nowrap`,
           )}
         >
+          {/* first name */}
           <Field name="firstName">
             {(field) => {
               const {
@@ -99,7 +110,9 @@ export default function ConatctForm() {
               );
             }}
           </Field>
+          {/* first name */}
 
+          {/* last name */}
           <Field name="lastName">
             {(field) => {
               const {
@@ -149,8 +162,11 @@ export default function ConatctForm() {
               );
             }}
           </Field>
+          {/* last name */}
         </div>
+        {/* name section */}
 
+        {/* email secition */}
         <div className={cn(`flex gap-4`)}>
           <Field name="email">
             {(field) => {
@@ -198,7 +214,9 @@ export default function ConatctForm() {
             }}
           </Field>
         </div>
+        {/* email secition */}
 
+        {/* phone no section */}
         <div className={cn(`flex gap-4`)}>
           <Field name="phoneNo">
             {(field) => {
@@ -246,7 +264,9 @@ export default function ConatctForm() {
             }}
           </Field>
         </div>
+        {/* phone no section */}
 
+        {/* message section */}
         <div className={cn(`flex gap-4`)}>
           <Field name="message">
             {(field) => {
@@ -294,6 +314,7 @@ export default function ConatctForm() {
             }}
           </Field>
         </div>
+        {/* message section */}
 
         <div className={cn(`pt-4`)}>
           <Button variant={"primary"} type="submit" className={cn(`w-full`)}>

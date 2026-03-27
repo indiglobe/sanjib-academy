@@ -36,7 +36,7 @@ export function CoursePricing({
   const saved = discountedPrice ? actualPrice - discountedPrice : 0;
   const percent = discountedPrice ? Math.round((saved / actualPrice) * 100) : 0;
   const numberFormatter = new Intl.NumberFormat("en-IN", {
-    maximumSignificantDigits: 3,
+    maximumFractionDigits: 0,
   });
 
   return (
@@ -56,6 +56,7 @@ export function CoursePricing({
           {/* Discounted price */}
           <span>
             <span>₹ </span>
+
             <span>{numberFormatter.format(discountedPrice)}</span>
           </span>
 

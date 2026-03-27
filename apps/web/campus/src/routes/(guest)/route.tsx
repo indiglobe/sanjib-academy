@@ -1,5 +1,6 @@
 import { fetchSession } from "@/lib/auth/session";
-import { guestMiddleware } from "@/middleware/guest";
+import { generateUserNameFromEmail } from "@repo/utils/utility";
+// import { guestMiddleware } from "@/middleware/guest";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(guest)")({
@@ -10,12 +11,16 @@ export const Route = createFileRoute("/(guest)")({
     const session = await fetchSession();
 
     // If the user has a valid session redirect them to the dashboard
-    if (session) throw redirect({ to: "/dashboard" });
+    if (session)
+      throw redirect({
+        to: "/$username/dashboard",
+        params: { username: generateUserNameFromEmail(session.user.email) },
+      });
   },
 
-  server: {
-    middleware: [guestMiddleware],
-  },
+  // server: {
+  //   middleware: [guestMiddleware],
+  // },
 });
 
 function RouteComponent() {
