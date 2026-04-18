@@ -34,7 +34,6 @@ export const createCourseEnrolmentRazorpayOrderServerFn = createServerFn({
     const orderDetails = await razorpay.orders.create({
       amount: amountToAcceptByRazorpay,
       currency: "INR",
-      method: "upi",
     });
 
     return orderDetails;

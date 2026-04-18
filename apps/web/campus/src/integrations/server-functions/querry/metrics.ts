@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import { readMetricsDetails } from "@repo/data/querries/metrics";
+import { readAllMetricsDetails } from "@repo/data/querries/metrics";
 
-export const readMetricsDetailsServeFn = createServerFn({
+export const readAllMetricsDetailsServeFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const metrics = await readMetricsDetails();
+  const metrics = await readAllMetricsDetails();
 
   return metrics;
 });

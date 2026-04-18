@@ -12,7 +12,7 @@ export type DefaultRazorpayOptions = Pick<
 /**
  * Extract variable options
  */
-export type VariableRazorpayOptions = Omit<
+export type RazorpayOptions = Omit<
   RazorpayOrderOptions,
   "key" | "currency" | "name" | "theme"
 >;
@@ -38,13 +38,10 @@ export function useRazorpayClient() {
   /**
    * Provide the default options and export the function
    */
-  function createRazorpayInstance(options: VariableRazorpayOptions) {
+  function createRazorpayInstance(options: RazorpayOptions) {
     return new Razorpay({
       ...DEFAULT_OPTIONS,
       ...options,
-      handler: async (respose) => {
-        console.log(respose);
-      },
     });
   }
 

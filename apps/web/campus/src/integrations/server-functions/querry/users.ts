@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { readUserDetails, createNewUser } from "@repo/data/querries/users";
+import { createNewUser, readUserDetails } from "@repo/data/querries/users";
+import { WelcomeFormSchema } from "@repo/utils/zod-schema/welcome-form";
+import z from "zod";
+import { zodValidator } from "@tanstack/zod-adapter";
 
 export const readUserDetailsServerFn = createServerFn()
   .inputValidator((d: { email: string }) => d)
@@ -10,13 +13,13 @@ export const readUserDetailsServerFn = createServerFn()
   });
 
 export const createNewUserServerFn = createServerFn()
-  .inputValidator((d: { email: string }) => d)
-  .handler(async ({ data: { email } }) => {
+  .inputValidator(zodValidator(z.custom<WelcomeFormSchema>()))
+  .handler(async ({ data: { email, avatarImageUrl, name } }) => {
     const user = await createNewUser({
       email,
       name,
-      oauthProviderAvatarImageUrl,
+      oauthProviderAvatarImageUrl: avatarImageUrl,
+      uploadedAvatarImageUrl: avatarImageUrl,
     });
-
     return user;
   });

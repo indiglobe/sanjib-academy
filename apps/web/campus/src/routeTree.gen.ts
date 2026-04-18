@@ -18,8 +18,10 @@ import { Route as publiclandingPagesRouteRouteImport } from './routes/(public)/(
 import { Route as authenticatednewUsersRouteRouteImport } from './routes/(authenticated)/(new-users)/route'
 import { Route as publiclandingPagesIndexRouteImport } from './routes/(public)/(landing-pages)/index'
 import { Route as guestSigninIndexRouteImport } from './routes/(guest)/signin/index'
+import { Route as authenticatedSettingsIndexRouteImport } from './routes/(authenticated)/settings/index'
 import { Route as authenticatedRedirectSigninIndexRouteImport } from './routes/(authenticated)/redirect-signin/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as authenticatedexistingUsersUsernameRouteRouteImport } from './routes/(authenticated)/(existing-users)/$username/route'
 import { Route as publiclawsuitPagesTermsAndConditionsIndexRouteImport } from './routes/(public)/(lawsuit-pages)/terms-and-conditions/index'
 import { Route as publiclawsuitPagesRefundPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/refund-policy/index'
 import { Route as publiclawsuitPagesPrivacyPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/privacy-policy/index'
@@ -29,6 +31,7 @@ import { Route as publiclandingPagesContactUsIndexRouteImport } from './routes/(
 import { Route as publiclandingPagesAboutUsIndexRouteImport } from './routes/(public)/(landing-pages)/about-us/index'
 import { Route as authenticatednewUsersWelcomeIndexRouteImport } from './routes/(authenticated)/(new-users)/welcome/index'
 import { Route as authenticatedexistingUsersUsernameDashboardIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/dashboard/index'
+import { Route as authenticatedexistingUsersUsernameCoursesIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/courses/index'
 
 const publicRouteRoute = publicRouteRouteImport.update({
   id: '/(public)',
@@ -70,6 +73,12 @@ const guestSigninIndexRoute = guestSigninIndexRouteImport.update({
   path: '/signin/',
   getParentRoute: () => guestRouteRoute,
 } as any)
+const authenticatedSettingsIndexRoute =
+  authenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => authenticatedRouteRoute,
+  } as any)
 const authenticatedRedirectSigninIndexRoute =
   authenticatedRedirectSigninIndexRouteImport.update({
     id: '/redirect-signin/',
@@ -81,6 +90,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authenticatedexistingUsersUsernameRouteRoute =
+  authenticatedexistingUsersUsernameRouteRouteImport.update({
+    id: '/(existing-users)/$username',
+    path: '/$username',
+    getParentRoute: () => authenticatedRouteRoute,
+  } as any)
 const publiclawsuitPagesTermsAndConditionsIndexRoute =
   publiclawsuitPagesTermsAndConditionsIndexRouteImport.update({
     id: '/terms-and-conditions/',
@@ -131,15 +146,23 @@ const authenticatednewUsersWelcomeIndexRoute =
   } as any)
 const authenticatedexistingUsersUsernameDashboardIndexRoute =
   authenticatedexistingUsersUsernameDashboardIndexRouteImport.update({
-    id: '/(existing-users)/$username/dashboard/',
-    path: '/$username/dashboard/',
-    getParentRoute: () => authenticatedRouteRoute,
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => authenticatedexistingUsersUsernameRouteRoute,
+  } as any)
+const authenticatedexistingUsersUsernameCoursesIndexRoute =
+  authenticatedexistingUsersUsernameCoursesIndexRouteImport.update({
+    id: '/courses/',
+    path: '/courses/',
+    getParentRoute: () => authenticatedexistingUsersUsernameRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/api/upload-image': typeof ApiUploadImageRoute
+  '/$username': typeof authenticatedexistingUsersUsernameRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/redirect-signin/': typeof authenticatedRedirectSigninIndexRoute
+  '/settings/': typeof authenticatedSettingsIndexRoute
   '/signin/': typeof guestSigninIndexRoute
   '/': typeof publiclandingPagesIndexRoute
   '/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
@@ -150,12 +173,15 @@ export interface FileRoutesByFullPath {
   '/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/api/upload-image': typeof ApiUploadImageRoute
+  '/$username': typeof authenticatedexistingUsersUsernameRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/redirect-signin': typeof authenticatedRedirectSigninIndexRoute
+  '/settings': typeof authenticatedSettingsIndexRoute
   '/signin': typeof guestSigninIndexRoute
   '/': typeof publiclandingPagesIndexRoute
   '/welcome': typeof authenticatednewUsersWelcomeIndexRoute
@@ -166,6 +192,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/terms-and-conditions': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/$username/courses': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -177,8 +204,10 @@ export interface FileRoutesById {
   '/(public)/(landing-pages)': typeof publiclandingPagesRouteRouteWithChildren
   '/(public)/(lawsuit-pages)': typeof publiclawsuitPagesRouteRouteWithChildren
   '/api/upload-image': typeof ApiUploadImageRoute
+  '/(authenticated)/(existing-users)/$username': typeof authenticatedexistingUsersUsernameRouteRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(authenticated)/redirect-signin/': typeof authenticatedRedirectSigninIndexRoute
+  '/(authenticated)/settings/': typeof authenticatedSettingsIndexRoute
   '/(guest)/signin/': typeof guestSigninIndexRoute
   '/(public)/(landing-pages)/': typeof publiclandingPagesIndexRoute
   '/(authenticated)/(new-users)/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
@@ -189,14 +218,17 @@ export interface FileRoutesById {
   '/(public)/(lawsuit-pages)/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/(public)/(lawsuit-pages)/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
   '/(public)/(lawsuit-pages)/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
+  '/(authenticated)/(existing-users)/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/(authenticated)/(existing-users)/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/api/upload-image'
+    | '/$username'
     | '/api/auth/$'
     | '/redirect-signin/'
+    | '/settings/'
     | '/signin/'
     | '/'
     | '/welcome/'
@@ -207,12 +239,15 @@ export interface FileRouteTypes {
     | '/privacy-policy/'
     | '/refund-policy/'
     | '/terms-and-conditions/'
+    | '/$username/courses/'
     | '/$username/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/upload-image'
+    | '/$username'
     | '/api/auth/$'
     | '/redirect-signin'
+    | '/settings'
     | '/signin'
     | '/'
     | '/welcome'
@@ -223,6 +258,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/refund-policy'
     | '/terms-and-conditions'
+    | '/$username/courses'
     | '/$username/dashboard'
   id:
     | '__root__'
@@ -233,8 +269,10 @@ export interface FileRouteTypes {
     | '/(public)/(landing-pages)'
     | '/(public)/(lawsuit-pages)'
     | '/api/upload-image'
+    | '/(authenticated)/(existing-users)/$username'
     | '/api/auth/$'
     | '/(authenticated)/redirect-signin/'
+    | '/(authenticated)/settings/'
     | '/(guest)/signin/'
     | '/(public)/(landing-pages)/'
     | '/(authenticated)/(new-users)/welcome/'
@@ -245,6 +283,7 @@ export interface FileRouteTypes {
     | '/(public)/(lawsuit-pages)/privacy-policy/'
     | '/(public)/(lawsuit-pages)/refund-policy/'
     | '/(public)/(lawsuit-pages)/terms-and-conditions/'
+    | '/(authenticated)/(existing-users)/$username/courses/'
     | '/(authenticated)/(existing-users)/$username/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -321,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof guestSigninIndexRouteImport
       parentRoute: typeof guestRouteRoute
     }
+    '/(authenticated)/settings/': {
+      id: '/(authenticated)/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof authenticatedSettingsIndexRouteImport
+      parentRoute: typeof authenticatedRouteRoute
+    }
     '/(authenticated)/redirect-signin/': {
       id: '/(authenticated)/redirect-signin/'
       path: '/redirect-signin'
@@ -334,6 +380,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(authenticated)/(existing-users)/$username': {
+      id: '/(authenticated)/(existing-users)/$username'
+      path: '/$username'
+      fullPath: '/$username'
+      preLoaderRoute: typeof authenticatedexistingUsersUsernameRouteRouteImport
+      parentRoute: typeof authenticatedRouteRoute
     }
     '/(public)/(lawsuit-pages)/terms-and-conditions/': {
       id: '/(public)/(lawsuit-pages)/terms-and-conditions/'
@@ -393,10 +446,17 @@ declare module '@tanstack/react-router' {
     }
     '/(authenticated)/(existing-users)/$username/dashboard/': {
       id: '/(authenticated)/(existing-users)/$username/dashboard/'
-      path: '/$username/dashboard'
+      path: '/dashboard'
       fullPath: '/$username/dashboard/'
       preLoaderRoute: typeof authenticatedexistingUsersUsernameDashboardIndexRouteImport
-      parentRoute: typeof authenticatedRouteRoute
+      parentRoute: typeof authenticatedexistingUsersUsernameRouteRoute
+    }
+    '/(authenticated)/(existing-users)/$username/courses/': {
+      id: '/(authenticated)/(existing-users)/$username/courses/'
+      path: '/courses'
+      fullPath: '/$username/courses/'
+      preLoaderRoute: typeof authenticatedexistingUsersUsernameCoursesIndexRouteImport
+      parentRoute: typeof authenticatedexistingUsersUsernameRouteRoute
     }
   }
 }
@@ -416,17 +476,37 @@ const authenticatednewUsersRouteRouteWithChildren =
     authenticatednewUsersRouteRouteChildren,
   )
 
+interface authenticatedexistingUsersUsernameRouteRouteChildren {
+  authenticatedexistingUsersUsernameCoursesIndexRoute: typeof authenticatedexistingUsersUsernameCoursesIndexRoute
+  authenticatedexistingUsersUsernameDashboardIndexRoute: typeof authenticatedexistingUsersUsernameDashboardIndexRoute
+}
+
+const authenticatedexistingUsersUsernameRouteRouteChildren: authenticatedexistingUsersUsernameRouteRouteChildren =
+  {
+    authenticatedexistingUsersUsernameCoursesIndexRoute:
+      authenticatedexistingUsersUsernameCoursesIndexRoute,
+    authenticatedexistingUsersUsernameDashboardIndexRoute:
+      authenticatedexistingUsersUsernameDashboardIndexRoute,
+  }
+
+const authenticatedexistingUsersUsernameRouteRouteWithChildren =
+  authenticatedexistingUsersUsernameRouteRoute._addFileChildren(
+    authenticatedexistingUsersUsernameRouteRouteChildren,
+  )
+
 interface authenticatedRouteRouteChildren {
   authenticatednewUsersRouteRoute: typeof authenticatednewUsersRouteRouteWithChildren
+  authenticatedexistingUsersUsernameRouteRoute: typeof authenticatedexistingUsersUsernameRouteRouteWithChildren
   authenticatedRedirectSigninIndexRoute: typeof authenticatedRedirectSigninIndexRoute
-  authenticatedexistingUsersUsernameDashboardIndexRoute: typeof authenticatedexistingUsersUsernameDashboardIndexRoute
+  authenticatedSettingsIndexRoute: typeof authenticatedSettingsIndexRoute
 }
 
 const authenticatedRouteRouteChildren: authenticatedRouteRouteChildren = {
   authenticatednewUsersRouteRoute: authenticatednewUsersRouteRouteWithChildren,
+  authenticatedexistingUsersUsernameRouteRoute:
+    authenticatedexistingUsersUsernameRouteRouteWithChildren,
   authenticatedRedirectSigninIndexRoute: authenticatedRedirectSigninIndexRoute,
-  authenticatedexistingUsersUsernameDashboardIndexRoute:
-    authenticatedexistingUsersUsernameDashboardIndexRoute,
+  authenticatedSettingsIndexRoute: authenticatedSettingsIndexRoute,
 }
 
 const authenticatedRouteRouteWithChildren =

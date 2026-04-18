@@ -48,6 +48,8 @@ export const courseEnrolmentMiddleware = createMiddleware({
     // Verify is the user is present or not
     const profile = await readProfilesDetailServerFn({ data: { email } });
 
+    console.log("hiii");
+
     // If the user is not present she direct them to the welcome page
     if (!profile) {
       throw redirect({ to: "/welcome", search: { requestInitiatedFrom } });

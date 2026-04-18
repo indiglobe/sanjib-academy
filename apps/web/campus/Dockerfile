@@ -8,6 +8,7 @@ WORKDIR /app
 # Copy package files first for caching
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/campus/package.json ./apps/web/campus/package.json
+COPY apps/web/socket/package.json ./apps/web/socket/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
@@ -77,12 +78,14 @@ RUN corepack enable
 # Copy only package.json
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/campus/package.json ./apps/web/campus/package.json
+COPY apps/web/socket/package.json ./apps/web/socket/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 
 # Copy built output from builder
 COPY --from=builder /app/apps/web/campus/dist ./apps/web/campus/dist
+COPY --from=builder /app/apps/web/socket/dist ./apps/web/socket/dist
 COPY --from=builder /app/packages/env/dist ./packages/env/dist
 COPY --from=builder /app/packages/data/dist ./packages/data/dist
 COPY --from=builder /app/packages/utils/dist ./packages/utils/dist

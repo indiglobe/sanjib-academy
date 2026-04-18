@@ -4,9 +4,12 @@ import { cn } from "@/utils/cn";
 import { contactFormSchema, ContactFormSchema } from "@/utils/zod-schema";
 import { useForm } from "@tanstack/react-form";
 import { useServerFn } from "@tanstack/react-start";
-import { SubmitEvent } from "react";
+import { ComponentProps } from "react";
 
-export default function ConatctForm() {
+export default function ConatctForm({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   /**
    * wrap server functions to use them in client
    */
@@ -42,285 +45,198 @@ export default function ConatctForm() {
     formId: "contact-form",
   });
 
-  async function onSubmit(e: SubmitEvent) {
-    e.preventDefault();
-
-    await handleSubmit();
-  }
-
   return (
-    <div>
+    <div className={cn(``, className)} {...props}>
       <form
-        onSubmit={onSubmit}
-        className={cn(`@container flex flex-col gap-y-6`)}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await handleSubmit();
+        }}
+        className={cn(`flex w-full flex-col gap-6`)}
       >
-        {/* name section */}
-        <div
-          className={cn(
-            `flex w-full flex-col flex-wrap gap-4 @sm:flex-row @sm:flex-nowrap`,
-          )}
-        >
-          {/* first name */}
+        {/* Name Section */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-4">
           <Field name="firstName">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div
-                  className={cn(
-                    `relative flex w-full flex-col gap-2 @sm:basis-1/2`,
-                  )}
+            {(field) => (
+              <div className="relative flex flex-1 flex-col gap-1">
+                <label
+                  htmlFor="first-name"
+                  className="font-medium after:text-red-500 after:content-['*']"
                 >
-                  <label
-                    htmlFor="first-name"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    First name:
-                  </label>
-
-                  <input
-                    type="text"
-                    id="first-name"
-                    placeholder="Jhon"
-                    className={cn(
-                      `focus-visible:ring-offset-background w-full rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
+                  First name
+                </label>
+                <input
+                  type="text"
+                  id="first-name"
+                  placeholder="John"
+                  className={cn(
+                    `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                    {
+                      "border-red-500 focus:ring-red-500":
+                        field.state.meta.errors.length &&
+                        field.state.meta.isTouched,
+                    },
+                  )}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                {field.state.meta.errors.length > 0 &&
+                  field.state.meta.isTouched && (
+                    <span className="absolute top-full text-xs text-red-500">
+                      {field.state.meta.errors[0]?.message}
                     </span>
                   )}
-                </div>
-              );
-            }}
+              </div>
+            )}
           </Field>
-          {/* first name */}
 
-          {/* last name */}
           <Field name="lastName">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div
-                  className={cn(
-                    `relative flex w-full flex-col gap-2 @sm:basis-1/2`,
-                  )}
+            {(field) => (
+              <div className="relative flex flex-1 flex-col gap-1">
+                <label
+                  htmlFor="last-name"
+                  className="font-medium after:text-red-500 after:content-['*']"
                 >
-                  <label
-                    htmlFor="last-name"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Last name:
-                  </label>
-
-                  <input
-                    type="text"
-                    id="last-name"
-                    placeholder="Snow"
-                    className={cn(
-                      `focus-visible:ring-offset-background w-full rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
+                  Last name
+                </label>
+                <input
+                  type="text"
+                  id="last-name"
+                  placeholder="Snow"
+                  className={cn(
+                    `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                    {
+                      "border-red-500 focus:ring-red-500":
+                        field.state.meta.errors.length &&
+                        field.state.meta.isTouched,
+                    },
+                  )}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+                {field.state.meta.errors.length > 0 &&
+                  field.state.meta.isTouched && (
+                    <span className="absolute top-full text-xs text-red-500">
+                      {field.state.meta.errors[0]?.message}
                     </span>
                   )}
-                </div>
-              );
-            }}
-          </Field>
-          {/* last name */}
-        </div>
-        {/* name section */}
-
-        {/* email secition */}
-        <div className={cn(`flex gap-4`)}>
-          <Field name="email">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="email"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Eamil:
-                  </label>
-
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="jhonsnow@thenorth.remembers"
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
-                    </span>
-                  )}
-                </div>
-              );
-            }}
+              </div>
+            )}
           </Field>
         </div>
-        {/* email secition */}
 
-        {/* phone no section */}
-        <div className={cn(`flex gap-4`)}>
-          <Field name="phoneNo">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="phone-no"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Phone no:
-                  </label>
+        {/* Email */}
+        <Field name="email">
+          {(field) => (
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="email"
+                className="font-medium after:text-red-500 after:content-['*']"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                placeholder="jhonsnow@thenorth.remembers"
+                className={cn(
+                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  {
+                    "border-red-500 focus:ring-red-500":
+                      field.state.meta.errors.length &&
+                      field.state.meta.isTouched,
+                  },
+                )}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {field.state.meta.errors.length > 0 &&
+                field.state.meta.isTouched && (
+                  <span className="absolute top-full text-xs text-red-500">
+                    {field.state.meta.errors[0]?.message}
+                  </span>
+                )}
+            </div>
+          )}
+        </Field>
 
-                  <input
-                    type="text"
-                    id="phone-no"
-                    placeholder="+91-0707 0707 01"
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
-                    </span>
-                  )}
-                </div>
-              );
-            }}
-          </Field>
-        </div>
-        {/* phone no section */}
+        {/* Phone */}
+        <Field name="phoneNo">
+          {(field) => (
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="phone-no"
+                className="font-medium after:text-red-500 after:content-['*']"
+              >
+                Phone
+              </label>
+              <input
+                type="text"
+                id="phone-no"
+                placeholder="+91-0707 0707 01"
+                className={cn(
+                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  {
+                    "border-red-500 focus:ring-red-500":
+                      field.state.meta.errors.length &&
+                      field.state.meta.isTouched,
+                  },
+                )}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {field.state.meta.errors.length > 0 &&
+                field.state.meta.isTouched && (
+                  <span className="absolute top-full text-xs text-red-500">
+                    {field.state.meta.errors[0]?.message}
+                  </span>
+                )}
+            </div>
+          )}
+        </Field>
 
-        {/* message section */}
-        <div className={cn(`flex gap-4`)}>
-          <Field name="message">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="message"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Message:
-                  </label>
+        {/* Message */}
+        <Field name="message">
+          {(field) => (
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="message"
+                className="font-medium after:text-red-500 after:content-['*']"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                placeholder="You know nothing John Snow..."
+                rows={6}
+                className={cn(
+                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  {
+                    "border-red-500 focus:ring-red-500":
+                      field.state.meta.errors.length &&
+                      field.state.meta.isTouched,
+                  },
+                )}
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              {field.state.meta.errors.length > 0 &&
+                field.state.meta.isTouched && (
+                  <span className="absolute top-full text-xs text-red-500">
+                    {field.state.meta.errors[0]?.message}
+                  </span>
+                )}
+            </div>
+          )}
+        </Field>
 
-                  <textarea
-                    id="message"
-                    placeholder="You know nothing Jhon Snow..."
-                    rows={6}
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
-                    </span>
-                  )}
-                </div>
-              );
-            }}
-          </Field>
-        </div>
-        {/* message section */}
-
-        <div className={cn(`pt-4`)}>
-          <Button variant={"primary"} type="submit" className={cn(`w-full`)}>
-            Submit
-          </Button>
-        </div>
+        <Button
+          variant="primary"
+          type="submit"
+          className="text-background bg-primary-500 dark:bg-primary-400 hover:bg-primary-600 w-full py-2 font-medium transition-colors"
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );

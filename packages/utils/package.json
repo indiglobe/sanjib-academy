@@ -49,6 +49,16 @@
         "default": "./dist/zod-schema/*.mjs"
       }
     },
+    "./const/*": {
+      "require": {
+        "types": "./dist/const/*.d.cts",
+        "default": "./dist/const/*.cjs"
+      },
+      "import": {
+        "types": "./dist/const/*.d.mts",
+        "default": "./dist/const/*.mjs"
+      }
+    },
     ".": {
       "require": {
         "types": "./dist/index.d.cts",

@@ -1,7 +1,7 @@
 import HomePage from "@/components/main/public/home/home";
 import { readAllBenefitedUsersServerFn } from "@/integrations/server-functions/querry/benefited-users";
 import { readAllFaqsServerFn } from "@/integrations/server-functions/querry/faq";
-import { readMetricsDetailsServeFn } from "@/integrations/server-functions/querry/metrics";
+import { readAllMetricsDetailsServeFn } from "@/integrations/server-functions/querry/metrics";
 import { readOfferedCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
 import { getAllTestimonialsServerFn } from "@/integrations/server-functions/querry/testimonials";
 import { createFileRoute } from "@tanstack/react-router";
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/(public)/(landing-pages)/")({
     const [benefitedUsers, metrics, faqs, offeredCourses, testimonials] =
       await Promise.all([
         readAllBenefitedUsersServerFn(),
-        readMetricsDetailsServeFn(),
+        readAllMetricsDetailsServeFn(),
         readAllFaqsServerFn(),
         readOfferedCoursesServerFn(),
         getAllTestimonialsServerFn(),

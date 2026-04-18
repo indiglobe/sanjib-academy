@@ -1,7 +1,7 @@
 import {
-  readProfilesDetail,
-  TCreateNewProfiles,
   createNewProfile,
+  readProfilesDetail,
+  TCreateNewProfilesParams,
 } from "@repo/data/querries/profile";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -15,10 +15,10 @@ export const readProfilesDetailServerFn = createServerFn({ method: "GET" })
     return await readProfilesDetail({ email });
   });
 
-export const createNewProfileServerFn = createServerFn({ method: "GET" })
-  .inputValidator(zodValidator(z.object({ email: z.email() })))
+export const createNewProfileServerFn = createServerFn({ method: "POST" })
+  .inputValidator(zodValidator(z.custom<TCreateNewProfilesParams>()))
   .handler(async ({ data }) => {
-    const { email } = data;
+    const { email, age, phoneNo } = data;
 
-    // return await createNewProfile({ email });
+    return await createNewProfile({ email, age, phoneNo: phoneNo.toString() });
   });

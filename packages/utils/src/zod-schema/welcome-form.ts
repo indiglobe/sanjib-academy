@@ -4,7 +4,13 @@ export const welcomeFormSchema = z.object({
   email: z.email("Please provide valid email."),
   name: z.string().min(3, "Name is too small."),
   avatarImageUrl: z.url("Provide a valid url"),
-  age: z.number().min(18, "Minimum age has to be 18."),
+  age: z
+    .number()
+    .min(18, "Minimum age has to be 18.")
+    .max(150, "Age cannot be more than 150"),
+  phone: z.number().refine((value) => {
+    return value.toString().length === 10;
+  }, "Phone no. has to be exactly 10 digit."),
 });
 
 export type WelcomeFormSchema = z.infer<typeof welcomeFormSchema>;

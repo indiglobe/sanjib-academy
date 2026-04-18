@@ -76,6 +76,7 @@ export function Navbar({ ...props }: ComponentProps<"nav">) {
         <SignInButtonOrAvatar />
 
         <div
+          aria-hidden
           data-slot={`navbar-background`}
           className={cn(
             `bg-background/90 absolute top-0 right-0 bottom-0 left-0 -z-1 backdrop-blur-xs`,
@@ -391,6 +392,15 @@ function PopoverAndAvatar() {
               className={cn(`flex h-full w-full items-center justify-start`)}
             >
               <span>Dashboard</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild className="">
+            <Link
+              to="/$username/courses"
+              params={{ username }}
+              className={cn(`flex h-full w-full items-center justify-start`)}
+            >
+              <span>Courses</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

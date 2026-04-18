@@ -6,43 +6,89 @@ import {
   boolean,
   datetime,
   char,
-  foreignKey,
   timestamp,
   uniqueIndex,
 } from "drizzle-orm/mysql-core";
 
+/**
+ * This is used to identify which table the data is from,
+ * and if there is any querry we have to do we can understand
+ * in which table we have to do the query.
+ */
+export type TableIdentifierToken =
+  /**
+   * UserTable
+   */
+  | "USER"
+  /**
+   * BenefitedUserTable
+   */
+  | "BUSR"
+  /**
+   * MetricsTable
+   */
+  | "MTRC"
+  /**
+   * FaqTable
+   */
+  | "FAQS"
+  /**
+   * WebinarDetailsTable
+   */
+  | "WBNR"
+  /**
+   * OfferedCoursesTable
+   */
+  | "OFFC"
+  /**
+   * CourseAdvantagesTable
+   */
+  | "CADV"
+  /**
+   * TestimonialsTable
+   */
+  | "TMNL"
+  /**
+   * ContactMessageTable
+   */
+  | "CONT"
+  /**
+   * CourseBuyingProfiles
+   */
+  | "CBPR";
+
 export const metricSuffixEnums = mysqlEnum("metric_suffix", ["+", "%"]);
 export const roleEnums = mysqlEnum("user_role", ["admin", "student", "basic"]);
+export const tableIdentifierToken = mysqlEnum("table_identifier_token", [
+  "BUSR",
+  "CADV",
+  "CBPR",
+  "CONT",
+  "FAQS",
+  "MTRC",
+  "OFFC",
+  "TMNL",
+  "USER",
+  "WBNR",
+] as [TableIdentifierToken, ...TableIdentifierToken[]]);
 
+// -------------------------
+// UserTable
+// -------------------------
 export const UserTable = mysqlTable("user", {
-  name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().primaryKey(),
-  oauthProviderAvatarImageUrl: varchar("oauth_avatar", {
-    length: 255,
-  }).notNull(),
-  uploadedAvatarImageUrl: varchar("custom_avatar", { length: 255 }),
-
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("USER"),
-});
-
-export const ProfileTable = mysqlTable("profile", {
-  profileOf: varchar("profile_of", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .references(() => UserTable.email, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
+  name: varchar("name", { length: 255 }).notNull(),
+  uploadedAvatarImageUrl: varchar("custom_avatar", { length: 255 }).notNull(),
   age: int().notNull(),
   role: roleEnums.notNull().$default(() => "basic"),
+  phoneNo: char({ length: 10 }).notNull(),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("PROF"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("USER"),
 });
 
+// -------------------------
+// BenefitedUserTable
+// -------------------------
 export const BenefitedUserTable = mysqlTable("benefited_user", {
   userEmail: varchar("email", { length: 255 })
     .primaryKey()
@@ -50,27 +96,29 @@ export const BenefitedUserTable = mysqlTable("benefited_user", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
+  benefitedSince: datetime("benefited_since", { mode: "date" }),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("BUSR"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("BUSR"),
 });
 
+// -------------------------
+// MetricsTable
+// -------------------------
 export const MetricsTable = mysqlTable("metric", {
-  metricsContent: varchar("metric_content", { length: 255 })
-    .notNull()
-    .primaryKey(),
+  id: int("id").primaryKey().autoincrement(),
+  metricsContent: varchar("metric_content", { length: 255 }).notNull(),
   metricsHeading: varchar("metric_heading", { length: 100 }).notNull(),
   metricsSuffix: metricSuffixEnums.notNull(),
   isVisible: boolean("is_visible_to_users")
     .$default(() => false)
     .notNull(),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("MTRC"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("MTRC"),
 });
 
+// -------------------------
+// FaqTable
+// -------------------------
 export const FaqTable = mysqlTable("faq", {
   id: int("id").primaryKey().autoincrement(),
   faqAnswer: varchar("faq_answer", { length: 511 }).notNull(),
@@ -79,11 +127,12 @@ export const FaqTable = mysqlTable("faq", {
     .$default(() => false)
     .notNull(),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("FAQS"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("FAQS"),
 });
 
+// -------------------------
+// WebinarDetailsTable
+// -------------------------
 export const WebinarDetailsTable = mysqlTable("webinar_detail", {
   id: int("id").primaryKey().autoincrement(),
   scheduledDate: datetime("webinar_scheduled_date", { mode: "date" }).notNull(),
@@ -95,11 +144,12 @@ export const WebinarDetailsTable = mysqlTable("webinar_detail", {
     length: 255,
   }).notNull(),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("WBNR"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("WBNR"),
 });
 
+// -------------------------
+// OfferedCoursesTable
+// -------------------------
 export const OfferedCoursesTable = mysqlTable("offered_course", {
   id: varchar("id", { length: 127 }).primaryKey(),
   courseTopic: varchar("course_topic", { length: 255 }).notNull(),
@@ -110,37 +160,31 @@ export const OfferedCoursesTable = mysqlTable("offered_course", {
   imageLink: varchar("image_link", { length: 255 }).notNull(),
   imageBase64Data: varchar("image_base64_data", { length: 1000 }),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("OFFC"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("OFFC"),
 });
 
-export const CourseAdvantagesTable = mysqlTable(
-  "course_advantage",
-  {
-    id: int("id").primaryKey().autoincrement(),
-    details: varchar("details", { length: 127 }).notNull(),
-    isVisible: boolean("is_visible_to_users")
-      .notNull()
-      .$default(() => true),
-    relatedTo: varchar("related_to", { length: 127 }).notNull(),
+// -------------------------
+// CourseAdvantagesTable
+// -------------------------
+export const CourseAdvantagesTable = mysqlTable("course_advantage", {
+  id: int("id").primaryKey().autoincrement(),
+  details: varchar("details", { length: 127 }).notNull(),
+  isVisible: boolean("is_visible_to_users")
+    .notNull()
+    .$default(() => true),
+  relatedTo: varchar("related_to", { length: 127 })
+    .notNull()
+    .references(() => OfferedCoursesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
 
-    tableIdentifierToken: char("table_identifier_token", { length: 4 })
-      .notNull()
-      .default("CADV"),
-  },
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CADV"),
+});
 
-  (table) => [
-    foreignKey({
-      columns: [table.relatedTo],
-      foreignColumns: [OfferedCoursesTable.id],
-      name: "offered_course_to_advantage",
-    })
-      .onDelete("cascade")
-      .onUpdate("cascade"),
-  ],
-);
-
+// -------------------------
+// TestimonialsTable
+// -------------------------
 export const TestimonialsTable = mysqlTable("testimonial", {
   id: int("id").primaryKey().autoincrement(),
   testimonialText: varchar("testimonial_text", { length: 512 }).notNull(),
@@ -152,11 +196,12 @@ export const TestimonialsTable = mysqlTable("testimonial", {
     }),
   authorSocialHandle: varchar("social_handle", { length: 127 }).notNull(),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("TMNL"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("TMNL"),
 });
 
+// -------------------------
+// ContactMessageTable
+// -------------------------
 export const ContactMessageTable = mysqlTable("contact_message", {
   id: int("id").primaryKey().autoincrement(),
   firstName: varchar({ length: 127 }).notNull(),
@@ -167,60 +212,48 @@ export const ContactMessageTable = mysqlTable("contact_message", {
   createdAt: timestamp("created_at", { mode: "date", fsp: 6 })
     .$defaultFn(() => new Date(Date.now()))
     .notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date", fsp: 6 }).notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", fsp: 6 })
+    .$defaultFn(() => new Date())
+    .$onUpdate(() => new Date())
+    .notNull(),
   isVerified: boolean("is_verified_user")
     .notNull()
     .$defaultFn(() => false),
 
-  tableIdentifierToken: char("table_identifier_token", { length: 4 })
-    .notNull()
-    .default("CONT"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CONT"),
 });
 
+// -------------------------
+// CourseBuyingProfilesTable
+// -------------------------
 export const CourseBuyingProfilesTable = mysqlTable(
   "course_buying_profiles",
   {
     id: int("id").primaryKey().autoincrement(),
-
     userEmail: varchar("user_email", { length: 255 })
       .notNull()
       .references(() => UserTable.email, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-
     courseId: varchar("course_id", { length: 127 })
       .notNull()
       .references(() => OfferedCoursesTable.id, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-
     amountPaid: int("amount_paid").notNull(),
-
     isCompleted: boolean("is_completed")
       .$default(() => false)
       .notNull(),
-
     purchasedAt: timestamp("purchased_at", { mode: "date", fsp: 6 })
       .$defaultFn(() => new Date())
       .notNull(),
+    orderId: varchar("order_id", { length: 10 }).notNull(),
 
-    tableIdentifierToken: char("table_identifier_token", { length: 4 })
-      .notNull()
-      .default("CBPR"),
+    tableIdentifierToken: tableIdentifierToken.notNull().default("CBPR"),
   },
   (table) => [
-    foreignKey({
-      columns: [table.userEmail],
-      foreignColumns: [UserTable.email],
-      name: "cbp_user_fk",
-    }),
-    foreignKey({
-      columns: [table.courseId],
-      foreignColumns: [OfferedCoursesTable.id],
-      name: "cbp_course_fk",
-    }),
     uniqueIndex("unique_user_course").on(table.userEmail, table.courseId),
   ],
 );
@@ -230,61 +263,8 @@ export const CourseBuyingProfilesTable = mysqlTable(
  * and if there is any querry we have to do we can understand
  * in which table we have to do the query.
  */
-export function tableIdentifier(
-  prefix: /**
-     * UserTable
-     */
-    | "USER"
-    /**
-     * ProfileTable
-     */
-    | "PROF"
-    /**
-     * BenefitedUserTable
-     */
-    | "BUSR"
-    /**
-     * MetricsTable
-     */
-    | "MTRC"
-    /**
-     * FaqTable
-     */
-    | "FAQS"
-    /**
-     * WebinarDetailsTable
-     */
-    | "WBNR"
-    /**
-     * OfferedCoursesTable
-     */
-    | "OFFC"
-    /**
-     * CourseAdvantagesTable
-     */
-    | "CADV"
-    /**
-     * TestimonialsTable
-     */
-    | "TMNL"
-    /**
-     * ContactMessageTable
-     */
-    | "CONT"
-    /**
-     * CourseBuyingProfiles
-     */
-    | "CBPR",
-) {
-  return `${prefix}`;
-}
-/**
- * This is used to identify which table the data is from,
- * and if there is any querry we have to do we can understand
- * in which table we have to do the query.
- */
 export function identifyTable(tableIdentifierToken: string) {
-  const prefix = tableIdentifierToken as Parameters<typeof tableIdentifier>[0];
+  const prefix = tableIdentifierToken as TableIdentifierToken;
 
   switch (prefix) {
     case "BUSR":
@@ -293,8 +273,6 @@ export function identifyTable(tableIdentifierToken: string) {
       return "FaqTable" as const;
     case "MTRC":
       return "MetricsTable" as const;
-    case "PROF":
-      return "ProfileTable" as const;
     case "USER":
       return "UserTable" as const;
     case "WBNR":
@@ -308,7 +286,7 @@ export function identifyTable(tableIdentifierToken: string) {
     case "CONT":
       return "ContactMessageTable" as const;
     case "CBPR":
-      return "CourseBuyingProfiles" as const;
+      return "CourseBuyingProfilesTable" as const;
 
     default:
       throw new Error("Provide a valid prefix to identify table name.");

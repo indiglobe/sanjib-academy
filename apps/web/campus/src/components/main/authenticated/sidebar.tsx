@@ -1,186 +1,211 @@
-import { cn } from "@/utils/cn";
-import { Link, useNavigate, useRouteContext } from "@tanstack/react-router";
 import { ComponentProps } from "react";
-import { generateUserNameFromEmail } from "@repo/utils/utility";
-import { LuSettings, LuUserPlus } from "react-icons/lu";
+import {
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  UserPlus,
+  LucideHome,
+  ClipboardPenLine,
+  GraduationCap,
+} from "lucide-react";
+import { cn } from "@/utils/cn";
 import { Button } from "@/ui/button";
-import { Image } from "@unpic/react";
-import { formatName } from "@repo/utils/utility";
-import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
-import { LogOutIcon } from "lucide-react";
+import { useSidebarState } from "@/hooks/use-sidebar-state";
+import {
+  Link,
+  useRouteContext,
+  useNavigate,
+  useLocation,
+} from "@tanstack/react-router";
+import { formatName, generateUserNameFromEmail } from "@repo/utils/utility";
 import { authClient } from "@/lib/auth/auth-client";
 
-export default function Sidebar({ ...props }: ComponentProps<"section">) {
-  return (
-    <section
-      {...props}
-      data-slot={`sidebar`}
-      aria-label="sidebar"
-      className={cn(
-        `bg-primary-50 text-primary-500 dark:text-foreground flex flex-col justify-between px-4 py-4`,
-        props.className,
-      )}
-    >
-      <SidebarTopSection />
-      <SidebarBottomSection />
-    </section>
-  );
-}
-
-/**
- * This is sidebar top section
- */
-function SidebarTopSection({ className, ...props }: ComponentProps<"div">) {
-  const context = useRouteContext({ from: "/(authenticated)" });
-
-  const { userDetails } = context;
-  return (
-    <div
-      data-slot={`sidebar-top-section`}
-      className={cn(`space-y-2`, className)}
-      {...props}
-    >
-      <div>
-        <Link
-          to="/"
-          className={cn(
-            `focus-visible:ring-primary-500 focus-visible:ring-offset-background relative inline-block size-10 overflow-clip rounded-md outline-none focus-visible:ring-2 focus-visible:ring-offset-2`,
-          )}
-        >
-          <Image
-            className={cn(`absolute h-full w-full object-cover`)}
-            src={"/logo256.png"}
-            alt="logo"
-            layout="fullWidth"
-          />
-        </Link>
-      </div>
-
-      <div>
-        {!userDetails && (
-          <div className={cn(``)}>
-            <Button className={cn(`w-full justify-start`)} variant={"primary"}>
-              <Link
-                tabIndex={-1}
-                to="/welcome"
-                className={cn(`flex items-center gap-2`)}
-              >
-                <span>
-                  <LuUserPlus />
-                </span>
-                <span>Welcome</span>
-              </Link>
-            </Button>
-          </div>
-        )}
-
-        {userDetails && (
-          <div>
-            <Button variant={"primary"}>
-              <Link
-                tabIndex={-1}
-                to="/$username/dashboard"
-                params={{
-                  username: generateUserNameFromEmail(userDetails.email),
-                }}
-              >
-                Dashboard
-              </Link>
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/**
- * This is sidebar bottom section
- */
-function SidebarBottomSection({ className, ...props }: ComponentProps<"div">) {
-  return (
-    <div
-      data-slot={`sidebar-bottom-section`}
-      className={cn(`flex flex-col gap-2`, className)}
-      {...props}
-    >
-      <Button
-        variant={"outline"}
-        className={cn(`border-primary-500 w-full justify-start bg-transparent`)}
-      >
-        <span>
-          <LuSettings />
-        </span>
-        <span>Settings</span>
-      </Button>
-
-      <SidebarProfileArea />
-    </div>
-  );
-}
-
-function SidebarProfileArea({ ...props }: ComponentProps<typeof Popover>) {
-  const context = useRouteContext({ from: "/(authenticated)" });
+export default function Sidebar({
+  className,
+  ...props
+}: ComponentProps<"aside">) {
+  const { isSidebarCollapsed, toggleSidebarBar } = useSidebarState();
+  const { userDetails, session } = useRouteContext({
+    from: "/(authenticated)",
+  });
   const navigate = useNavigate();
 
-  const { session } = context;
-
-  if (!session) return null;
-
-  const {
-    user: { name, image, email },
-  } = session;
-
-  const formatedName = formatName(name);
-
-  async function logout() {
-    await authClient.signOut();
-
-    navigate({ to: "/" });
-  }
-
   return (
-    <Popover modal {...props}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
+    <aside
+      className={cn(
+        "border-primary-200 bg-primary-50/50 fixed top-0 left-0 flex h-svh flex-col justify-between border-r transition-all duration-300",
+        isSidebarCollapsed ? "w-17.5" : "w-62.5",
+        className,
+      )}
+      {...props}
+    >
+      {/* Top Section */}
+      <div>
+        {/* Toggle Button */}
+        <div className="flex items-center justify-between p-4">
+          {!isSidebarCollapsed && (
+            <h1 className="text-primary-800 text-lg font-semibold">
+              {
+                formatName(userDetails ? userDetails.name : session.user.name)
+                  .firstName
+              }
+            </h1>
+          )}
+          <Button
+            variant="ghost"
+            className="text-primary-800 hover:bg-primary-100"
+            onClick={toggleSidebarBar}
+          >
+            {isSidebarCollapsed ? <Menu size={18} /> : <X size={18} />}
+          </Button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-2 px-2">
+          {userDetails && <ExistingUserSidebarItems />}
+          {!userDetails && <NewUserSidebarItems />}
+        </nav>
+      </div>
+
+      {/* Bottom Section */}
+      <div className="flex flex-col gap-2 p-2">
+        <SidebarButton
           className={cn(
-            `border-primary-500 flex h-16 w-full justify-start bg-transparent px-2`,
+            "text-accent-700 hover:bg-accent-100 text-sm transition",
+            isSidebarCollapsed && "justify-center",
           )}
         >
-          <span
-            className={cn(
-              `bg-primary-500 relative inline-block aspect-square h-full overflow-clip rounded-full`,
-            )}
-          >
-            {image && (
-              <Image
-                src={image}
-                className={cn(`absolute top-0 left-0 h-full w-full`)}
-                alt="profile photo"
-                layout="fullWidth"
-              />
-            )}
-          </span>
-          <span className={cn(`flex flex-col items-start justify-start`)}>
-            <span className={cn(`text-xl`)}>{formatedName.firstName}</span>
-            <span className={cn(`text-xs`)}>{email}</span>
-          </span>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="end" className="bg-primary-400 space-y-2">
-        <Button
-          className={cn(`flex w-full items-center`)}
-          onClick={logout}
-          variant={"destructive"}
+          <Link tabIndex={-1} to="/" className={cn(``)}>
+            <LucideHome size={20} />
+            <SidebarButtonContent>Home</SidebarButtonContent>
+          </Link>
+        </SidebarButton>
+
+        <SidebarButton
+          className={cn(
+            "text-accent-700 hover:bg-accent-100 text-sm transition",
+            isSidebarCollapsed && "justify-center",
+          )}
         >
-          <span>
-            <LogOutIcon />
-          </span>
-          <span>Log out</span>
-          <span></span>
-        </Button>
-      </PopoverContent>
-    </Popover>
+          <Link tabIndex={-1} to="/settings" className={cn(``)}>
+            <Settings size={20} />
+            <SidebarButtonContent>Settings</SidebarButtonContent>
+          </Link>
+        </SidebarButton>
+
+        <SidebarButton
+          className={cn(
+            "text-sm text-red-700 transition hover:bg-red-100 dark:hover:bg-red-950",
+            isSidebarCollapsed && "justify-center",
+          )}
+          onClick={async () => {
+            await authClient.signOut();
+            navigate({ to: "/" });
+          }}
+        >
+          <LogOut size={20} />
+          <SidebarButtonContent>Logout</SidebarButtonContent>
+        </SidebarButton>
+      </div>
+    </aside>
+  );
+}
+
+function SidebarButton({ className, ...props }: ComponentProps<"button">) {
+  return (
+    <button
+      className={cn(
+        `relative flex items-center gap-3 rounded-sm px-3 py-2 text-sm font-medium transition`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function SidebarButtonContent({ className, ...props }: ComponentProps<"span">) {
+  const { isSidebarCollapsed } = useSidebarState();
+  return (
+    <span
+      className={cn(
+        `absolute top-0 left-0 flex h-full w-full items-center justify-start pl-10 text-nowrap`,
+        `${isSidebarCollapsed && "opacity-0"}`,
+      )}
+      {...props}
+    />
+  );
+}
+
+function NewUserSidebarItems() {
+  const { isSidebarCollapsed } = useSidebarState();
+  return (
+    <>
+      <SidebarButton
+        className={cn(
+          "text-primary-800 hover:bg-primary-100 flex items-center gap-3 px-3 py-2 text-sm font-medium transition",
+          isSidebarCollapsed && "justify-center",
+        )}
+      >
+        <Link to={"/welcome"} tabIndex={-1}>
+          <UserPlus />
+          <SidebarButtonContent>Get Started</SidebarButtonContent>
+        </Link>
+      </SidebarButton>
+    </>
+  );
+}
+
+function ExistingUserSidebarItems() {
+  const { isSidebarCollapsed } = useSidebarState();
+  const { userDetails } = useRouteContext({
+    from: "/(authenticated)",
+  });
+  const location = useLocation();
+
+  const activePath = location.pathname.split("/")[2];
+
+  if (!userDetails) return null;
+
+  return (
+    <>
+      <SidebarButton
+        className={cn(
+          "text-primary-800 hover:bg-primary-100 flex items-center gap-3 px-3 py-2 text-sm font-medium transition",
+          isSidebarCollapsed && "justify-center",
+          activePath === "dashboard" && "bg-primary-100",
+        )}
+      >
+        <Link
+          to={"/$username/dashboard"}
+          tabIndex={-1}
+          params={{
+            username: generateUserNameFromEmail(userDetails.email),
+          }}
+        >
+          <ClipboardPenLine />
+          <SidebarButtonContent>Dashboard</SidebarButtonContent>
+        </Link>
+      </SidebarButton>
+
+      <SidebarButton
+        className={cn(
+          "text-primary-800 hover:bg-primary-100 flex items-center gap-3 px-3 py-2 text-sm font-medium transition",
+          isSidebarCollapsed && "justify-center",
+          activePath === "courses" && "bg-primary-100",
+        )}
+      >
+        <Link
+          to={"/$username/courses"}
+          tabIndex={-1}
+          params={{
+            username: generateUserNameFromEmail(userDetails.email),
+          }}
+        >
+          <GraduationCap />
+          <SidebarButtonContent>Courses</SidebarButtonContent>
+        </Link>
+      </SidebarButton>
+    </>
   );
 }

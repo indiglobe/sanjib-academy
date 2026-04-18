@@ -1,4 +1,5 @@
 import { cloudinary } from "@/integrations/cloudinary";
+import { generateUserNameFromEmail } from "@repo/utils/utility";
 import { welcomePageAvatarUploadSchema } from "@repo/utils/zod-schema/welcome-form";
 import { createFileRoute } from "@tanstack/react-router";
 import { UploadApiErrorResponse, UploadApiResponse } from "cloudinary";
@@ -30,6 +31,8 @@ export const Route = createFileRoute("/api/upload-image")({
           data: { avatar, userEmail },
         } = parsedData;
 
+        const userName = generateUserNameFromEmail(userEmail);
+
         // Convert to buffer
         const arrayBuffer = await avatar.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
@@ -39,8 +42,9 @@ export const Route = createFileRoute("/api/upload-image")({
           (resolve, reject) => {
             const uploadStream = cloudinary.uploader.upload_stream(
               {
-                folder: `temp/avatar/${userEmail}`,
-                public_id: crypto.randomUUID(),
+                folder: `${userName}/avatars`,
+                public_id: 'avatar',
+                overwrite: true,
               },
               (error, result) => {
                 if (error) return reject(error);

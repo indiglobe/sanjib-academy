@@ -8,22 +8,25 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { useRouteContext } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
-import lodash from "lodash";
-import { ComponentProps, SubmitEvent, useState } from "react";
+import { ComponentProps, useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import axios from "axios";
 import { UploadResult } from "@/routes/api/upload-image";
 import { formatName, generateUserNameFromEmail } from "@repo/utils/utility";
+import { useServerFn } from "@tanstack/react-start";
+import { submitWelcomeFormServerFn } from "@/integrations/server-functions/form-actions/welcome-form";
 
 export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
   /**
-   *  Get the context value from the route
+   *  Get the context values from the route
    */
   const { session } = useRouteContext({
     from: "/(authenticated)/(new-users)/welcome/",
   });
+  const submitWelcomeForm = useServerFn(submitWelcomeFormServerFn);
+
   /**
-   * Destructured the context for the value
+   * Destructured the contexts for the value
    */
   const {
     user: { email, name, image },
@@ -36,41 +39,36 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
       name,
       avatarImageUrl: image ?? "",
       age: 0,
+      phone: Number("0000000000"),
     } satisfies WelcomeFormSchema,
+
     // run this function on submit of the form
     onSubmit: async ({ value }) => {
-      console.log(value);
+      const { email, age, avatarImageUrl, name, phone } = value;
+
+      await submitWelcomeForm({
+        data: { email, age, name, phone, avatarImageUrl },
+      });
     },
+
     // Validate the form fields before submission
     validators: {
       onSubmit: welcomeFormSchema,
     },
   });
+
   // state related the previewing image
   const [previewImageSrc, setPreviewImageSrc] = useState(image);
   const [isAvatarUploading, setIsAvatarUploading] = useState(false);
 
+  // an utility function for the name
   const formatedName = formatName(name);
 
-  //
-  async function onSubmit(e: SubmitEvent) {
-    e.preventDefault();
-
-    await handleSubmit();
-  }
-
-  // When the user uploads their avatar run function
   async function uploadTemporayAvatar(files: FileList | null) {
     if (!files) return;
 
-    // Take the first image as avatar
-    const firstAvatarImage = files[0];
-
-    /**
-     * Set preview so that the image is visible to the user
-     * on when they are selecting an image from their device
-     */
-    const previewUrl = URL.createObjectURL(firstAvatarImage);
+    const file = files[0];
+    const previewUrl = URL.createObjectURL(file);
     setPreviewImageSrc(previewUrl);
 
     /**
@@ -80,172 +78,124 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
 
     // Generate a request body for the uploading api
     const reqBody = {
-      avatar: firstAvatarImage,
+      avatar: file,
       userEmail: generateUserNameFromEmail(email),
     } satisfies WelcomePageAvatarUploadSchema;
 
-    // Populated for data with firm fields according to the request body
+    // Generate a request body for the uploading api
     Object.entries(reqBody).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
     setIsAvatarUploading(true);
-    // Send image to the api so taht the backend can upload image
     const res = await axios.post("/api/upload-image", formData);
     setIsAvatarUploading(false);
 
-    // After successful Upload This is the uploaded result
     const uploadResult = res.data as UploadResult;
 
-    // Set Uploaded URL to the Form Field
     if (uploadResult.status === "success") {
       setFieldValue("avatarImageUrl", () => uploadResult.result.secure_url);
     }
   }
 
-  return (
-    <div {...props} className={cn(``, props.className)}>
-      <h1 className={cn(`flex flex-col py-10`)}>
-        <span className={cn(`text-2xl`)}>Hey {formatedName.firstName}!</span>
-        <span className={cn(`text-xl`)}>
-          👋 Let's get your profile set up so you can get started.
-        </span>
-      </h1>
-      <form
-        onSubmit={onSubmit}
-        className={cn(`m-auto flex max-w-160 flex-col gap-4`)}
-      >
-        {/* Avatar section */}
-        <div className={cn(`flex gap-4`)}>
-          <Field name="avatarImageUrl">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div
-                  className={cn(
-                    `relative flex w-full flex-col items-center justify-center gap-2`,
-                  )}
-                >
-                  <label htmlFor="avatarImageUrl" className={cn(`relative`)}>
-                    <span
-                      className={cn(
-                        `relative flex size-36 items-center justify-center overflow-clip rounded-full`,
-                        {
-                          "bg-primary-500":
-                            !previewImageSrc || previewImageSrc.length === 0,
-                          "border-primary-500 border-2": !(
-                            !previewImageSrc || previewImageSrc.length === 0
-                          ),
-                          "opacity-50": isAvatarUploading,
-                        },
-                      )}
-                    >
-                      {!(!previewImageSrc || previewImageSrc.length === 0) && (
-                        <Image
-                          src={previewImageSrc}
-                          alt={`image of ${lodash.kebabCase(name)}`}
-                          className={cn(
-                            `absolute top-0 left-0 h-full w-full object-cover`,
-                          )}
-                          layout="fullWidth"
-                        />
-                      )}
+  // classname for using in fields
+  const inputStyle =
+    "rounded-lg border px-3 py-2 text-sm bg-background border-primary-200 dark:border-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition";
 
-                      {(!previewImageSrc || previewImageSrc.length === 0) && (
-                        <LuImagePlus className={cn(`size-20`)} />
-                      )}
-                    </span>
-                  </label>
+  return (
+    <div
+      {...props}
+      className={cn(
+        `flex min-h-svh items-center justify-center px-4 py-8`,
+        props.className,
+      )}
+    >
+      {/* Card */}
+      <div
+        className={cn(
+          `border-primary-200 dark:border-primary-800 bg-background/80 w-full max-w-lg space-y-6 rounded-2xl border p-6 shadow-xl backdrop-blur-xl sm:p-8`,
+        )}
+      >
+        {/* Heading */}
+        <div className={cn(`space-y-2 text-center`)}>
+          <h1 className={cn(`text-2xl font-bold sm:text-3xl`)}>
+            Hey {formatedName.firstName} 👋
+          </h1>
+          <p className={cn(`text-foreground/70 text-sm`)}>
+            Let's set up your profile to get started
+          </p>
+        </div>
+
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleSubmit();
+          }}
+          className={cn(`space-y-5`)}
+        >
+          {/* Avatar */}
+          <div className={cn(`flex justify-center`)}>
+            <Field name="avatarImageUrl">
+              {() => (
+                <label className={cn(`group relative cursor-pointer`)}>
+                  <div
+                    className={cn(
+                      `flex size-28 items-center justify-center overflow-hidden rounded-full transition sm:size-32`,
+                      `ring-primary-300 dark:ring-primary-700 ring-2`,
+                      {
+                        "opacity-50": isAvatarUploading,
+                      },
+                    )}
+                  >
+                    {previewImageSrc ? (
+                      <Image
+                        src={previewImageSrc}
+                        alt="avatar"
+                        layout="fullWidth"
+                        className={cn(`h-full w-full object-cover`)}
+                      />
+                    ) : (
+                      <LuImagePlus className={cn(`text-primary-500 size-10`)} />
+                    )}
+                  </div>
+
+                  {/* Hover overlay */}
+                  <div
+                    className={cn(
+                      `absolute inset-0 flex items-center justify-center rounded-full bg-black/30 text-xs text-white opacity-0 transition group-hover:opacity-100`,
+                    )}
+                  >
+                    Change
+                  </div>
 
                   <input
                     type="file"
-                    id="avatarImageUrl"
-                    accept="image/png, image/gif, image/jpeg"
+                    className={cn(`hidden`)}
+                    accept="image/*"
                     disabled={isAvatarUploading}
-                    className={cn(
-                      `focus-visible:ring-offset-background absolute -z-1 size-0 h-0 w-0 rounded-sm border border-black p-0 opacity-0 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    onChange={async (e) => {
-                      await uploadTemporayAvatar(e.target.files);
-                    }}
+                    onChange={(e) => uploadTemporayAvatar(e.target.files)}
                   />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
-                    </span>
-                  )}
-                </div>
-              );
-            }}
-          </Field>
-        </div>
-        {/* Avatar section */}
+                </label>
+              )}
+            </Field>
+          </div>
 
-        {/* Email section */}
-        <div className={cn(`flex gap-4`)}>
+          {/* Email */}
           <Field name="email">
-            {(field) => {
-              const {
-                state: {
-                  meta: { errors, isTouched },
-                },
-              } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="email"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Email:
-                  </label>
-
-                  <input
-                    type="text"
-                    id="email"
-                    placeholder=""
-                    disabled
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  {errors.length > 0 && isTouched && (
-                    <span
-                      className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
-                      )}
-                    >
-                      {errors[0]?.message}
-                    </span>
-                  )}
-                </div>
-              );
-            }}
+            {(field) => (
+              <div className={cn(`flex flex-col gap-1`)}>
+                <label className={cn(`text-sm font-medium`)}>Email</label>
+                <input
+                  disabled
+                  value={field.state.value ?? ""}
+                  className={cn(inputStyle, `cursor-not-allowed opacity-70`)}
+                />
+              </div>
+            )}
           </Field>
-        </div>
-        {/* Email section */}
+          {/* Email */}
 
-        {/* Name section */}
-        <div className={cn(`flex gap-4`)}>
+          {/* Name */}
           <Field name="name">
             {(field) => {
               const {
@@ -253,35 +203,22 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
                   meta: { errors, isTouched },
                 },
               } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="name"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Name:
-                  </label>
 
+              return (
+                <div className={cn(`relative flex flex-col gap-1`)}>
+                  <label className={cn(`text-sm font-medium`)}>Name</label>
                   <input
-                    type="text"
-                    id="name"
-                    placeholder="Enter your name"
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
+                    value={field.state.value ?? ""}
+                    placeholder="Jhon Doe"
                     onChange={(e) => field.handleChange(e.target.value)}
+                    className={cn(inputStyle, {
+                      "border-red-500": errors.length && isTouched,
+                    })}
                   />
                   {errors.length > 0 && isTouched && (
                     <span
                       className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
+                        `absolute top-full left-0 text-xs text-red-500`,
                       )}
                     >
                       {errors[0]?.message}
@@ -291,11 +228,9 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
               );
             }}
           </Field>
-        </div>
-        {/* Name section */}
+          {/* Name */}
 
-        {/* Age section */}
-        <div className={cn(`flex gap-4`)}>
+          {/* Age */}
           <Field name="age">
             {(field) => {
               const {
@@ -303,35 +238,33 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
                   meta: { errors, isTouched },
                 },
               } = field;
-              return (
-                <div className={cn(`relative flex w-full flex-col gap-2`)}>
-                  <label
-                    htmlFor="age"
-                    className={cn(
-                      `relative after:absolute after:text-xs after:text-red-400 after:content-['*']`,
-                    )}
-                  >
-                    Age:
-                  </label>
 
+              return (
+                <div className={cn(`relative flex flex-col gap-1`)}>
+                  <label className={cn(`text-sm font-medium`)}>Age</label>
                   <input
-                    type="number"
-                    id="age"
-                    placeholder="Enter your age"
-                    className={cn(
-                      `focus-visible:ring-offset-background rounded-sm border border-black px-3 py-2 focus-visible:ring-1 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:outline-none dark:border-white dark:focus-visible:ring-white`,
-                      {
-                        "border-red-500 focus-visible:ring-red-500 dark:border-red-500 dark:focus-visible:ring-red-500":
-                          errors.length > 0 && isTouched,
-                      },
-                    )}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    type="text"
+                    inputMode="numeric"
+                    value={field.state.value === 0 ? "" : field.state.value}
+                    placeholder="0"
+                    onChange={(e) => {
+                      const newVal = e.target.value;
+                      // If empty, set 0
+                      if (newVal === "") {
+                        field.handleChange(0);
+                      } else {
+                        // Convert to number
+                        field.handleChange(Number(newVal));
+                      }
+                    }}
+                    className={cn(inputStyle, {
+                      "border-red-500": errors.length && isTouched,
+                    })}
                   />
                   {errors.length > 0 && isTouched && (
                     <span
                       className={cn(
-                        `absolute top-full left-0 translate-y-1/10 text-xs text-red-500`,
+                        `absolute top-full left-0 text-xs text-red-500`,
                       )}
                     >
                       {errors[0]?.message}
@@ -341,15 +274,57 @@ export default function WelcomeForm({ ...props }: ComponentProps<"div">) {
               );
             }}
           </Field>
-        </div>
-        {/* Age section */}
+          {/* Age */}
 
-        <div className={cn(`ml-auto flex`)}>
-          <Button variant={"primary"} type="submit">
-            Create profile
-          </Button>
-        </div>
-      </form>
+          {/* Phone no. */}
+          <Field name="phone">
+            {(field) => {
+              const {
+                state: {
+                  meta: { errors, isTouched },
+                },
+              } = field;
+
+              return (
+                <div className={cn(`relative flex flex-col gap-1`)}>
+                  <label className={cn(`text-sm font-medium`)}>Phone no.</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="9876543210"
+                    value={field.state.value === 0 ? "" : field.state.value}
+                    onChange={(e) => field.handleChange(Number(e.target.value))}
+                    className={cn(inputStyle, {
+                      "border-red-500": errors.length && isTouched,
+                    })}
+                  />
+                  {errors.length > 0 && isTouched && (
+                    <span
+                      className={cn(
+                        `absolute top-full left-0 text-xs text-red-500`,
+                      )}
+                    >
+                      {errors[0]?.message}
+                    </span>
+                  )}
+                </div>
+              );
+            }}
+          </Field>
+          {/* Phone no. */}
+
+          {/* Submit */}
+          <div className={cn(`pt-2`)}>
+            <Button
+              variant="primary"
+              className={cn(`w-full py-2 text-sm sm:text-base`)}
+              type="submit"
+            >
+              Create Profile
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

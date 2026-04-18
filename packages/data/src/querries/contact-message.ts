@@ -1,21 +1,146 @@
-import { ContactMessageTable } from "@/schema";
-import { db } from "..";
-import { InferInsertModel } from "drizzle-orm";
+import { db } from "@/index";
+import { ContactMessageTable, TableIdentifierToken } from "@/schema";
+import { asc, eq } from "drizzle-orm";
 
-type InsertNewContactMessage = Omit<
-  InferInsertModel<typeof ContactMessageTable>,
-  "id" | "createdAt" | "tableIdentifierToken" | "updatedAt"
+/**
+ * Table identifier token (system controlled)
+ */
+const tableIdentifierToken: TableIdentifierToken = "CONT";
+
+/**
+ * ----------------------------------------
+ * CREATE
+ * ----------------------------------------
+ */
+
+export type TCreate__ContactMessage = Omit<
+  typeof ContactMessageTable.$inferInsert,
+  "id" | "tableIdentifierToken"
 >;
 
-export const createNewContactMessage = async (
-  messageDetails: InsertNewContactMessage,
-) => {
-  const insertResult = await db
-    .insert(ContactMessageTable)
-    .values({ ...messageDetails, updatedAt: new Date(Date.now()) });
+export const create__ContactMessage = async ({
+  firstName,
+  lastName,
+  email,
+  phoneNo,
+  message,
+}: TCreate__ContactMessage) => {
+  const now = new Date();
 
-  if (insertResult[0].affectedRows >= 1) {
-    return { status: "success", data: messageDetails } as const;
-  }
-  return { status: "fail" } as const;
+  await db.insert(ContactMessageTable).values({
+    firstName,
+    lastName,
+    email,
+    phoneNo,
+    message,
+    updatedAt: now,
+  });
+
+  return {
+    firstName,
+    lastName,
+    email,
+    phoneNo,
+    message,
+    createdAt: now,
+    updatedAt: now,
+    isVerified: false,
+    tableIdentifierToken,
+  } satisfies Omit<typeof ContactMessageTable.$inferSelect, "id">;
+};
+
+/**
+ * ----------------------------------------
+ * READ (ALL)
+ * ----------------------------------------
+ */
+
+export const read__AllContactMessages = async () => {
+  return await db
+    .select()
+    .from(ContactMessageTable)
+    .orderBy(asc(ContactMessageTable.createdAt));
+};
+
+/**
+ * ----------------------------------------
+ * READ (BY ID)
+ * ----------------------------------------
+ */
+
+export type TRead__SingleContactMessage = {
+  identifier: Required<{
+    id: (typeof ContactMessageTable.$inferSelect)["id"];
+  }>;
+};
+
+export const read__ContactMessageById = async ({
+  identifier: { id },
+}: TRead__SingleContactMessage) => {
+  const [message] = await db
+    .select()
+    .from(ContactMessageTable)
+    .where(eq(ContactMessageTable.id, id));
+
+  return message ? message : null;
+};
+
+/**
+ * ----------------------------------------
+ * UPDATE
+ * ----------------------------------------
+ */
+
+export type TUpdate__ContactMessage = {
+  identifier: Required<{
+    id: (typeof ContactMessageTable.$inferSelect)["id"];
+  }>;
+
+  dataToUpdate: Partial<
+    Omit<typeof ContactMessageTable.$inferInsert, "id" | "tableIdentifierToken">
+  >;
+};
+
+export const update__ContactMessage = async ({
+  identifier,
+  dataToUpdate,
+}: TUpdate__ContactMessage) => {
+  const now = new Date();
+
+  const filteredData = Object.fromEntries(
+    Object.entries(dataToUpdate).filter(([, v]) => v !== undefined),
+  ) as typeof dataToUpdate;
+
+  await db
+    .update(ContactMessageTable)
+    .set({
+      ...filteredData,
+      updatedAt: now,
+    })
+    .where(eq(ContactMessageTable.id, identifier.id));
+
+  return {
+    ...filteredData,
+    id: identifier.id,
+    updatedAt: now,
+    tableIdentifierToken,
+  } satisfies Partial<typeof ContactMessageTable.$inferInsert>;
+};
+
+/**
+ * ----------------------------------------
+ * DELETE
+ * ----------------------------------------
+ */
+
+export type TDelete__ContactMessage = {
+  identifier: Required<{
+    id: NonNullable<(typeof ContactMessageTable.$inferInsert)["id"]>;
+  }>;
+};
+
+export const delete__ContactMessage = async ({
+  identifier: { id },
+}: TDelete__ContactMessage) => {
+  await db.delete(ContactMessageTable).where(eq(ContactMessageTable.id, id));
 };

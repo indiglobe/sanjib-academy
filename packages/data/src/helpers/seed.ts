@@ -1,12 +1,9 @@
-import { InferInsertModel } from "drizzle-orm";
 import { faker } from "@faker-js/faker";
 import { db } from "..";
-
 import {
   BenefitedUserTable,
   FaqTable,
   MetricsTable,
-  ProfileTable,
   UserTable,
   WebinarDetailsTable,
   CourseAdvantagesTable,
@@ -29,44 +26,45 @@ async function seed() {
   await db.delete(FaqTable);
   await db.delete(MetricsTable);
   await db.delete(BenefitedUserTable);
-  await db.delete(ProfileTable);
   await db.delete(UserTable);
 
   /**
    * USERS
    */
-  type InsertUser = InferInsertModel<typeof UserTable>;
+  type InsertUser = typeof UserTable.$inferInsert;
 
-  const users: InsertUser[] = [
+  const users = [
     {
       email: "Aaron.Mills84@hotmail.com",
       name: "Dr. Dianna Streich",
-      oauthProviderAvatarImageUrl:
-        "https://avatars.githubusercontent.com/u/35384604",
-      uploadedAvatarImageUrl: null,
+      uploadedAvatarImageUrl: "",
+      age: 20,
+      phoneNo: "9876543210",
     },
     {
       email: "Andy49@hotmail.com",
       name: "Jerry Prosacco",
-      oauthProviderAvatarImageUrl:
-        "https://avatars.githubusercontent.com/u/52535046",
       uploadedAvatarImageUrl:
         "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
+      age: 60,
+      phoneNo: "6936936922",
     },
     {
       email: "Anita.Cormier@yahoo.com",
       name: "Ross Watsica",
-      oauthProviderAvatarImageUrl:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/2.jpg",
       uploadedAvatarImageUrl:
         "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/21.jpg",
+      age: 50,
+      phoneNo: "2222222222",
+      role: "student",
     },
     {
       email: "Adrian.Reynolds40@gmail.com",
       name: "Dr. Alexander Gislason",
-      oauthProviderAvatarImageUrl:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/female/512/34.jpg",
-      uploadedAvatarImageUrl: null,
+      uploadedAvatarImageUrl: "",
+      age: 50,
+      phoneNo: "8888888888",
+      role: "admin",
     },
   ] as InsertUser[];
 
@@ -76,7 +74,15 @@ async function seed() {
     return {
       email: `${name.split(" ").join(`_${idx}_`)}@email.com`,
       name: name,
-      oauthProviderAvatarImageUrl: faker.image.avatar(),
+      age: randomInt(18, 50),
+      phoneNo: Math.floor(Math.random() * 10000000000).toString(),
+      uploadedAvatarImageUrl: "",
+      role:
+        Math.random() > 0.3
+          ? "basic"
+          : Math.random() > 0.6
+            ? "student"
+            : "admin",
     } satisfies InsertUser;
   });
   // THIS IS EXTRA USERS DELETE IT LATER
@@ -88,42 +94,9 @@ async function seed() {
   }
 
   /**
-   * PROFILES
-   */
-  type InsertProfile = InferInsertModel<typeof ProfileTable>;
-
-  const profiles: InsertProfile[] = [
-    { profileOf: "Aaron.Mills84@hotmail.com", role: "admin" },
-    { profileOf: "Adrian.Reynolds40@gmail.com", role: "basic" },
-    { profileOf: "Andy49@hotmail.com", role: "student" },
-    { profileOf: "Anita.Cormier@yahoo.com", role: "student" },
-  ] as InsertProfile[];
-
-  // THIS IS EXTRA PROFILES DELETE IT LATER
-  const __dummyProfiles = __dummyUsers.map<InsertProfile>(({ email }) => {
-    return {
-      profileOf: email,
-      age: randomInt(18, 100),
-      role:
-        Math.random() > 0.8
-          ? "admin"
-          : Math.random() > 0.6
-            ? "basic"
-            : "student",
-    };
-  });
-  // THIS IS EXTRA PROFILES DELETE IT LATER
-
-  async function insertProfileTable() {
-    console.log(`---INSERTING PROFILES---`);
-    await db.insert(ProfileTable).values([...profiles, ...__dummyProfiles]);
-    console.log(`---INSERTED PROFILES---`);
-  }
-
-  /**
    * BENEFITED USERS
    */
-  type InsertBenefitedUser = InferInsertModel<typeof BenefitedUserTable>;
+  type InsertBenefitedUser = typeof BenefitedUserTable.$inferInsert;
 
   const benefitedUsers: InsertBenefitedUser[] = users
     .filter(({}) => Math.random() < 0.7)
@@ -132,13 +105,12 @@ async function seed() {
     }));
 
   // THIS IS EXTRA BENEFITED USERS DELETE IT LATER
-  const __dummyBenefitedUser = __dummyProfiles
-    .filter(({ profileOf, role }) => {
-      if (role === "admin" || Math.random() > 0.5)
-        return { userEmail: profileOf };
+  const __dummyBenefitedUser = __dummyUsers
+    .filter(({ email, role }) => {
+      if (role === "admin" || Math.random() > 0.5) return { userEmail: email };
     })
-    .map<InsertBenefitedUser>(({ profileOf }) => {
-      return { userEmail: profileOf };
+    .map<InsertBenefitedUser>(({ email }) => {
+      return { userEmail: email };
     });
   // THIS IS EXTRA BENEFITED USERS DELETE IT LATER
 
@@ -153,7 +125,7 @@ async function seed() {
   /**
    * METRICS
    */
-  type InsertMetric = InferInsertModel<typeof MetricsTable>;
+  type InsertMetric = typeof MetricsTable.$inferInsert;
 
   const metrics: InsertMetric[] = (
     [
@@ -201,7 +173,7 @@ async function seed() {
   /**
    * FAQ
    */
-  type InsertFaq = InferInsertModel<typeof FaqTable>;
+  type InsertFaq = typeof FaqTable.$inferInsert;
 
   const faq: InsertFaq[] = [
     {
@@ -280,7 +252,7 @@ async function seed() {
   /**
    * WEBINARS
    */
-  type InsertWebinar = InferInsertModel<typeof WebinarDetailsTable>;
+  type InsertWebinar = typeof WebinarDetailsTable.$inferInsert;
 
   const webinars: InsertWebinar[] = [
     {
@@ -302,7 +274,7 @@ async function seed() {
   /**
    * OFFERED COURSES
    */
-  type InsertOfferedCourses = InferInsertModel<typeof OfferedCoursesTable>;
+  type InsertOfferedCourses = typeof OfferedCoursesTable.$inferInsert;
 
   const offeredcourses: InsertOfferedCourses[] = [
     {
@@ -350,9 +322,8 @@ async function seed() {
   /**
    * OFFERED COURSES ADVANTAGES
    */
-  type InsertOfferedCoursesAdvantages = InferInsertModel<
-    typeof CourseAdvantagesTable
-  >;
+  type InsertOfferedCoursesAdvantages =
+    typeof CourseAdvantagesTable.$inferInsert;
   const offeredCoursesAdvantages: InsertOfferedCoursesAdvantages[] = [
     {
       details: "Smart Money Concepts (SMC)",
@@ -437,7 +408,7 @@ async function seed() {
   /**
    * TESTIMONIALS
    */
-  type InsertTestimonials = InferInsertModel<typeof TestimonialsTable>;
+  type InsertTestimonials = typeof TestimonialsTable.$inferInsert;
 
   const testimonials: InsertTestimonials[] =
     benefitedUsers.map<InsertTestimonials>((e) => {
@@ -492,7 +463,7 @@ async function seed() {
   /**
    * CONTACT
    */
-  type InsertContact = InferInsertModel<typeof ContactMessageTable>;
+  type InsertContact = typeof ContactMessageTable.$inferInsert;
 
   const contactMessage: InsertContact[] = [
     {
@@ -525,9 +496,8 @@ async function seed() {
   /**
    * COURSE BUYING PROFILES
    */
-  type InsertCourseBuyingProfiles = InferInsertModel<
-    typeof CourseBuyingProfilesTable
-  >;
+  type InsertCourseBuyingProfiles =
+    typeof CourseBuyingProfilesTable.$inferInsert;
 
   const insertCourseBuyingProfiles: InsertCourseBuyingProfiles[] =
     [] satisfies InsertCourseBuyingProfiles[];
@@ -543,7 +513,6 @@ async function seed() {
   }
 
   await insertUserTable();
-  await insertProfileTable();
   await insertBenefitedUserTable();
   await insertMetricsTable();
   await insertWebinarDetailsTable();

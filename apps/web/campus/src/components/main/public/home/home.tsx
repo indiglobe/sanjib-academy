@@ -125,175 +125,118 @@ export function HeroSection({ ...props }: ComponentProps<"section">) {
     <section
       {...props}
       data-slot={`hero-section`}
-      className={cn(`font-primary-secondary pt-8 pb-6`, props.className)}
+      className={cn(
+        `font-primary-secondary relative py-10 sm:py-14 lg:py-20`,
+        props.className,
+      )}
     >
-      {/* hero section bg image */}
-      <div
-        aria-hidden
-        data-slot={`background`}
-        className={cn(`absolute inset-0 -z-1 flex items-center justify-center`)}
-      >
-        <div className={cn(`opacity-50 dark:opacity-30`)}>
-          <Image src={heroSection} layout="fullWidth" alt="backgrond image" />
+      {/* background */}
+      <div className="absolute inset-0 -z-1 flex items-center justify-center">
+        <div className="opacity-40 sm:opacity-50 dark:opacity-30">
+          <Image src={heroSection} layout="fullWidth" alt="background image" />
         </div>
-
-        <div
-          className={cn(
-            `from-background absolute top-0 left-0 h-full w-full bg-linear-to-r to-transparent`,
-          )}
-        />
+        <div className="from-background absolute inset-0 bg-linear-to-r to-transparent" />
       </div>
-      {/* hero section bg image */}
-      {/* hero section content */}
-      <div
-        className={cn(`flex w-full flex-col gap-6 *:basis-full lg:flex-row`)}
-      >
-        {/* hero section texts */}
-        <div className={cn(`lg:basis-2/3`)}>
-          {/* benefited users list with avatar */}
+
+      {/* content wrapper */}
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-16">
+        {/* LEFT CONTENT */}
+        <div className="lg:basis-2/3">
+          {/* users */}
           <div
-            id={`gsap-benefited-users`}
-            className={cn(
-              `bg-foreground/10 group relative mb-4 flex max-w-max items-center gap-2 rounded-full p-2 pr-8 sm:gap-4 md:mb-8`,
-            )}
+            id="gsap-benefited-users"
+            className="bg-foreground/10 mb-4 flex w-fit items-center gap-2 rounded-full p-2 pr-4 sm:gap-3 md:mb-6"
           >
-            <div className="flex items-center -space-x-4 transition-all duration-300 group-hover:space-x-0">
+            <div className="flex items-center -space-x-3 sm:-space-x-4">
               {benefitedUsers.map(({ email, name, imageUrl }, idx) => {
                 if (idx >= 4) return null;
                 return (
                   <Avatar
                     key={email}
-                    className="border-background size-10 border-2 transition-all duration-300 md:size-12"
+                    className="border-background size-8 border-2 sm:size-10 md:size-12"
                   >
-                    <AvatarImage src={imageUrl ?? undefined} alt="avatar" />
+                    <AvatarImage src={imageUrl ?? undefined} />
                     <AvatarFallback>{name[0]}</AvatarFallback>
                   </Avatar>
                 );
               })}
             </div>
-            <div className={cn(``)}>
+
+            <div className="text-xs sm:text-sm md:text-base">
               {benefitedUsers.length > 1000
                 ? `${lodash.round(benefitedUsers.length / 1000, 2)}k`
                 : benefitedUsers.length}
               + satisfied users
             </div>
           </div>
-          {/* benefited users list with avatar */}
 
+          {/* experience */}
           <div
-            id={`gsap-experience-text`}
-            className={cn(
-              `text-background dark:text-foreground bg-primary-500 relative flex max-w-max rounded-full px-4 py-2 text-base font-semibold md:text-lg lg:text-xl`,
-            )}
+            id="gsap-experience-text"
+            className="bg-primary-500 text-background dark:text-foreground w-fit rounded-full px-3 py-1 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm md:text-base"
           >
             7+ Years Experience
           </div>
 
-          {/* hero section text */}
-          <div
-            className={cn(
-              `font-brand-secondary flex flex-col gap-1 py-10 md:gap-2 lg:gap-4`,
-            )}
-          >
-            <span
-              className={cn(
-                `gsap-heading-text`,
-                `relative text-2xl md:text-3xl lg:text-4xl`,
-              )}
-            >
-              India's Best Channel to{" "}
+          {/* headings */}
+          <div className="py-6 sm:py-8 lg:py-10">
+            <span className="gsap-heading-text font-brand-secondary block text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+              India's Best Channel to
             </span>
-            <span
-              className={cn(
-                `gsap-heading-text`,
-                `text-primary-500 relative text-4xl font-semibold md:text-5xl lg:text-6xl lg:leading-16`,
-              )}
-            >
-              Learn and Trade Everyday{" "}
+
+            <span className="gsap-heading-text text-primary-500 font-brand-secondary block text-3xl leading-tight font-semibold sm:text-4xl md:text-5xl lg:text-6xl">
+              Learn and Trade Everyday
             </span>
-            <span
-              className={cn(
-                `gsap-heading-text`,
-                `relative text-2xl md:text-3xl lg:text-4xl`,
-              )}
-            >
+
+            <span className="gsap-heading-text font-brand-secondary block text-xl sm:text-2xl md:text-3xl lg:text-4xl">
               with Experienced Traders.
             </span>
-            <span
-              className={cn(
-                `gsap-heading-text`,
-                `font-brand-primary max-w-120 pt-4 text-sm md:text-base lg:text-xl`,
-              )}
-            >
+
+            <span className="gsap-heading-text font-brand-secondary mt-4 block max-w-xl text-sm sm:text-base md:text-lg lg:text-xl">
               Combining Smart Money Concepts, Options Hedging, and Fundamental
               Analysis in one powerful mentorship.
             </span>
           </div>
-          {/* hero section text */}
 
-          {/* CTA buttons */}
+          {/* buttons */}
           <div
-            id={`gsap-cta-buttons`}
-            className={cn(`flex flex-wrap gap-x-4 gap-y-4`)}
+            id="gsap-cta-buttons"
+            className="flex flex-col gap-3 sm:flex-row sm:flex-wrap"
           >
             <Link to="/courses" tabIndex={-1}>
-              <button
-                className={cn(
-                  `focus-visible:ring-offset-background text-background dark:text-foreground bg-primary-500 hover:bg-primary-500 focus-visible:bg-primary-500 focus-visible:ring-primary-500 focus-visible:textp relative rounded-full px-4 py-2 text-base font-semibold transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-lg lg:text-xl`,
-                )}
-              >
+              <button className="focus-visible:ring-offset-background text-background dark:text-foreground bg-primary-500 hover:bg-primary-500 focus-visible:bg-primary-500 focus-visible:ring-primary-500 relative rounded-full px-4 py-2 text-base font-semibold transition-all outline-none focus-visible:ring-2 focus-visible:ring-offset-2 md:text-lg lg:text-xl">
                 Get started
               </button>
             </Link>
 
-            <button
-              className={cn(
-                `focus-visible:ring-offset-background dark:text-foreground hover:text-background focus-visible:text-primary-50 text-primary-500 outline-primary-500 hover:bg-primary-500 focus-visible:bg-primary-500 focus-visible:ring-primary-500 rounded-full bg-transparent px-4 py-2 text-base font-semibold outline-2 transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:text-lg lg:text-xl`,
-              )}
-            >
+            <button className="focus-visible:ring-offset-background dark:text-foreground hover:text-background focus-visible:text-primary-50 text-primary-500 outline-primary-500 hover:bg-primary-500 focus-visible:bg-primary-500 focus-visible:ring-primary-500 rounded-full bg-transparent px-4 py-2 text-base font-semibold outline-2 transition-all focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:text-lg lg:text-xl">
               See result
             </button>
           </div>
-          {/* CTA buttons */}
         </div>
-        {/* hero section texts */}
-        {/* hero section images */}
-        <div
-          id={`owner-portrait`}
-          className={cn(
-            `relative flex items-center justify-center lg:basis-1/3`,
-          )}
-        >
-          <div
-            className={cn(
-              `relative aspect-3/4 max-lg:w-[70%] max-lg:max-w-80 lg:h-full`,
-            )}
-          >
+
+        {/* RIGHT IMAGE */}
+        <div id="owner-portrait" className="flex justify-center lg:basis-1/3">
+          <div className="relative aspect-3/4 w-[70%] max-w-xs sm:max-w-sm md:max-w-md lg:w-full">
             <Image
               src={ownerPortrait}
               alt="owner-portrait"
               layout="fullWidth"
-              className={cn(`absolute h-full w-full object-cover`)}
+              className="object-cover"
             />
-          </div>
 
-          <div
-            className={cn(
-              `absolute bottom-0 left-1/2 isolate flex w-max -translate-x-1/2 flex-col items-center justify-center rounded-2xl px-4 py-2 text-white`,
-            )}
-          >
-            <span className={cn(`text-2xl font-bold`)}>27+</span>
-            <span>Years of Market Back Testing</span>
-            <span
-              className={cn(
-                `bg-primary-500/50 border-primary-500 absolute inset-0 -z-1 rounded-2xl border-2 backdrop-blur-xs`,
-              )}
-            />
+            {/* floating badge */}
+            <div className="bg-primary-50/70 border-primary-500 absolute bottom-4 left-1/2 w-[70%] -translate-x-1/2 rounded-xl border px-3 py-2 text-center text-white sm:bottom-6">
+              <span className="block text-lg font-bold sm:text-xl md:text-2xl">
+                27+
+              </span>
+              <span className="text-xs sm:text-sm">
+                Years of Market Back Testing
+              </span>
+            </div>
           </div>
         </div>
-        {/* hero section images */}
       </div>
-      {/* hero section content */}
     </section>
   );
 }
