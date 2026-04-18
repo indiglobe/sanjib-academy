@@ -9,8 +9,8 @@
     ]
   },
   "scripts": {
-    "prebuild": "rimraf ./dist",
     "dev": "pkgroll --watch",
+    "prebuild": "rimraf ./dist",
     "build": "pkgroll",
     "format": "prettier --write **/* ",
     "pretest": "tf run db:test",

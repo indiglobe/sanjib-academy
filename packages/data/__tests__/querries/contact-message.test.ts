@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { db } from "@/index";
 import { ContactMessageTable } from "@/schema";
 import {
   create__ContactMessage,
@@ -7,7 +6,8 @@ import {
   read__ContactMessageById,
   update__ContactMessage,
   delete__ContactMessage,
-} from "./contact-message"; // adjust path if needed
+} from "@/querries/contact-message";
+import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
 
 beforeAll(async () => {

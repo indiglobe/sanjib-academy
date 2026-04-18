@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { db } from "@/index";
 import { TestimonialsTable, UserTable } from "@/schema";
 import {
   create__Testimonial,
@@ -7,7 +6,8 @@ import {
   read__SingleTestimonial,
   update__Testimonial,
   delete__Testimonial,
-} from "./testimonial";
+} from "@/querries/testimonial";
+import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
 
 beforeAll(async () => {

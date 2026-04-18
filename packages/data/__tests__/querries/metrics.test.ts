@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { db } from "..";
 import { MetricsTable } from "@/schema";
 import {
   create__Metric,
@@ -7,7 +6,8 @@ import {
   read__Metric,
   update__Metric,
   delete__Metric,
-} from "./metrics";
+} from "@/querries/metrics";
+import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
 
 beforeAll(async () => {

@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { db } from "..";
 import { WebinarDetailsTable } from "@/schema";
 import {
   create__Webinar,
@@ -9,7 +8,8 @@ import {
   read__Webinar,
   update__Webinar,
   delete__Webinar,
-} from "./webinar-details";
+} from "@/querries/webinar-details";
+import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
 
 beforeAll(async () => {

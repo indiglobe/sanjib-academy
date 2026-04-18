@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { db } from "..";
 import { CourseAdvantagesTable, OfferedCoursesTable } from "@/schema";
 import {
   create__CourseAdvantage,
@@ -7,7 +6,8 @@ import {
   read__AllCourseAdvantages,
   update__CourseAdvantage,
   delete__CourseAdvantage,
-} from "./courses-advantages";
+} from "@/querries/courses-advantages";
+import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
 
 beforeAll(async () => {
