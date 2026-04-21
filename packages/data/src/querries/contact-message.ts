@@ -68,15 +68,15 @@ export const read__AllContactMessages = async () => {
  * ----------------------------------------
  */
 
-export type TRead__SingleContactMessage = {
+export type TRead__OneContactMessage = {
   identifier: Required<{
     id: (typeof ContactMessageTable.$inferSelect)["id"];
   }>;
 };
 
-export const read__ContactMessageById = async ({
+export const read__OneContactMessage = async ({
   identifier: { id },
-}: TRead__SingleContactMessage) => {
+}: TRead__OneContactMessage) => {
   const [message] = await db
     .select()
     .from(ContactMessageTable)

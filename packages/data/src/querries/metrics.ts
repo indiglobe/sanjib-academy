@@ -66,13 +66,13 @@ export const read__AllMetricsDetails = async () => {
  * ----------------------------------------
  */
 
-export type TRead__Metric = {
+export type TRead__OneMetric = {
   identifier: Required<{
     id: (typeof MetricsTable.$inferSelect)["id"];
   }>;
 };
 
-export const read__Metric = async ({ identifier }: TRead__Metric) => {
+export const read__OneMetric = async ({ identifier }: TRead__OneMetric) => {
   const [metrics] = await db
     .select({
       content: MetricsTable.metricsContent,

@@ -1,6 +1,4 @@
-import { Main } from "@/components/main/public/main";
-import SigninForm from "@/components/main/public/signing-options/signin-form";
-import { cn } from "@/utils/cn";
+import SigninForm from "@/components/main/unauthenticated/signing-options/signin-form";
 import { signinSearchParams } from "@/utils/zod-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -18,9 +16,7 @@ export const Route = createFileRoute("/(guest)/signin/")({
 function RouteComponent() {
   return (
     <>
-      <Main className={cn(`mt-0 md:-mx-10 lg:-mx-20`)}>
-        <SigninForm />
-      </Main>
+      <SigninForm />
     </>
   );
 }

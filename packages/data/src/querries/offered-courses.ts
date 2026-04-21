@@ -40,7 +40,7 @@ export const create__OfferedCourse = async (data: TCreate__OfferedCourse) => {
  * ----------------------------------------
  */
 
-export const read__OfferedCourses = async () => {
+export const read__AllOfferedCourses = async () => {
   const courseColumns = getTableColumns(OfferedCoursesTable);
   const advantageColumns = getTableColumns(CourseAdvantagesTable);
 
@@ -92,7 +92,7 @@ export const read__OfferedCourses = async () => {
  * ----------------------------------------
  */
 
-export type TRead__SingleOfferedCourse = {
+export type TRead__OneOfferedCourse = {
   identifier: Required<{
     id: (typeof OfferedCoursesTable.$inferInsert)["id"];
   }>;
@@ -101,9 +101,9 @@ export type TRead__SingleOfferedCourse = {
 /**
  * read single offered course with advantages
  */
-export const read__SingleOfferedCourse = async ({
+export const read__OneOfferedCourse = async ({
   identifier,
-}: TRead__SingleOfferedCourse) => {
+}: TRead__OneOfferedCourse) => {
   const courseColumns = getTableColumns(OfferedCoursesTable);
   const advantageColumns = getTableColumns(CourseAdvantagesTable);
 

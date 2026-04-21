@@ -3,7 +3,7 @@ import { FaqTable } from "@/schema";
 import {
   create__Faq,
   read__AllFaqs,
-  read__Faq,
+  read__OneFaq,
   update__Faq,
   delete__Faq,
 } from "@/querries/faq";
@@ -81,10 +81,10 @@ describe("faq queries works fine", () => {
     expect(faqs[0]).toHaveProperty("tableIdentifierToken");
   });
 
-  test("reads a single existing faq", async () => {
+  test("reads a one existing faq", async () => {
     const [existing] = await db.select().from(FaqTable).limit(1);
 
-    const faq = await read__Faq({
+    const faq = await read__OneFaq({
       identifier: { id: existing.id },
     });
 
@@ -92,7 +92,7 @@ describe("faq queries works fine", () => {
   });
 
   test("reads a non-existing faq", async () => {
-    const faq = await read__Faq({
+    const faq = await read__OneFaq({
       identifier: { id: 999999 },
     });
 

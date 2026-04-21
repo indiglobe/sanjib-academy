@@ -1,4 +1,4 @@
-import { createNewContactMessageServerFn } from "@/integrations/server-functions/form-actions/contact-form";
+import { create__NewContactMessageServerFn } from "@/integrations/server-functions/form-actions/contact-form";
 import { Button } from "@/ui/button";
 import { cn } from "@/utils/cn";
 import { contactFormSchema, ContactFormSchema } from "@/utils/zod-schema";
@@ -10,15 +10,11 @@ export default function ConatctForm({
   className,
   ...props
 }: ComponentProps<"div">) {
-  /**
-   * wrap server functions to use them in client
-   */
-  const createNewContactMessage = useServerFn(createNewContactMessageServerFn);
+  const create__NewContactMessage = useServerFn(
+    create__NewContactMessageServerFn,
+  );
 
   const { Field, handleSubmit } = useForm({
-    /**
-     * provide default values for the form fields
-     */
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -26,121 +22,120 @@ export default function ConatctForm({
       phoneNo: "",
       message: "",
     } satisfies ContactFormSchema,
-    /**
-     * run form validation on form submission
-     */
     validators: {
       onSubmit: contactFormSchema,
     },
-    /**
-     * On submit run this function
-     */
     onSubmit: async ({ value }) => {
       const { email, firstName, lastName, message, phoneNo } = value;
-      return await createNewContactMessage({
+      return await create__NewContactMessage({
         data: { email, firstName, lastName, message, phoneNo },
       });
     },
-    // This is to identify this form in tanstack-devtool
     formId: "contact-form",
   });
 
   return (
-    <div className={cn(``, className)} {...props}>
+    <div
+      className={cn(
+        "dark:border-zinc-700d backdrop-blur-xld w-full rounded-2xl border border-zinc-200 bg-white/80 p-6 shadow-xl transition-all sm:p-8 dark:bg-zinc-900/70",
+        className,
+      )}
+      {...props}
+    >
       <form
         onSubmit={async (e) => {
           e.preventDefault();
           await handleSubmit();
         }}
-        className={cn(`flex w-full flex-col gap-6`)}
+        className="flex flex-col gap-6"
       >
-        {/* Name Section */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-4">
-          <Field name="firstName">
-            {(field) => (
-              <div className="relative flex flex-1 flex-col gap-1">
-                <label
-                  htmlFor="first-name"
-                  className="font-medium after:text-red-500 after:content-['*']"
-                >
-                  First name
-                </label>
-                <input
-                  type="text"
-                  id="first-name"
-                  placeholder="John"
-                  className={cn(
-                    `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
-                    {
-                      "border-red-500 focus:ring-red-500":
-                        field.state.meta.errors.length &&
-                        field.state.meta.isTouched,
-                    },
-                  )}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                />
-                {field.state.meta.errors.length > 0 &&
-                  field.state.meta.isTouched && (
-                    <span className="absolute top-full text-xs text-red-500">
-                      {field.state.meta.errors[0]?.message}
-                    </span>
-                  )}
-              </div>
-            )}
-          </Field>
+        {/* Header */}
+        <div className="space-y-1">
+          <h2 className="text-2xl font-semibold text-zinc-800 dark:text-white">
+            Send a message
+          </h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            We'll get back to you within 24 hours.
+          </p>
+        </div>
 
-          <Field name="lastName">
-            {(field) => (
-              <div className="relative flex flex-1 flex-col gap-1">
-                <label
-                  htmlFor="last-name"
-                  className="font-medium after:text-red-500 after:content-['*']"
-                >
-                  Last name
-                </label>
-                <input
-                  type="text"
-                  id="last-name"
-                  placeholder="Snow"
-                  className={cn(
-                    `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
-                    {
-                      "border-red-500 focus:ring-red-500":
-                        field.state.meta.errors.length &&
-                        field.state.meta.isTouched,
-                    },
-                  )}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                />
-                {field.state.meta.errors.length > 0 &&
-                  field.state.meta.isTouched && (
-                    <span className="absolute top-full text-xs text-red-500">
-                      {field.state.meta.errors[0]?.message}
-                    </span>
-                  )}
-              </div>
-            )}
-          </Field>
+        {/* Name */}
+        <div className={cn(`@container`)}>
+          <div className="grid grid-cols-1 gap-4 @md:grid-cols-2">
+            <Field name="firstName">
+              {(field) => (
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    First name *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="John"
+                    className={cn(
+                      "focus:ring-primary-500 w-full rounded-sm border border-zinc-300 bg-white px-3 py-2 text-sm transition-all focus:ring-2 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800",
+                      {
+                        "border-red-500 focus:ring-red-500":
+                          field.state.meta.errors.length &&
+                          field.state.meta.isTouched,
+                      },
+                    )}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched && (
+                      <span className="mt-1 text-xs text-red-500">
+                        {field.state.meta.errors[0]?.message}
+                      </span>
+                    )}
+                </div>
+              )}
+            </Field>
+
+            <Field name="lastName">
+              {(field) => (
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                    Last name *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Snow"
+                    className={cn(
+                      "focus:ring-primary-500 w-full rounded-sm border border-zinc-300 bg-white px-3 py-2 text-sm transition-all focus:ring-2 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800",
+                      {
+                        "border-red-500 focus:ring-red-500":
+                          field.state.meta.errors.length &&
+                          field.state.meta.isTouched,
+                      },
+                    )}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors.length > 0 &&
+                    field.state.meta.isTouched && (
+                      <span className="mt-1 text-xs text-red-500">
+                        {field.state.meta.errors[0]?.message}
+                      </span>
+                    )}
+                </div>
+              )}
+            </Field>
+          </div>
         </div>
 
         {/* Email */}
         <Field name="email">
           {(field) => (
-            <div className="relative flex flex-col gap-1">
-              <label
-                htmlFor="email"
-                className="font-medium after:text-red-500 after:content-['*']"
-              >
-                Email
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Email *
               </label>
               <input
                 type="email"
-                id="email"
-                placeholder="jhonsnow@thenorth.remembers"
+                placeholder="john@example.com"
                 className={cn(
-                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  "focus:ring-primary-500 w-full rounded-sm border border-zinc-300 bg-white px-3 py-2 text-sm transition-all focus:ring-2 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800",
                   {
                     "border-red-500 focus:ring-red-500":
                       field.state.meta.errors.length &&
@@ -152,7 +147,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="absolute top-full text-xs text-red-500">
+                  <span className="mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}
@@ -163,19 +158,15 @@ export default function ConatctForm({
         {/* Phone */}
         <Field name="phoneNo">
           {(field) => (
-            <div className="relative flex flex-col gap-1">
-              <label
-                htmlFor="phone-no"
-                className="font-medium after:text-red-500 after:content-['*']"
-              >
-                Phone
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Phone *
               </label>
               <input
                 type="text"
-                id="phone-no"
-                placeholder="+91-0707 0707 01"
+                placeholder="+91 00000 00000"
                 className={cn(
-                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  "focus:ring-primary-500 w-full rounded-sm border border-zinc-300 bg-white px-3 py-2 text-sm transition-all focus:ring-2 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800",
                   {
                     "border-red-500 focus:ring-red-500":
                       field.state.meta.errors.length &&
@@ -187,7 +178,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="absolute top-full text-xs text-red-500">
+                  <span className="mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}
@@ -198,19 +189,15 @@ export default function ConatctForm({
         {/* Message */}
         <Field name="message">
           {(field) => (
-            <div className="relative flex flex-col gap-1">
-              <label
-                htmlFor="message"
-                className="font-medium after:text-red-500 after:content-['*']"
-              >
-                Message
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Message *
               </label>
               <textarea
-                id="message"
-                placeholder="You know nothing John Snow..."
-                rows={6}
+                rows={5}
+                placeholder="Write your message..."
                 className={cn(
-                  `w-full rounded-sm border px-3 py-2 focus:ring-1 focus:ring-black focus:outline-none dark:border-white dark:focus:ring-white`,
+                  "focus:ring-primary-500 w-full resize-none rounded-sm border border-zinc-300 bg-white px-3 py-2 text-sm transition-all focus:ring-2 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800",
                   {
                     "border-red-500 focus:ring-red-500":
                       field.state.meta.errors.length &&
@@ -222,7 +209,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="absolute top-full text-xs text-red-500">
+                  <span className="mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}
@@ -230,12 +217,13 @@ export default function ConatctForm({
           )}
         </Field>
 
+        {/* Button */}
         <Button
           variant="primary"
           type="submit"
-          className="text-background bg-primary-500 dark:bg-primary-400 hover:bg-primary-600 w-full py-2 font-medium transition-colors"
+          className="bg-primary-500 hover:bg-primary-600 dark:bg-primary-400 dark:hover:bg-primary-500 w-full rounded-none py-3 text-base font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg active:scale-[0.98]"
         >
-          Submit
+          Send Message 🚀
         </Button>
       </form>
     </div>

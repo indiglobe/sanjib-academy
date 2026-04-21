@@ -71,7 +71,7 @@ describe("benefited user queries works fine", () => {
     expect(Array.isArray(users)).toBe(true);
   });
 
-  test("reads a single existing benefited user", async () => {
+  test("reads a One existing benefited user", async () => {
     const user = await read__OneBenefitedUser({
       identifier: { email: "user1@email.com" },
     });

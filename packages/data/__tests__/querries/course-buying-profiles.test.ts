@@ -7,7 +7,7 @@ import {
 import {
   create__CourseBuyingProfile,
   read__AllCourseBuyingProfiles,
-  read__CourseBuyingProfileById,
+  read__OneCourseBuyingProfile,
   update__CourseBuyingProfile,
   delete__CourseBuyingProfile,
 } from "@/querries/course-buying-profiles";
@@ -24,8 +24,15 @@ beforeAll(async () => {
   // Insert required foreign key data
   await db.insert(UserTable).values([
     {
-      email: "test@email.com",
-      name: "Test User",
+      email: "testuser-1@email.com",
+      name: "Test User 1",
+      uploadedAvatarImageUrl: "",
+      age: 25,
+      phoneNo: "9876543210",
+    },
+    {
+      email: "testuser-2@email.com",
+      name: "Test User 2",
       uploadedAvatarImageUrl: "",
       age: 25,
       phoneNo: "9876543210",
@@ -39,6 +46,14 @@ beforeAll(async () => {
       courseHeading: "Test Heading",
       brochureLink: "https://example.com",
       originalEnrlomentFee: 1000,
+      imageLink: "https://example.com/image.png",
+    },
+    {
+      id: "course-2",
+      courseTopic: "Topic 2",
+      courseHeading: "Heading 2",
+      brochureLink: "https://example.com",
+      originalEnrlomentFee: 100,
       imageLink: "https://example.com/image.png",
     },
   ]);
@@ -55,7 +70,7 @@ afterAll(async () => {
 describe("course buying profile queries work fine", () => {
   test("creates a course buying profile", async () => {
     const result = await create__CourseBuyingProfile({
-      userEmail: "test@email.com",
+      userEmail: "testuser-1@email.com",
       courseId: "course-1",
       amountPaid: 500,
       orderId: "ORD1234567",
@@ -63,7 +78,7 @@ describe("course buying profile queries work fine", () => {
     });
 
     expect(result).toMatchObject({
-      userEmail: "test@email.com",
+      userEmail: "testuser-1@email.com",
       courseId: "course-1",
       amountPaid: 500,
       orderId: "ORD1234567",
@@ -76,7 +91,7 @@ describe("course buying profile queries work fine", () => {
     const [row] = await db
       .select()
       .from(CourseBuyingProfilesTable)
-      .where(eq(CourseBuyingProfilesTable.userEmail, "test@email.com"));
+      .where(eq(CourseBuyingProfilesTable.userEmail, "testuser-1@email.com"));
 
     expect(row).toBeDefined();
     expect(row.amountPaid).toBe(500);
@@ -89,13 +104,22 @@ describe("course buying profile queries work fine", () => {
     expect(data.length).toBeGreaterThan(0);
   });
 
+  test("reads all course buying profiles with identifier", async () => {
+    const data = await read__AllCourseBuyingProfiles({
+      identifier: { courseId: "course-1" },
+    });
+
+    expect(Array.isArray(data)).toBe(true);
+    expect(data.length).toBeGreaterThan(0);
+  });
+
   test("reads by id", async () => {
     const [existing] = await db
       .select()
       .from(CourseBuyingProfilesTable)
       .limit(1);
 
-    const row = await read__CourseBuyingProfileById({
+    const row = await read__OneCourseBuyingProfile({
       identifier: { id: existing.id },
     });
 
@@ -104,13 +128,13 @@ describe("course buying profile queries work fine", () => {
     if (!row) return;
 
     expect(row.id).toBe(existing.id);
-    expect(row.userEmail).toBe("test@email.com");
+    expect(row.userEmail).toBe("testuser-1@email.com");
   });
 
   test("reads by email + courseId", async () => {
-    const row = await read__CourseBuyingProfileById({
+    const row = await read__OneCourseBuyingProfile({
       identifier: {
-        email: "test@email.com",
+        email: "testuser-1@email.com",
         courseId: "course-1",
       },
     });
@@ -119,12 +143,12 @@ describe("course buying profile queries work fine", () => {
 
     if (!row) return;
 
-    expect(row.userEmail).toBe("test@email.com");
+    expect(row.userEmail).toBe("testuser-1@email.com");
     expect(row.courseId).toBe("course-1");
   });
 
   test("returns null for invalid identifier", async () => {
-    const row = await read__CourseBuyingProfileById({
+    const row = await read__OneCourseBuyingProfile({
       identifier: { id: 999999 },
     });
 
@@ -161,7 +185,7 @@ describe("course buying profile queries work fine", () => {
   test("updates using email + courseId", async () => {
     const updated = await update__CourseBuyingProfile({
       identifier: {
-        email: "test@email.com",
+        email: "testuser-1@email.com",
         courseId: "course-1",
       },
       dataToUpdate: {
@@ -170,7 +194,7 @@ describe("course buying profile queries work fine", () => {
     });
 
     expect(updated).toMatchObject({
-      userEmail: "test@email.com",
+      userEmail: "testuser-1@email.com",
       courseId: "course-1",
       isCompleted: false,
       tableIdentifierToken: "CBPR",
@@ -179,7 +203,7 @@ describe("course buying profile queries work fine", () => {
     const [row] = await db
       .select()
       .from(CourseBuyingProfilesTable)
-      .where(eq(CourseBuyingProfilesTable.userEmail, "test@email.com"));
+      .where(eq(CourseBuyingProfilesTable.userEmail, "testuser-1@email.com"));
 
     expect(row.isCompleted).toBe(false);
   });

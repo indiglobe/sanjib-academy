@@ -1,25 +1,55 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createNewUser, readUserDetails } from "@repo/data/querries/users";
-import { WelcomeFormSchema } from "@repo/utils/zod-schema/welcome-form";
-import z from "zod";
+import {
+  read__AllUsers,
+  create__User,
+  delete__User,
+  read__OneUser,
+  update__User,
+} from "@repo/data/querries/users";
+import {
+  create__UserSchema,
+  delete__UserSchema,
+  update__UserSchema,
+  read__OneUserSchema,
+} from "@repo/utils/zod-schema/data";
 import { zodValidator } from "@tanstack/zod-adapter";
 
-export const readUserDetailsServerFn = createServerFn()
-  .inputValidator((d: { email: string }) => d)
-  .handler(async ({ data: { email } }) => {
-    const user = readUserDetails({ email });
+export const create__UserServerFn = createServerFn({ method: "POST" })
+  .inputValidator(zodValidator(create__UserSchema))
+  .handler(async ({ data }) => {
+    const faqData = await create__User(data);
 
-    return user;
+    return faqData;
   });
 
-export const createNewUserServerFn = createServerFn()
-  .inputValidator(zodValidator(z.custom<WelcomeFormSchema>()))
-  .handler(async ({ data: { email, avatarImageUrl, name } }) => {
-    const user = await createNewUser({
-      email,
-      name,
-      oauthProviderAvatarImageUrl: avatarImageUrl,
-      uploadedAvatarImageUrl: avatarImageUrl,
-    });
-    return user;
+export const read__AllUsersServerFn = createServerFn({
+  method: "GET",
+}).handler(async () => {
+  const faqData = await read__AllUsers();
+
+  return faqData;
+});
+
+export const read__OneUserServerFn = createServerFn({ method: "GET" })
+  .inputValidator(zodValidator(read__OneUserSchema))
+  .handler(async ({ data }) => {
+    const faqData = await read__OneUser(data);
+
+    return faqData;
+  });
+
+export const update__UserServerFn = createServerFn({ method: "POST" })
+  .inputValidator(zodValidator(update__UserSchema))
+  .handler(async ({ data }) => {
+    const faqData = await update__User(data);
+
+    return faqData;
+  });
+
+export const delete__UserServerFn = createServerFn({ method: "POST" })
+  .inputValidator(zodValidator(delete__UserSchema))
+  .handler(async ({ data }) => {
+    const faqData = await delete__User(data);
+
+    return faqData;
   });

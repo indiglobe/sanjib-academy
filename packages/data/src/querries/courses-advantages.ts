@@ -38,7 +38,7 @@ export const create__CourseAdvantage = async (
  * ----------------------------------------
  */
 
-export type TRead__CourseAdvantage = {
+export type TRead__OneCourseAdvantage = {
   identifier:
     | {
         id: (typeof CourseAdvantagesTable.$inferSelect)["id"];
@@ -51,9 +51,9 @@ export type TRead__CourseAdvantage = {
 /**
  * read single course advantage
  */
-export const read__CourseAdvantage = async ({
+export const read__OneCourseAdvantage = async ({
   identifier,
-}: TRead__CourseAdvantage) => {
+}: TRead__OneCourseAdvantage) => {
   const baseQuerrry = db.select().from(CourseAdvantagesTable).limit(1);
 
   const [advantage] =

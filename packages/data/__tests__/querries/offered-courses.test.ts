@@ -3,8 +3,8 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { OfferedCoursesTable, CourseAdvantagesTable } from "@/schema";
 import {
   create__OfferedCourse,
-  read__OfferedCourses,
-  read__SingleOfferedCourse,
+  read__AllOfferedCourses,
+  read__OneOfferedCourse,
   update__OfferedCourse,
   delete__OfferedCourse,
 } from "@/querries/offered-courses";
@@ -103,7 +103,7 @@ describe("offered course queries work fine", () => {
   });
 
   test("reads all offered courses with advantages", async () => {
-    const courses = await read__OfferedCourses();
+    const courses = await read__AllOfferedCourses();
 
     expect(Array.isArray(courses)).toBe(true);
     expect(courses.length).toBeGreaterThan(0);
@@ -124,8 +124,8 @@ describe("offered course queries work fine", () => {
     expect(isThereAnyNullValueInArray).not.toBe(true);
   });
 
-  test("reads a single offered course with advantages", async () => {
-    const course = await read__SingleOfferedCourse({
+  test("reads a one offered course with advantages", async () => {
+    const course = await read__OneOfferedCourse({
       identifier: { id: "course-2" },
     });
 
@@ -135,7 +135,7 @@ describe("offered course queries work fine", () => {
   });
 
   test("reads a non-existing course", async () => {
-    const course = await read__SingleOfferedCourse({
+    const course = await read__OneOfferedCourse({
       identifier: { id: "doesnot-exists" },
     });
 

@@ -55,8 +55,36 @@ export const create__CourseBuyingProfile = async ({
  * ----------------------------------------
  */
 
-export const read__AllCourseBuyingProfiles = async () => {
-  return await db.select().from(CourseBuyingProfilesTable);
+export type TRead__AllCourseBuyingProfiles = {
+  identifier:
+    | Pick<typeof CourseBuyingProfilesTable.$inferSelect, "userEmail">
+    | Pick<typeof CourseBuyingProfilesTable.$inferSelect, "courseId">;
+};
+
+export const read__AllCourseBuyingProfiles = async (
+  params?: TRead__AllCourseBuyingProfiles,
+) => {
+  const baseQuery = db.select().from(CourseBuyingProfilesTable);
+  if (!params) {
+    const baseQueryResponse = await baseQuery;
+
+    return baseQueryResponse;
+  }
+
+  const { identifier } = params;
+
+  const finalQuery =
+    "courseId" in identifier
+      ? baseQuery.where(
+          eq(CourseBuyingProfilesTable.courseId, identifier.courseId),
+        )
+      : baseQuery.where(
+          eq(CourseBuyingProfilesTable.userEmail, identifier.userEmail),
+        );
+
+  const finalQueryResponse = await finalQuery;
+
+  return finalQueryResponse;
 };
 
 /**
@@ -65,7 +93,7 @@ export const read__AllCourseBuyingProfiles = async () => {
  * ----------------------------------------
  */
 
-export type TRead__CourseBuyingProfileById = {
+export type TRead__OneCourseBuyingProfile = {
   identifier:
     | {
         id: (typeof CourseBuyingProfilesTable.$inferSelect)["id"];
@@ -76,9 +104,9 @@ export type TRead__CourseBuyingProfileById = {
       };
 };
 
-export const read__CourseBuyingProfileById = async ({
+export const read__OneCourseBuyingProfile = async ({
   identifier,
-}: TRead__CourseBuyingProfileById) => {
+}: TRead__OneCourseBuyingProfile) => {
   const baseQuery = db.select().from(CourseBuyingProfilesTable);
 
   const finalQuery =

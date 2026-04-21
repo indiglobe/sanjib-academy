@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { CourseAdvantagesTable, OfferedCoursesTable } from "@/schema";
 import {
   create__CourseAdvantage,
-  read__CourseAdvantage,
+  read__OneCourseAdvantage,
   read__AllCourseAdvantages,
   update__CourseAdvantage,
   delete__CourseAdvantage,
@@ -77,18 +77,18 @@ describe("course advantage queries works fine", () => {
     });
   });
 
-  test("reads a single course advantage by id", async () => {
+  test("reads a one course advantage by id", async () => {
     const [existing] = await db.select().from(CourseAdvantagesTable).limit(1);
 
-    const result = await read__CourseAdvantage({
+    const result = await read__OneCourseAdvantage({
       identifier: { id: existing.id },
     });
 
     expect(result).toEqual(existing);
   });
 
-  test("reads a single course advantage by relatedTo", async () => {
-    const result = await read__CourseAdvantage({
+  test("reads a one course advantage by relatedTo", async () => {
+    const result = await read__OneCourseAdvantage({
       identifier: { relatedTo: "course-1" },
     });
 
@@ -97,7 +97,7 @@ describe("course advantage queries works fine", () => {
   });
 
   test("returns null for non-existing course advantage", async () => {
-    const result = await read__CourseAdvantage({
+    const result = await read__OneCourseAdvantage({
       identifier: { id: 999999 },
     });
 

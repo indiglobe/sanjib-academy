@@ -1,4 +1,4 @@
-import { readUserDetailsServerFn } from "@/integrations/server-functions/querry/users";
+import { read__OneUserServerFn } from "@/integrations/server-functions/querry/users";
 import { fetchSession } from "@/lib/auth/session";
 import { BeforeLoadRouterContext } from "@/router";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
@@ -17,7 +17,9 @@ export const Route = createFileRoute("/(public)")({
     const { email } = user;
 
     // As the user does help validation return the user details
-    const userDetails = await readUserDetailsServerFn({ data: { email } });
+    const userDetails = await read__OneUserServerFn({
+      data: { identifier: { email } },
+    });
 
     // Pause the user details for for using later
     return { session, userDetails } satisfies BeforeLoadRouterContext;

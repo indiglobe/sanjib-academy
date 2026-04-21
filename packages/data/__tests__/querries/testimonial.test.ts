@@ -3,7 +3,7 @@ import { TestimonialsTable, UserTable } from "@/schema";
 import {
   create__Testimonial,
   read__AllTestimonials,
-  read__SingleTestimonial,
+  read__OneTestimonial,
   update__Testimonial,
   delete__Testimonial,
 } from "@/querries/testimonial";
@@ -76,10 +76,10 @@ describe("testimonials queries work fine", () => {
     expect(row.uploadedAvatarImageUrl).toBe("https://example.com/avatar.png");
   });
 
-  test("reads single testimonial", async () => {
+  test("reads one testimonial", async () => {
     const [existing] = await db.select().from(TestimonialsTable).limit(1);
 
-    const row = await read__SingleTestimonial({
+    const row = await read__OneTestimonial({
       identifier: { id: existing.id },
     });
 
@@ -92,7 +92,7 @@ describe("testimonials queries work fine", () => {
   });
 
   test("returns null for invalid testimonial id", async () => {
-    const row = await read__SingleTestimonial({
+    const row = await read__OneTestimonial({
       identifier: { id: 999999 },
     });
 

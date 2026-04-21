@@ -41,7 +41,7 @@ export const create__BenefitedUser = async (data: TCreate__BenefitedUser) => {
  * ----------------------------------------
  */
 
-export type TRead__BenefitedUser = {
+export type TRead__OneBenefitedUser = {
   identifier: Required<{
     email: (typeof BenefitedUserTable.$inferSelect)["userEmail"];
   }>;
@@ -52,7 +52,7 @@ export type TRead__BenefitedUser = {
  */
 export const read__OneBenefitedUser = async ({
   identifier,
-}: TRead__BenefitedUser) => {
+}: TRead__OneBenefitedUser) => {
   const userCols = getTableColumns(UserTable);
   const benefitedCols = getTableColumns(BenefitedUserTable);
 

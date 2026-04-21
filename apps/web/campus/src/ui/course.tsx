@@ -1,6 +1,4 @@
-import { Button } from "@/ui/button";
 import { cn } from "@/utils/cn";
-import { Check, Download, UserPlus } from "lucide-react";
 import { ComponentProps } from "react";
 
 export function Course({ className, ...props }: ComponentProps<"div">) {
@@ -8,7 +6,7 @@ export function Course({ className, ...props }: ComponentProps<"div">) {
     <div
       data-slot={`course`}
       className={cn(
-        `bg-primary-50 border-primary-500 flex w-full max-w-100 flex-col space-y-4 rounded-2xl border p-4 sm:p-5 lg:p-6`,
+        `group border-primary-200 bg-background hover:border-primary-500 flex flex-col rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`,
         className,
       )}
       {...props}
@@ -16,14 +14,14 @@ export function Course({ className, ...props }: ComponentProps<"div">) {
   );
 }
 
-export function CourseTopic({ className, ...props }: ComponentProps<"h3">) {
+export function CourseDescription({
+  className,
+  ...props
+}: ComponentProps<"p">) {
   return (
-    <h3
-      data-slot={`course-topic`}
-      className={cn(
-        `text-primary-500 text-lg font-semibold sm:text-xl md:text-2xl`,
-        className,
-      )}
+    <p
+      data-slot={`course-description`}
+      className={cn(`text-muted-foreground mb-4 text-sm`, className)}
       {...props}
     />
   );
@@ -33,7 +31,7 @@ export function CourseHeading({ className, ...props }: ComponentProps<"h4">) {
   return (
     <h4
       data-slot={`course-heading`}
-      className={cn(`text-sm sm:text-base md:text-lg`, className)}
+      className={cn(`mb-2 text-lg font-semibold`, className)}
       {...props}
     />
   );
@@ -53,24 +51,30 @@ export function CoursePricing({
   });
 
   return (
-    <div
-      data-slot={`course-pricing`}
-      className={cn("mb-6 text-2xl font-semibold sm:text-3xl", className)}
-      {...props}
-    >
-      {!discountedPrice && <span>₹ {numberFormatter.format(actualPrice)}</span>}
+    <div className={cn("mt-auto", className)} {...props}>
+      {percent ? (
+        <>
+          <div className="mb-3 flex items-center gap-3">
+            <span className="text-primary text-xl font-semibold">
+              ₹{discountedPrice}
+            </span>
 
-      {discountedPrice && (
-        <div className="flex flex-wrap items-end gap-2 sm:gap-3">
-          <span>₹ {numberFormatter.format(discountedPrice)}</span>
+            <span className="text-muted-foreground text-sm line-through">
+              ₹{actualPrice}
+            </span>
 
-          <span className="text-muted-foreground text-lg line-through sm:text-xl">
-            ₹ {numberFormatter.format(actualPrice)}
-          </span>
+            <span className="rounded-full border border-green-500 bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-700">
+              {numberFormatter.format(percent)}% OFF
+            </span>
+          </div>
 
-          <span className="bg-primary-100 border-primary-500 text-primary-700 rounded-full border px-2 py-1 text-xs font-medium">
-            Save ₹{numberFormatter.format(saved)} ({percent}%)
-          </span>
+          <p className="text-muted-foreground mb-4 text-xs">
+            You save ₹{saved}
+          </p>
+        </>
+      ) : (
+        <div className="mb-4">
+          <span className="text-xl font-semibold">₹{actualPrice}</span>
         </div>
       )}
     </div>
@@ -84,7 +88,7 @@ export function LearningTopicList({
   return (
     <ul
       data-slot={`learning-topic-list`}
-      className={cn(`space-y-2 text-sm sm:text-base`, className)}
+      className={cn(`mb-5 space-y-2`, className)}
       {...props}
     />
   );
@@ -97,68 +101,14 @@ export function LearningTopicItem({
   return (
     <li
       data-slot={`learning-topic-item`}
-      className={cn(`flex items-start gap-2`, className)}
+      className={cn(
+        `text-muted-foreground flex items-start gap-2 text-sm`,
+        className,
+      )}
       {...props}
     >
-      <span className="mt-1 inline-block rounded-full bg-green-500">
-        <Check className="size-4 p-0.5 text-white" />
-      </span>
+      <span className="bg-primary mt-1 h-1.5 w-1.5 shrink-0 rounded-full" />
       {props.children}
     </li>
-  );
-}
-
-export function CourseCardFooter({
-  className,
-  ...props
-}: ComponentProps<"div">) {
-  return (
-    <div
-      data-slot={`course-card-footer`}
-      className={cn(
-        `mt-auto flex w-full flex-col flex-wrap gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between`,
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
-export function CourseEnrollNow({
-  className,
-  ...props
-}: ComponentProps<typeof Button>) {
-  return (
-    <Button
-      data-slot={`course-enroll-now`}
-      className={cn(
-        `flex w-full items-center justify-center gap-2 rounded-none text-sm font-semibold uppercase sm:w-auto sm:text-base`,
-        className,
-      )}
-      {...props}
-    >
-      <span>Enroll Now</span>
-      <UserPlus className="size-4 sm:size-5" />
-    </Button>
-  );
-}
-
-export function DownloadCourseBrochure({
-  className,
-  ...props
-}: ComponentProps<typeof Button>) {
-  return (
-    <Button
-      data-slot={`download-course-brochure`}
-      variant="outline"
-      className={cn(
-        `flex w-full items-center justify-center gap-2 rounded-none text-sm sm:w-auto sm:text-base`,
-        className,
-      )}
-      {...props}
-    >
-      <span>Download Brochure</span>
-      <Download className="size-4 sm:size-5" />
-    </Button>
   );
 }

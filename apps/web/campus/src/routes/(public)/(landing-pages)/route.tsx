@@ -1,6 +1,6 @@
 import { Footer } from "@/components/footer/public-footer/footer";
 import { Header } from "@/components/header/public-header/header";
-import { BuyNowSection } from "@/components/main/public/buy-now-section";
+import { EventStickyBar } from "@/components/main/public/event-sticky-bar";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/(landing-pages)")({
@@ -12,7 +12,7 @@ function RouteComponent() {
     <>
       <Header />
       <Outlet />
-      <BuyNowSection />
+      <EventStickyBar />
       <Footer />
     </>
   );

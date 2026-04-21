@@ -2,7 +2,7 @@ import { welcomeFormSchema } from "@repo/utils/zod-schema/welcome-form";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { createNewUserServerFn } from "../querry/users";
-import { createNewProfileServerFn } from "../querry/profile";
+import { create__NewProfileServerFn } from "../querry/profile";
 import { redirect } from "@tanstack/react-router";
 import { generateUserNameFromEmail } from "@repo/utils/utility";
 
@@ -15,7 +15,7 @@ export const submitWelcomeFormServerFn = createServerFn({
 
     await createNewUserServerFn({ data });
 
-    await createNewProfileServerFn({
+    await create__NewProfileServerFn({
       data: { phoneNo: phone.toString(), email, ...rest },
     });
 

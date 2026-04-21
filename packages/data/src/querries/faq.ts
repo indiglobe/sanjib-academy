@@ -53,13 +53,13 @@ export const read__AllFaqs = async () => {
  * ----------------------------------------
  */
 
-export type TRead__Faq = {
+export type TRead__OneFaq = {
   identifier: Required<{
     id: (typeof FaqTable.$inferSelect)["id"];
   }>;
 };
 
-export const read__Faq = async ({ identifier }: TRead__Faq) => {
+export const read__OneFaq = async ({ identifier }: TRead__OneFaq) => {
   const [faq] = await db
     .select()
     .from(FaqTable)

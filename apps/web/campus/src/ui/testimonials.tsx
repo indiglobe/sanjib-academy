@@ -6,9 +6,8 @@ export function TestimonialCard({ ...props }: ComponentProps<"div">) {
   return (
     <div
       {...props}
-      data-slot={`testimonial-card`}
       className={cn(
-        `h-full w-80 min-w-80 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition-all duration-300 dark:border-black dark:bg-white/2`,
+        "group relative h-full w-90 min-w-90 rounded-2xl border border-neutral-200/70 bg-white/80 p-6 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-white/10 dark:bg-white/5",
         props.className,
       )}
     />

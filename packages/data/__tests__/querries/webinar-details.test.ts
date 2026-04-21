@@ -5,7 +5,7 @@ import {
   read__MostUpcomingWebinar,
   read__UpcomingWebinars,
   read__AllWebinars,
-  read__Webinar,
+  read__OneWebinar,
   update__Webinar,
   delete__Webinar,
 } from "@/querries/webinar-details";
@@ -88,10 +88,10 @@ describe("webinar queries works fine", () => {
     expect(webinars.length).toBeGreaterThan(0);
   });
 
-  test("reads a single webinar", async () => {
+  test("reads a one webinar", async () => {
     const [existing] = await db.select().from(WebinarDetailsTable).limit(1);
 
-    const webinar = await read__Webinar({
+    const webinar = await read__OneWebinar({
       identifier: { id: existing.id },
     });
 
@@ -99,7 +99,7 @@ describe("webinar queries works fine", () => {
   });
 
   test("reads a non-existing webinar", async () => {
-    const webinar = await read__Webinar({
+    const webinar = await read__OneWebinar({
       identifier: { id: 999999 },
     });
 

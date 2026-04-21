@@ -26,7 +26,7 @@ import { Route as publiclawsuitPagesTermsAndConditionsIndexRouteImport } from '.
 import { Route as publiclawsuitPagesRefundPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/refund-policy/index'
 import { Route as publiclawsuitPagesPrivacyPolicyIndexRouteImport } from './routes/(public)/(lawsuit-pages)/privacy-policy/index'
 import { Route as publiclawsuitPagesDisclaimerIndexRouteImport } from './routes/(public)/(lawsuit-pages)/disclaimer/index'
-import { Route as publiclandingPagesCoursesIndexRouteImport } from './routes/(public)/(landing-pages)/courses/index'
+import { Route as publiclandingPagesResourcesIndexRouteImport } from './routes/(public)/(landing-pages)/resources/index'
 import { Route as publiclandingPagesContactUsIndexRouteImport } from './routes/(public)/(landing-pages)/contact-us/index'
 import { Route as publiclandingPagesAboutUsIndexRouteImport } from './routes/(public)/(landing-pages)/about-us/index'
 import { Route as authenticatednewUsersWelcomeIndexRouteImport } from './routes/(authenticated)/(new-users)/welcome/index'
@@ -120,10 +120,10 @@ const publiclawsuitPagesDisclaimerIndexRoute =
     path: '/disclaimer/',
     getParentRoute: () => publiclawsuitPagesRouteRoute,
   } as any)
-const publiclandingPagesCoursesIndexRoute =
-  publiclandingPagesCoursesIndexRouteImport.update({
-    id: '/courses/',
-    path: '/courses/',
+const publiclandingPagesResourcesIndexRoute =
+  publiclandingPagesResourcesIndexRouteImport.update({
+    id: '/resources/',
+    path: '/resources/',
     getParentRoute: () => publiclandingPagesRouteRoute,
   } as any)
 const publiclandingPagesContactUsIndexRoute =
@@ -168,7 +168,7 @@ export interface FileRoutesByFullPath {
   '/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
   '/about-us/': typeof publiclandingPagesAboutUsIndexRoute
   '/contact-us/': typeof publiclandingPagesContactUsIndexRoute
-  '/courses/': typeof publiclandingPagesCoursesIndexRoute
+  '/resources/': typeof publiclandingPagesResourcesIndexRoute
   '/disclaimer/': typeof publiclawsuitPagesDisclaimerIndexRoute
   '/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
@@ -187,7 +187,7 @@ export interface FileRoutesByTo {
   '/welcome': typeof authenticatednewUsersWelcomeIndexRoute
   '/about-us': typeof publiclandingPagesAboutUsIndexRoute
   '/contact-us': typeof publiclandingPagesContactUsIndexRoute
-  '/courses': typeof publiclandingPagesCoursesIndexRoute
+  '/resources': typeof publiclandingPagesResourcesIndexRoute
   '/disclaimer': typeof publiclawsuitPagesDisclaimerIndexRoute
   '/privacy-policy': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/refund-policy': typeof publiclawsuitPagesRefundPolicyIndexRoute
@@ -213,7 +213,7 @@ export interface FileRoutesById {
   '/(authenticated)/(new-users)/welcome/': typeof authenticatednewUsersWelcomeIndexRoute
   '/(public)/(landing-pages)/about-us/': typeof publiclandingPagesAboutUsIndexRoute
   '/(public)/(landing-pages)/contact-us/': typeof publiclandingPagesContactUsIndexRoute
-  '/(public)/(landing-pages)/courses/': typeof publiclandingPagesCoursesIndexRoute
+  '/(public)/(landing-pages)/resources/': typeof publiclandingPagesResourcesIndexRoute
   '/(public)/(lawsuit-pages)/disclaimer/': typeof publiclawsuitPagesDisclaimerIndexRoute
   '/(public)/(lawsuit-pages)/privacy-policy/': typeof publiclawsuitPagesPrivacyPolicyIndexRoute
   '/(public)/(lawsuit-pages)/refund-policy/': typeof publiclawsuitPagesRefundPolicyIndexRoute
@@ -234,7 +234,7 @@ export interface FileRouteTypes {
     | '/welcome/'
     | '/about-us/'
     | '/contact-us/'
-    | '/courses/'
+    | '/resources/'
     | '/disclaimer/'
     | '/privacy-policy/'
     | '/refund-policy/'
@@ -253,7 +253,7 @@ export interface FileRouteTypes {
     | '/welcome'
     | '/about-us'
     | '/contact-us'
-    | '/courses'
+    | '/resources'
     | '/disclaimer'
     | '/privacy-policy'
     | '/refund-policy'
@@ -278,7 +278,7 @@ export interface FileRouteTypes {
     | '/(authenticated)/(new-users)/welcome/'
     | '/(public)/(landing-pages)/about-us/'
     | '/(public)/(landing-pages)/contact-us/'
-    | '/(public)/(landing-pages)/courses/'
+    | '/(public)/(landing-pages)/resources/'
     | '/(public)/(lawsuit-pages)/disclaimer/'
     | '/(public)/(lawsuit-pages)/privacy-policy/'
     | '/(public)/(lawsuit-pages)/refund-policy/'
@@ -416,11 +416,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publiclawsuitPagesDisclaimerIndexRouteImport
       parentRoute: typeof publiclawsuitPagesRouteRoute
     }
-    '/(public)/(landing-pages)/courses/': {
-      id: '/(public)/(landing-pages)/courses/'
-      path: '/courses'
-      fullPath: '/courses/'
-      preLoaderRoute: typeof publiclandingPagesCoursesIndexRouteImport
+    '/(public)/(landing-pages)/resources/': {
+      id: '/(public)/(landing-pages)/resources/'
+      path: '/resources'
+      fullPath: '/resources/'
+      preLoaderRoute: typeof publiclandingPagesResourcesIndexRouteImport
       parentRoute: typeof publiclandingPagesRouteRoute
     }
     '/(public)/(landing-pages)/contact-us/': {
@@ -528,7 +528,7 @@ interface publiclandingPagesRouteRouteChildren {
   publiclandingPagesIndexRoute: typeof publiclandingPagesIndexRoute
   publiclandingPagesAboutUsIndexRoute: typeof publiclandingPagesAboutUsIndexRoute
   publiclandingPagesContactUsIndexRoute: typeof publiclandingPagesContactUsIndexRoute
-  publiclandingPagesCoursesIndexRoute: typeof publiclandingPagesCoursesIndexRoute
+  publiclandingPagesResourcesIndexRoute: typeof publiclandingPagesResourcesIndexRoute
 }
 
 const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren =
@@ -537,7 +537,8 @@ const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren
     publiclandingPagesAboutUsIndexRoute: publiclandingPagesAboutUsIndexRoute,
     publiclandingPagesContactUsIndexRoute:
       publiclandingPagesContactUsIndexRoute,
-    publiclandingPagesCoursesIndexRoute: publiclandingPagesCoursesIndexRoute,
+    publiclandingPagesResourcesIndexRoute:
+      publiclandingPagesResourcesIndexRoute,
   }
 
 const publiclandingPagesRouteRouteWithChildren =

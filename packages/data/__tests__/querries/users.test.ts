@@ -80,12 +80,12 @@ describe("user querries works fine", () => {
     expect(Array.isArray(userList)).toBe(true);
   });
 
-  test("reads a single existing user from the db", async () => {
+  test("reads a one existing user from the db", async () => {
     const user = await read__OneUser({
       identifier: { email: "debobratapurkait25@gmail.com" },
     });
 
-    // exactly provides a single user
+    // exactly provides a one user
     expect(user).toEqual({
       age: 20,
       email: "debobratapurkait25@gmail.com",
@@ -98,7 +98,7 @@ describe("user querries works fine", () => {
     });
   });
 
-  test("reads a single non-existing user from the db", async () => {
+  test("reads a one non-existing user from the db", async () => {
     const user = await read__OneUser({
       identifier: { email: "debo@gmail.com" },
     });

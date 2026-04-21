@@ -3,9 +3,9 @@ import { ContactMessageTable } from "@/schema";
 import {
   create__ContactMessage,
   read__AllContactMessages,
-  read__ContactMessageById,
   update__ContactMessage,
   delete__ContactMessage,
+  read__OneContactMessage,
 } from "@/querries/contact-message";
 import { db } from "@/index";
 import { eq, sql } from "drizzle-orm";
@@ -59,10 +59,10 @@ describe("contact message queries work fine", () => {
     expect(data.length).toBeGreaterThan(0);
   });
 
-  test("reads single contact message by id", async () => {
+  test("reads one contact message by id", async () => {
     const [existing] = await db.select().from(ContactMessageTable).limit(1);
 
-    const row = await read__ContactMessageById({
+    const row = await read__OneContactMessage({
       identifier: { id: existing.id },
     });
 
@@ -75,7 +75,7 @@ describe("contact message queries work fine", () => {
   });
 
   test("returns null for invalid id", async () => {
-    const row = await read__ContactMessageById({
+    const row = await read__OneContactMessage({
       identifier: { id: 999999 },
     });
 

@@ -1,4 +1,4 @@
-import AboutUs from "@/components/main/public/about-us/about-us";
+// import AboutUs from "@/components/main/public/about-us/about-us";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/(landing-pages)/about-us/")({
@@ -10,9 +10,5 @@ export const Route = createFileRoute("/(public)/(landing-pages)/about-us/")({
 });
 
 function RouteComponent() {
-  return (
-    <>
-      <AboutUs />
-    </>
-  );
+  return <>{/* <AboutUs /> */}</>;
 }

@@ -3,7 +3,7 @@ import { MetricsTable } from "@/schema";
 import {
   create__Metric,
   read__AllMetricsDetails,
-  read__Metric,
+  read__OneMetric,
   update__Metric,
   delete__Metric,
 } from "@/querries/metrics";
@@ -87,10 +87,10 @@ describe("metrics queries works fine", () => {
     expect(metrics[0]).toHaveProperty("heading");
   });
 
-  test("reads a single existing metric", async () => {
+  test("reads a one existing metric", async () => {
     const [existing] = await db.select().from(MetricsTable).limit(1);
 
-    const metric = await read__Metric({
+    const metric = await read__OneMetric({
       identifier: { id: existing.id },
     });
 
@@ -101,7 +101,7 @@ describe("metrics queries works fine", () => {
   });
 
   test("reads a non-existing metric", async () => {
-    const metric = await read__Metric({
+    const metric = await read__OneMetric({
       identifier: { id: -1 },
     });
 

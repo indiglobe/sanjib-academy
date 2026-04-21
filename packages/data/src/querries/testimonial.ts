@@ -81,15 +81,15 @@ export const read__AllTestimonials = async () => {
  * ----------------------------------------
  */
 
-export type TRead__Testimonial = {
+export type TRead__OneTestimonial = {
   identifier: Required<{
     id: (typeof TestimonialsTable.$inferSelect)["id"];
   }>;
 };
 
-export const read__SingleTestimonial = async ({
+export const read__OneTestimonial = async ({
   identifier,
-}: TRead__Testimonial) => {
+}: TRead__OneTestimonial) => {
   const {
     email,
     name,

@@ -1,10 +1,10 @@
 import { contactFormSchema } from "@/utils/zod-schema";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { createNewContactMessage } from "@repo/data/querries/contact-message";
+import { create__NewContactMessage } from "@repo/data/querries/contact-message";
 import { isUserSigninedInMiddleware } from "@/middleware/check-user";
 
-export const createNewContactMessageServerFn = createServerFn({
+export const create__NewContactMessageServerFn = createServerFn({
   method: "POST",
 })
   .middleware([isUserSigninedInMiddleware])
@@ -14,7 +14,7 @@ export const createNewContactMessageServerFn = createServerFn({
 
     const { userSignnedIn } = context;
 
-    return await createNewContactMessage({
+    return await create__NewContactMessage({
       email,
       firstName,
       lastName,

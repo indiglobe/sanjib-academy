@@ -1,9 +1,12 @@
 import HomePage from "@/components/main/public/home/home";
-import { readAllBenefitedUsersServerFn } from "@/integrations/server-functions/querry/benefited-users";
-import { readAllFaqsServerFn } from "@/integrations/server-functions/querry/faq";
-import { readAllMetricsDetailsServeFn } from "@/integrations/server-functions/querry/metrics";
-import { readOfferedCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
-import { getAllTestimonialsServerFn } from "@/integrations/server-functions/querry/testimonials";
+import { read__AllFaqsServerFn } from "@/integrations/server-functions/querry/faq";
+// import { read__AllBenefitedUsersServerFn } from "@/integrations/server-functions/querry/benefited-users";
+// import { read__AllFaqsServerFn } from "@/integrations/server-functions/querry/faq";
+import { read__AllMetricsDetailsServerFn } from "@/integrations/server-functions/querry/metrics";
+import { read__AllOfferedCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
+import { read__AllTestimonialsServerFn } from "@/integrations/server-functions/querry/testimonials";
+// import { read__OfferedCoursesServerFn } from "@/integrations/server-functions/querry/offered-courses";
+// import { getAllTestimonialsServerFn } from "@/integrations/server-functions/querry/testimonials";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(public)/(landing-pages)/")({
@@ -14,16 +17,27 @@ export const Route = createFileRoute("/(public)/(landing-pages)/")({
   }),
 
   loader: async () => {
-    const [benefitedUsers, metrics, faqs, offeredCourses, testimonials] =
-      await Promise.all([
-        readAllBenefitedUsersServerFn(),
-        readAllMetricsDetailsServeFn(),
-        readAllFaqsServerFn(),
-        readOfferedCoursesServerFn(),
-        getAllTestimonialsServerFn(),
-      ] as const);
+    const [
+      // benefitedUsers,
+      metrics,
+      faqs,
+      offeredCourses,
+      testimonials,
+    ] = await Promise.all([
+      // read__AllBenefitedUsersServerFn(),
+      read__AllMetricsDetailsServerFn(),
+      read__AllFaqsServerFn(),
+      read__AllOfferedCoursesServerFn(),
+      read__AllTestimonialsServerFn(),
+    ] as const);
 
-    return { benefitedUsers, metrics, faqs, offeredCourses, testimonials };
+    return {
+      // benefitedUsers,
+      metrics,
+      faqs,
+      offeredCourses,
+      testimonials,
+    };
   },
 });
 

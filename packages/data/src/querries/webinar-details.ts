@@ -90,13 +90,13 @@ export const read__AllWebinars = async () => {
  * ----------------------------------------
  */
 
-export type TRead__Webinar = {
+export type TRead__OneWebinar = {
   identifier: Required<{
     id: (typeof WebinarDetailsTable.$inferSelect)["id"];
   }>;
 };
 
-export const read__Webinar = async ({ identifier }: TRead__Webinar) => {
+export const read__OneWebinar = async ({ identifier }: TRead__OneWebinar) => {
   const [webinar] = await db
     .select()
     .from(WebinarDetailsTable)

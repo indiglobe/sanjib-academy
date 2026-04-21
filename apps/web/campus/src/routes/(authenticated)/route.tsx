@@ -1,11 +1,11 @@
 // import { authMiddleware } from "@/middleware/auth";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { BeforeLoadRouterContext } from "@/router";
-import { readUserDetailsServerFn } from "@/integrations/server-functions/querry/users";
+import { read__OneUserServerFn } from "@/integrations/server-functions/querry/users";
 import { fetchSession } from "@/lib/auth/session";
 import { redirectSigninSearchParams } from "@/utils/zod-schema";
 import { zodValidator } from "@tanstack/zod-adapter";
-import Sidebar from "@/components/main/authenticated/sidebar";
+// import Sidebar from "@/components/main/authenticated/sidebar";
 import { cn } from "@/utils/cn";
 import { Main } from "@/components/main/authenticated/main";
 
@@ -32,22 +32,24 @@ export const Route = createFileRoute("/(authenticated)")({
     const { email } = user;
 
     // Switch the user details of the signed in user
-    const userDetails = await readUserDetailsServerFn({ data: { email } });
+    const userDetails = await read__OneUserServerFn({
+      data: { identifier: { email } },
+    });
 
     // Add those details The context to use later
     return { session, userDetails } satisfies BeforeLoadRouterContext;
   },
 
   // server: {
-  //   middleware: [authMiddleware],
+  //   middleware: [],
   // },
 });
 
 function RouteComponent() {
   return (
     <Main className={cn(`flex`)}>
-      <Sidebar />
-      <Outlet />
+      {/* <Sidebar />
+      <Outlet /> */}
     </Main>
   );
 }

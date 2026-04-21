@@ -3,7 +3,7 @@
  * No components should be rendered in this route.
  */
 
-import { readUserDetailsServerFn } from "@/integrations/server-functions/querry/users";
+import { read__OneUserServerFn } from "@/integrations/server-functions/querry/users";
 import {
   redirectSigninSearchParams,
   RedirectSigninSearchParams,
@@ -23,7 +23,9 @@ export const Route = createFileRoute("/(authenticated)/redirect-signin/")({
     /**
      * after successful sign in fetch userdetails
      */
-    const userDetails = await readUserDetailsServerFn({ data: { email } });
+    const userDetails = await read__OneUserServerFn({
+      data: { identifier: { email } },
+    });
 
     /**
      * if there is no userDetails that means the user is a new
@@ -61,7 +63,7 @@ export const Route = createFileRoute("/(authenticated)/redirect-signin/")({
     //   const { user } = session;
     //   const { email } = user;
 
-    //   const userDetails = await readUserDetailsServerFn({ data: { email } });
+    //   const userDetails = await read__OneUserServerFn({ data: { email } });
 
     //   if (!userDetails) {
     //     throw redirect({ to: "/welcome" });

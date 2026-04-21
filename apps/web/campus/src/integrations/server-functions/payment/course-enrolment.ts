@@ -3,7 +3,7 @@ import { courseEnrolmentMiddleware } from "@/middleware/course-enrolment";
 import { courseEnrolmentInputValidator } from "@/utils/zod-schema";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { readCoursesBoughtByEmailServerFn } from "../querry/course-buying-profiles";
+import { read__CoursesBoughtByEmailServerFn } from "../querry/course-buying-profiles";
 
 export const createCourseEnrolmentRazorpayOrderServerFn = createServerFn({
   method: "POST",
@@ -20,11 +20,13 @@ export const createCourseEnrolmentRazorpayOrderServerFn = createServerFn({
       },
     } = context;
 
-    const coursesBoughtByEmail = await readCoursesBoughtByEmailServerFn({
+    // check if the user already bought the course or not
+    const coursesBoughtByEmail = await read__CoursesBoughtByEmailServerFn({
       data: { courseId: courseDetails, email },
     });
 
     if (coursesBoughtByEmail) {
+      // todo: redirect the user to dashboard page with the course
     }
 
     // convert amount into paise that is accepted by the razorpay
