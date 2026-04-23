@@ -25,3 +25,26 @@ export function formatName(fullName: string) {
 
   throw fullName;
 }
+
+export function formatSeconds(
+  totalSeconds: number,
+  options?: { dhms: boolean },
+) {
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  if (options?.dhms) {
+    return `${days > 0 && `${days}d`} ${hours > 0 && `${hours}h`} ${minutes > 0 && `${minutes}m `} ${seconds > 0 && `${seconds}s`}  `;
+  }
+
+  // Default: hh:mm:ss with leading zeros
+  const totalHours = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = Math.floor(totalSeconds % 60);
+
+  return [totalHours, mins, secs]
+    .map((val) => val.toString().padStart(2, "0"))
+    .join(":");
+}

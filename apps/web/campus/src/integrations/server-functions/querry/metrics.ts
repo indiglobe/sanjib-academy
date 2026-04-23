@@ -17,39 +17,29 @@ import { zodValidator } from "@tanstack/zod-adapter";
 export const create__MetricServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(create__MetricSchema))
   .handler(async ({ data }) => {
-    const faqData = await create__Metric(data);
-
-    return faqData;
+    return await create__Metric(data);
   });
 
 export const read__AllMetricsDetailsServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__AllMetricsDetails();
-
-  return faqData;
+  return await read__AllMetricsDetails();
 });
 
 export const read__OneMetricServerFn = createServerFn({ method: "GET" })
   .inputValidator(zodValidator(read__OneMetricSchema))
   .handler(async ({ data }) => {
-    const faqData = await read__OneMetric(data);
-
-    return faqData;
+    return await read__OneMetric(data);
   });
 
 export const update__MetricServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(update__MetricSchema))
   .handler(async ({ data }) => {
-    const faqData = await update__Metric(data);
-
-    return faqData;
+    return await update__Metric(data);
   });
 
 export const delete__MetricServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(delete__MetricSchema))
   .handler(async ({ data }) => {
-    const faqData = await delete__Metric(data);
-
-    return faqData;
+    return await delete__Metric(data);
   });

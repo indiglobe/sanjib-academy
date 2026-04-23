@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.3.0",
+    "@repo/local-assets": "workspace:*",
     "@types/node": "^22.19.15",
     "drizzle-kit": "^0.30.6",
     "lint-staged": "^16.2.7",

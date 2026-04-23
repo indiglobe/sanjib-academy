@@ -17,39 +17,29 @@ import { zodValidator } from "@tanstack/zod-adapter";
 export const create__OfferedCourseServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(create__OfferedCourseSchema))
   .handler(async ({ data }) => {
-    const faqData = await create__OfferedCourse(data);
-
-    return faqData;
+    return await create__OfferedCourse(data);
   });
 
 export const read__AllOfferedCoursesServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__AllOfferedCourses();
-
-  return faqData;
+  return await read__AllOfferedCourses();
 });
 
 export const read__OneOfferedCourseServerFn = createServerFn({ method: "GET" })
   .inputValidator(zodValidator(read__OneOfferedCourseSchema))
   .handler(async ({ data }) => {
-    const faqData = await read__OneOfferedCourse(data);
-
-    return faqData;
+    return await read__OneOfferedCourse(data);
   });
 
 export const update__OfferedCourseServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(update__OfferedCourseSchema))
   .handler(async ({ data }) => {
-    const faqData = await update__OfferedCourse(data);
-
-    return faqData;
+    return await update__OfferedCourse(data);
   });
 
 export const delete__OfferedCourseServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(delete__OfferedCourseSchema))
   .handler(async ({ data }) => {
-    const faqData = await delete__OfferedCourse(data);
-
-    return faqData;
+    return await delete__OfferedCourse(data);
   });

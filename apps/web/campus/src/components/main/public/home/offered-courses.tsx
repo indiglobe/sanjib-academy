@@ -56,19 +56,24 @@ export function OfferedCourses({
                 {/* PRICE SECTION */}
 
                 {/* CTA BUTTONS */}
-                <div className="flex gap-2">
-                  <Button
-                    variant={"outline"}
-                    className={`hover:bg-muted border-primary-500 dark:border-primary-100 text-primary-500 dark:text-foreground flex-1 rounded-none border px-4 py-2 text-sm font-medium transition`}
+                <div className="flex gap-2 *:w-full">
+                  <Link
+                    className="flex-1"
+                    tabIndex={-1}
+                    to="/resources/course/$courseId"
+                    params={{ courseId: course.id }}
                   >
-                    <Link className={cn(``)} tabIndex={-1} to="/resources">
+                    <Button
+                      variant="outline"
+                      className="hover:bg-muted border-primary-500 dark:border-primary-100 text-primary-500 dark:text-foreground w-full rounded-none border px-4 py-2 text-sm font-medium transition"
+                    >
                       View Details
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
 
                   <Button
-                    variant={"primary"}
-                    className={`bg-primary-500 flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90`}
+                    variant="primary"
+                    className="bg-primary-500 w-full flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
                   >
                     Enroll Now
                   </Button>

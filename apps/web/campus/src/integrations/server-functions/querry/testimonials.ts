@@ -17,39 +17,29 @@ import { zodValidator } from "@tanstack/zod-adapter";
 export const create__TestimonialServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(create__TestimonialSchema))
   .handler(async ({ data }) => {
-    const faqData = await create__Testimonial(data);
-
-    return faqData;
+    return await create__Testimonial(data);
   });
 
 export const read__AllTestimonialsServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__AllTestimonials();
-
-  return faqData;
+  return await read__AllTestimonials();
 });
 
 export const read__OneTestimonialServerFn = createServerFn({ method: "GET" })
   .inputValidator(zodValidator(read__OneTestimonialSchema))
   .handler(async ({ data }) => {
-    const faqData = await read__OneTestimonial(data);
-
-    return faqData;
+    return await read__OneTestimonial(data);
   });
 
 export const update__TestimonialServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(update__TestimonialSchema))
   .handler(async ({ data }) => {
-    const faqData = await update__Testimonial(data);
-
-    return faqData;
+    return await update__Testimonial(data);
   });
 
 export const delete__TestimonialServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(delete__TestimonialSchema))
   .handler(async ({ data }) => {
-    const faqData = await delete__Testimonial(data);
-
-    return faqData;
+    return await delete__Testimonial(data);
   });

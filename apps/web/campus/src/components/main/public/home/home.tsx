@@ -159,7 +159,7 @@ export function HeroSection({
 
               <div className={cn(`h-80 w-full overflow-clip rounded-lg`)}>
                 <Image
-                  src={`https://images.pexels.com/photos/31599837/pexels-photo-31599837.jpeg`}
+                  src={ownerPortrait}
                   alt={""}
                   layout="fullWidth"
                   className={cn(`h-auto w-full object-cover`)}
@@ -261,7 +261,7 @@ export function OurMethod() {
   return (
     <section className="relative py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <div className="flex flex-col gap-12 xl:flex-row">
+        <div className="@container flex flex-col gap-12 xl:flex-row">
           {/* LEFT CONTENT */}
           <div className="m-auto w-full max-w-md text-center xl:text-left">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
@@ -273,30 +273,16 @@ export function OurMethod() {
               process designed for beginners, traders, and investors.
             </p>
 
-            <Button className="mt-6 rounded-full bg-linear-to-r from-indigo-500 to-purple-600 px-6 py-5 text-base font-medium text-white shadow-md transition hover:shadow-lg">
-              Get Started
-            </Button>
+            <Link to="/resources" tabIndex={-1}>
+              <Button className="mt-6 rounded-full bg-linear-to-r from-indigo-500 to-purple-600 px-6 py-5 text-base font-medium text-white shadow-md transition hover:shadow-lg">
+                Get Started
+              </Button>
+            </Link>
           </div>
 
           {/* RIGHT STEPS */}
-          <div className="relative flex w-full flex-col items-center gap-8 xl:flex-row xl:items-start xl:justify-between">
-            {/* Connecting line (desktop only) */}
-            <div
-              style={{
-                maskImage:
-                  "linear-gradient(to right, transparent 30%, black 30%, black 50%, transparent 50%)",
-              }}
-              className="absolute top-0 left-1/2 block h-full w-0.5 bg-linear-to-r from-indigo-200 via-purple-200 to-pink-200 max-xl:hidden xl:top-10 xl:left-0 xl:h-0.5 xl:w-full"
-            />
-            <div
-              style={{
-                maskImage:
-                  "linear-gradient(to right, transparent 50%, black 50%, black 75%, transparent 75%)",
-              }}
-              className="absolute top-0 left-1/2 block h-full w-0.5 bg-linear-to-r from-indigo-200 via-purple-200 to-pink-200 max-xl:hidden xl:top-15 xl:left-0 xl:h-0.5 xl:w-full"
-            />
-
-            <LearningStep className={cn(`relative -left-10 xl:left-0`)}>
+          <div className="relative flex w-full flex-col items-center gap-8 @3xl:flex-row @3xl:items-start @3xl:justify-between">
+            <LearningStep className={cn(`relative -left-10 @3xl:left-0`)}>
               <LearningStepCount>Step 1</LearningStepCount>
               <LearningStepHeading>Join a Free Masterclass</LearningStepHeading>
               <LearningStepDetails>
@@ -305,7 +291,7 @@ export function OurMethod() {
               </LearningStepDetails>
             </LearningStep>
 
-            <LearningStep className={cn(`relative xl:top-5`)}>
+            <LearningStep className={cn(`relative @3xl:top-5`)}>
               <LearningStepCount>Step 2</LearningStepCount>
               <LearningStepHeading>Enroll & Start Learning</LearningStepHeading>
               <LearningStepDetails>
@@ -314,7 +300,9 @@ export function OurMethod() {
               </LearningStepDetails>
             </LearningStep>
 
-            <LearningStep className={cn(`relative max-xl:left-10 xl:top-10`)}>
+            <LearningStep
+              className={cn(`relative @max-3xl:left-10 @3xl:top-10`)}
+            >
               <LearningStepCount>Step 3</LearningStepCount>
               <LearningStepHeading>
                 Apply & Trade Confidently

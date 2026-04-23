@@ -19,55 +19,41 @@ import { zodValidator } from "@tanstack/zod-adapter";
 export const create__WebinarServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(create__WebinarSchema))
   .handler(async ({ data }) => {
-    const faqData = await create__Webinar(data);
-
-    return faqData;
+    return await create__Webinar(data);
   });
 
 export const read__AllWebinarsServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__AllWebinars();
-
-  return faqData;
+  return await read__AllWebinars();
 });
 
 export const read__OneWebinarServerFn = createServerFn({ method: "GET" })
   .inputValidator(zodValidator(read__OneWebinarSchema))
   .handler(async ({ data }) => {
-    const faqData = await read__OneWebinar(data);
-
-    return faqData;
+    return await read__OneWebinar(data);
   });
 
 export const read__UpcomingWebinarsServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__UpcomingWebinars();
-
-  return faqData;
+  return await read__UpcomingWebinars();
 });
 
 export const read__MostUpcomingWebinarServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const faqData = await read__MostUpcomingWebinar();
-
-  return faqData;
+  return await read__MostUpcomingWebinar();
 });
 
 export const update__WebinarServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(update__WebinarSchema))
   .handler(async ({ data }) => {
-    const faqData = await update__Webinar(data);
-
-    return faqData;
+    return await update__Webinar(data);
   });
 
 export const delete__WebinarServerFn = createServerFn({ method: "POST" })
   .inputValidator(zodValidator(delete__WebinarSchema))
   .handler(async ({ data }) => {
-    const faqData = await delete__Webinar(data);
-
-    return faqData;
+    return await delete__Webinar(data);
   });

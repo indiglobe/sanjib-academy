@@ -19,17 +19,13 @@ export const create__BenefitedUserServerFn = createServerFn({
 })
   .inputValidator(zodValidator(create__BenefitedUserSchema))
   .handler(async ({ data }) => {
-    const createdUserDetails = await create__BenefitedUser(data);
-
-    return createdUserDetails;
+    return await create__BenefitedUser(data);
   });
 
 export const read__AllBenefitedUsersServerFn = createServerFn({
   method: "GET",
 }).handler(async () => {
-  const benefitedUsers = await read__AllBenefitedUsers();
-
-  return benefitedUsers;
+  return await read__AllBenefitedUsers();
 });
 
 export const read__OneBenefitedUserServerFn = createServerFn({
@@ -37,9 +33,7 @@ export const read__OneBenefitedUserServerFn = createServerFn({
 })
   .inputValidator(zodValidator(read__OneBenefitedUserSchema))
   .handler(async ({ data }) => {
-    const benefitedUser = await read__OneBenefitedUser(data);
-
-    return benefitedUser;
+    return await read__OneBenefitedUser(data);
   });
 
 export const update__BenefitedUserServerFn = createServerFn({
@@ -47,9 +41,7 @@ export const update__BenefitedUserServerFn = createServerFn({
 })
   .inputValidator(zodValidator(update__BenefitedUserSchema))
   .handler(async ({ data }) => {
-    const updateResponse = await update__BenefitedUser(data);
-
-    return updateResponse;
+    return await update__BenefitedUser(data);
   });
 
 export const delete__BenefitedUserServerFn = createServerFn({
@@ -57,7 +49,5 @@ export const delete__BenefitedUserServerFn = createServerFn({
 })
   .inputValidator(zodValidator(delete__BenefitedUserSchema))
   .handler(async ({ data }) => {
-    const deleteResponse = await delete__BenefitedUser(data);
-
-    return deleteResponse;
+    return await delete__BenefitedUser(data);
   });

@@ -32,6 +32,7 @@ import { Route as publiclandingPagesAboutUsIndexRouteImport } from './routes/(pu
 import { Route as authenticatednewUsersWelcomeIndexRouteImport } from './routes/(authenticated)/(new-users)/welcome/index'
 import { Route as authenticatedexistingUsersUsernameDashboardIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/dashboard/index'
 import { Route as authenticatedexistingUsersUsernameCoursesIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/courses/index'
+import { Route as publiclandingPagesResourcesCourseCourseIdIndexRouteImport } from './routes/(public)/(landing-pages)/resources/course/$courseId/index'
 
 const publicRouteRoute = publicRouteRouteImport.update({
   id: '/(public)',
@@ -156,6 +157,12 @@ const authenticatedexistingUsersUsernameCoursesIndexRoute =
     path: '/courses/',
     getParentRoute: () => authenticatedexistingUsersUsernameRouteRoute,
   } as any)
+const publiclandingPagesResourcesCourseCourseIdIndexRoute =
+  publiclandingPagesResourcesCourseCourseIdIndexRouteImport.update({
+    id: '/resources/course/$courseId/',
+    path: '/resources/course/$courseId/',
+    getParentRoute: () => publiclandingPagesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/api/upload-image': typeof ApiUploadImageRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
   '/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
+  '/resources/course/$courseId/': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/api/upload-image': typeof ApiUploadImageRoute
@@ -194,6 +202,7 @@ export interface FileRoutesByTo {
   '/terms-and-conditions': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
   '/$username/courses': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
+  '/resources/course/$courseId': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -220,6 +229,7 @@ export interface FileRoutesById {
   '/(public)/(lawsuit-pages)/terms-and-conditions/': typeof publiclawsuitPagesTermsAndConditionsIndexRoute
   '/(authenticated)/(existing-users)/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/(authenticated)/(existing-users)/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
+  '/(public)/(landing-pages)/resources/course/$courseId/': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions/'
     | '/$username/courses/'
     | '/$username/dashboard/'
+    | '/resources/course/$courseId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/upload-image'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/$username/courses'
     | '/$username/dashboard'
+    | '/resources/course/$courseId'
   id:
     | '__root__'
     | '/(authenticated)'
@@ -285,6 +297,7 @@ export interface FileRouteTypes {
     | '/(public)/(lawsuit-pages)/terms-and-conditions/'
     | '/(authenticated)/(existing-users)/$username/courses/'
     | '/(authenticated)/(existing-users)/$username/dashboard/'
+    | '/(public)/(landing-pages)/resources/course/$courseId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -458,6 +471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedexistingUsersUsernameCoursesIndexRouteImport
       parentRoute: typeof authenticatedexistingUsersUsernameRouteRoute
     }
+    '/(public)/(landing-pages)/resources/course/$courseId/': {
+      id: '/(public)/(landing-pages)/resources/course/$courseId/'
+      path: '/resources/course/$courseId'
+      fullPath: '/resources/course/$courseId/'
+      preLoaderRoute: typeof publiclandingPagesResourcesCourseCourseIdIndexRouteImport
+      parentRoute: typeof publiclandingPagesRouteRoute
+    }
   }
 }
 
@@ -529,6 +549,7 @@ interface publiclandingPagesRouteRouteChildren {
   publiclandingPagesAboutUsIndexRoute: typeof publiclandingPagesAboutUsIndexRoute
   publiclandingPagesContactUsIndexRoute: typeof publiclandingPagesContactUsIndexRoute
   publiclandingPagesResourcesIndexRoute: typeof publiclandingPagesResourcesIndexRoute
+  publiclandingPagesResourcesCourseCourseIdIndexRoute: typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
 }
 
 const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren =
@@ -539,6 +560,8 @@ const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren
       publiclandingPagesContactUsIndexRoute,
     publiclandingPagesResourcesIndexRoute:
       publiclandingPagesResourcesIndexRoute,
+    publiclandingPagesResourcesCourseCourseIdIndexRoute:
+      publiclandingPagesResourcesCourseCourseIdIndexRoute,
   }
 
 const publiclandingPagesRouteRouteWithChildren =

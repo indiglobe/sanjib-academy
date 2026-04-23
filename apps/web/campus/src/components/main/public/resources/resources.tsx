@@ -11,6 +11,7 @@ import {
   LearningTopicList,
 } from "../../../../ui/course";
 import { Button } from "@/ui/button";
+import { formatSeconds } from "@repo/utils/utility";
 
 export default function Courses() {
   return (
@@ -105,19 +106,24 @@ export function CoursesSection({
                   />
 
                   {/* CTA BUTTONS */}
-                  <div className="flex gap-2">
-                    <Button
-                      variant={"outline"}
-                      className={`hover:bg-muted border-primary-500 dark:border-primary-900 text-primary-500 dark:text-foreground flex-1 rounded-none border px-4 py-2 text-sm font-medium transition`}
+                  <div className="flex gap-2 *:w-full">
+                    <Link
+                      className="flex-1"
+                      tabIndex={-1}
+                      to="/resources/course/$courseId"
+                      params={{ courseId: course.id }}
                     >
-                      <Link className={cn(``)} tabIndex={-1} to="/resources">
+                      <Button
+                        variant="outline"
+                        className="hover:bg-muted border-primary-500 dark:border-primary-100 text-primary-500 dark:text-foreground w-full rounded-none border px-4 py-2 text-sm font-medium transition"
+                      >
                         View Details
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
 
                     <Button
-                      variant={"primary"}
-                      className={`bg-primary-500 flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90`}
+                      variant="primary"
+                      className="bg-primary-500 w-full flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
                     >
                       Enroll Now
                     </Button>
@@ -150,17 +156,6 @@ function getRelativeTime(date: Date) {
   return `in ${diff} days`;
 }
 
-function formatSeconds(totalSeconds: number) {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = Math.floor(totalSeconds % 60);
-
-  // Format with leading zeros using padStart()
-  return [hours, minutes, seconds]
-    .map((val) => val.toString().padStart(2, "0"))
-    .join(":");
-}
-
 export function WebinarTable({
   className,
   ...props
@@ -172,7 +167,7 @@ export function WebinarTable({
   return (
     <section
       {...props}
-      className={cn(`w-full`, className)}
+      className={cn(`w-full pb-20`, className)}
       data-slot={`webinar-table`}
     >
       {/* 🔥 Section Heading */}
@@ -329,7 +324,7 @@ export function WebinarTable({
                           {webinar.discountedPrice && (
                             <span
                               className={cn(
-                                `text-primary-900/50 dark:text-primary-900/50 text-xs line-through`,
+                                `text-primary-900/50 decoration-primary-900/50 text-xs line-through`,
                               )}
                             >
                               ₹{webinar.actualPrice}

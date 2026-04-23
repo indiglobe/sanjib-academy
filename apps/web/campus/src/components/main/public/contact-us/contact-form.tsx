@@ -64,11 +64,15 @@ export default function ConatctForm({
           <div className="grid grid-cols-1 gap-4 @md:grid-cols-2">
             <Field name="firstName">
               {(field) => (
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    First name *
+                <div className="relative flex flex-col gap-1">
+                  <label
+                    htmlFor="firstName"
+                    className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                  >
+                    First name <span className={cn(`text-red-500`)}>*</span>
                   </label>
                   <input
+                    id="firstName"
                     type="text"
                     placeholder="John"
                     className={cn(
@@ -84,7 +88,7 @@ export default function ConatctForm({
                   />
                   {field.state.meta.errors.length > 0 &&
                     field.state.meta.isTouched && (
-                      <span className="mt-1 text-xs text-red-500">
+                      <span className="absolute top-full left-2 mt-1 text-xs text-red-500">
                         {field.state.meta.errors[0]?.message}
                       </span>
                     )}
@@ -94,11 +98,15 @@ export default function ConatctForm({
 
             <Field name="lastName">
               {(field) => (
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    Last name *
+                <div className="relative flex flex-col gap-1">
+                  <label
+                    htmlFor="lastName"
+                    className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+                  >
+                    Last name <span className={cn(`text-red-500`)}>*</span>
                   </label>
                   <input
+                    id="lastName"
                     type="text"
                     placeholder="Snow"
                     className={cn(
@@ -114,7 +122,7 @@ export default function ConatctForm({
                   />
                   {field.state.meta.errors.length > 0 &&
                     field.state.meta.isTouched && (
-                      <span className="mt-1 text-xs text-red-500">
+                      <span className="absolute top-full left-2 mt-1 text-xs text-red-500">
                         {field.state.meta.errors[0]?.message}
                       </span>
                     )}
@@ -127,11 +135,15 @@ export default function ConatctForm({
         {/* Email */}
         <Field name="email">
           {(field) => (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Email *
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Email <span className={cn(`text-red-500`)}>*</span>
               </label>
               <input
+                id="email"
                 type="email"
                 placeholder="john@example.com"
                 className={cn(
@@ -147,7 +159,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="mt-1 text-xs text-red-500">
+                  <span className="absolute top-full left-2 mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}
@@ -158,11 +170,15 @@ export default function ConatctForm({
         {/* Phone */}
         <Field name="phoneNo">
           {(field) => (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Phone *
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="phoneNo"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Phone <span className={cn(`text-red-500`)}>*</span>
               </label>
               <input
+                id="phoneNo"
                 type="text"
                 placeholder="+91 00000 00000"
                 className={cn(
@@ -178,7 +194,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="mt-1 text-xs text-red-500">
+                  <span className="absolute top-full left-2 mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}
@@ -189,11 +205,15 @@ export default function ConatctForm({
         {/* Message */}
         <Field name="message">
           {(field) => (
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Message *
+            <div className="relative flex flex-col gap-1">
+              <label
+                htmlFor="message"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
+                Message <span className={cn(`text-red-500`)}>*</span>
               </label>
               <textarea
+                id="message"
                 rows={5}
                 placeholder="Write your message..."
                 className={cn(
@@ -209,7 +229,7 @@ export default function ConatctForm({
               />
               {field.state.meta.errors.length > 0 &&
                 field.state.meta.isTouched && (
-                  <span className="mt-1 text-xs text-red-500">
+                  <span className="absolute top-full left-2 mt-1 text-xs text-red-500">
                     {field.state.meta.errors[0]?.message}
                   </span>
                 )}

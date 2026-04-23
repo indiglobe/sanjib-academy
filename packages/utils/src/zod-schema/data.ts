@@ -414,3 +414,42 @@ export const delete__WebinarSchema = z.object({
     id: z.number(),
   }),
 });
+
+export const create__CourseModuleSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  appearingOrder: z.number(),
+  courseId: z.string(),
+});
+
+export const read__AllCourseModulesSchema = z
+  .object({
+    identifier: z.object({
+      courseId: z.string(),
+    }),
+  })
+  .optional();
+
+export const read__OneCourseModuleSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});
+
+export const update__CourseModuleSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+  dataToUpdate: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    appearingOrder: z.number().optional(),
+    courseId: z.string().optional(),
+  }),
+});
+
+export const delete__CourseModuleSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});

@@ -20,9 +20,7 @@ export const create__CourseAdvantageServerFn = createServerFn({
 })
   .inputValidator(zodValidator(create__CourseAdvantageSchema))
   .handler(async ({ data }) => {
-    const response = await create__CourseAdvantage(data);
-
-    return response;
+    return await create__CourseAdvantage(data);
   });
 
 export const read__AllCourseAdvantagesServerFn = createServerFn({
@@ -30,9 +28,7 @@ export const read__AllCourseAdvantagesServerFn = createServerFn({
 })
   .inputValidator(zodValidator(read__AllCourseAdvantagesSchema))
   .handler(async ({ data }) => {
-    const response = await read__AllCourseAdvantages(data);
-
-    return response;
+    return await read__AllCourseAdvantages(data);
   });
 
 export const read__OneCourseAdvantageServerFn = createServerFn({
@@ -40,9 +36,7 @@ export const read__OneCourseAdvantageServerFn = createServerFn({
 })
   .inputValidator(zodValidator(read__OneCourseAdvantageSchema))
   .handler(async ({ data }) => {
-    const response = await read__OneCourseAdvantage(data);
-
-    return response;
+    return await read__OneCourseAdvantage(data);
   });
 
 export const update__CourseAdvantageServerFn = createServerFn({
@@ -50,9 +44,7 @@ export const update__CourseAdvantageServerFn = createServerFn({
 })
   .inputValidator(zodValidator(update__CourseAdvantageSchema))
   .handler(async ({ data }) => {
-    const response = await update__CourseAdvantage(data);
-
-    return response;
+    return await update__CourseAdvantage(data);
   });
 
 export const delete__CourseAdvantageServerFn = createServerFn({
@@ -60,7 +52,5 @@ export const delete__CourseAdvantageServerFn = createServerFn({
 })
   .inputValidator(zodValidator(delete__CourseAdvantageSchema))
   .handler(async ({ data }) => {
-    const response = await delete__CourseAdvantage(data);
-
-    return response;
+    return await delete__CourseAdvantage(data);
   });

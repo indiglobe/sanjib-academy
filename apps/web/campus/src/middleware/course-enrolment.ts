@@ -3,7 +3,7 @@ import { createMiddleware } from "@tanstack/react-start";
 import { redirect } from "@tanstack/react-router";
 import { courseEnrolmentInputValidator } from "@/utils/zod-schema";
 import { env } from "@repo/env";
-import { readProfilesDetailServerFn } from "@/integrations/server-functions/querry/profile";
+import { read__OneUserServerFn } from "@/integrations/server-functions/querry/users";
 
 /**
  * this middleware checks if the user is signed in or not.
@@ -51,10 +51,12 @@ export const courseEnrolmentMiddleware = createMiddleware({
     } = session;
 
     // Verify is the user is present or not
-    const profile = await readProfilesDetailServerFn({ data: { email } });
+    const user = await read__OneUserServerFn({
+      data: { identifier: { email } },
+    });
 
     // If the user is not present she direct them to the welcome page
-    if (!profile) {
+    if (!user) {
       throw redirect({ to: "/welcome", search: { requestInitiatedFrom } });
     }
 

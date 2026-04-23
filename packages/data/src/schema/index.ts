@@ -53,9 +53,21 @@ export type TableIdentifierToken =
    */
   | "CONT"
   /**
-   * CourseBuyingProfiles
+   * CourseBuyingProfilesTable
    */
-  | "CBPR";
+  | "CBPR"
+  /**
+   * CourseModulesTable
+   */
+  | "CMOD"
+  /**
+   * CourseVideoTable
+   */
+  | "CVID"
+  /**
+   * CourseDocumentTable
+   */
+  | "CDOC";
 
 export const metricSuffixEnums = mysqlEnum("metric_suffix", ["+", "%"]);
 export const roleEnums = mysqlEnum("user_role", ["admin", "student", "basic"]);
@@ -70,6 +82,9 @@ export const tableIdentifierToken = mysqlEnum("table_identifier_token", [
   "TMNL",
   "USER",
   "WBNR",
+  "CMOD",
+  "CVID",
+  "CDOC",
 ] as [TableIdentifierToken, ...TableIdentifierToken[]]);
 
 // -------------------------
@@ -258,6 +273,62 @@ export const CourseBuyingProfilesTable = mysqlTable(
   ],
 );
 
+// -------------------------
+// CourseModulesTable
+// -------------------------
+export const CourseModulesTable = mysqlTable("course_modules", {
+  id: int("id").primaryKey().autoincrement(),
+  title: varchar("title", { length: 127 }).notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
+  appearingOrder: int("appearing_order").notNull(),
+  courseId: varchar("course_id", { length: 127 })
+    .notNull()
+    .references(() => OfferedCoursesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CMOD"),
+});
+
+// -------------------------
+// CourseVideoTable
+// -------------------------
+export const CourseVideoTable = mysqlTable("course_video", {
+  id: int("id").primaryKey().autoincrement(),
+  videoURL: varchar("video_url", { length: 127 }).notNull(),
+  thumbnailImage: varchar("video_thumbnail_url", { length: 127 }).notNull(),
+  videoTitle: varchar("video_title", { length: 127 }).notNull(),
+  videoDescription: varchar("video_description", { length: 127 }),
+  moduleId: int("module_id")
+    .notNull()
+    .references(() => CourseModulesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CVID"),
+});
+
+// -------------------------
+// CourseDocumentTable
+// -------------------------
+export const CourseDocumentTable = mysqlTable("course_document", {
+  id: int("id").primaryKey().autoincrement(),
+  documentURL: varchar("document_url", { length: 127 }).notNull(),
+  thumbnailImage: varchar("document_thumbnail_url", { length: 127 }).notNull(),
+  documentTitle: varchar("document_title", { length: 127 }).notNull(),
+  documentDescription: varchar("document_description", { length: 127 }),
+  moduleId: int("module_id")
+    .notNull()
+    .references(() => CourseModulesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CDOC"),
+});
+
 /**
  * This is used to identify which table the data is from,
  * and if there is any querry we have to do we can understand
@@ -287,6 +358,12 @@ export function identifyTable(tableIdentifierToken: string) {
       return "ContactMessageTable" as const;
     case "CBPR":
       return "CourseBuyingProfilesTable" as const;
+    case "CMOD":
+      return "CourseModulesTable" as const;
+    case "CVID":
+      return "CourseVideoTable" as const;
+    case "CDOC":
+      return "CourseDocumentTable" as const;
 
     default:
       throw new Error("Provide a valid prefix to identify table name.");

@@ -11,7 +11,11 @@ import {
   TestimonialsTable,
   ContactMessageTable,
   CourseBuyingProfilesTable,
+  CourseModulesTable,
+  CourseVideoTable,
+  CourseDocumentTable,
 } from "../schema";
+import manifestJson from "@repo/local-assets/manifest.json";
 
 async function seed() {
   console.log("__________ SEEDING STARTED __________");
@@ -37,23 +41,27 @@ async function seed() {
     {
       email: "Aaron.Mills84@hotmail.com",
       name: "Dr. Dianna Streich",
-      uploadedAvatarImageUrl: "",
+      uploadedAvatarImageUrl: faker.helpers.arrayElement(
+        manifestJson["images/avatar"],
+      ),
       age: 20,
       phoneNo: "9876543210",
     },
     {
       email: "Andy49@hotmail.com",
       name: "Jerry Prosacco",
-      uploadedAvatarImageUrl:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
+      uploadedAvatarImageUrl: faker.helpers.arrayElement(
+        manifestJson["images/avatar"],
+      ),
       age: 60,
       phoneNo: "6936936922",
     },
     {
       email: "Anita.Cormier@yahoo.com",
       name: "Ross Watsica",
-      uploadedAvatarImageUrl:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/21.jpg",
+      uploadedAvatarImageUrl: faker.helpers.arrayElement(
+        manifestJson["images/avatar"],
+      ),
       age: 50,
       phoneNo: "2222222222",
       role: "student",
@@ -61,7 +69,9 @@ async function seed() {
     {
       email: "Adrian.Reynolds40@gmail.com",
       name: "Dr. Alexander Gislason",
-      uploadedAvatarImageUrl: "",
+      uploadedAvatarImageUrl: faker.helpers.arrayElement(
+        manifestJson["images/avatar"],
+      ),
       age: 50,
       phoneNo: "8888888888",
       role: "admin",
@@ -76,7 +86,9 @@ async function seed() {
       name: name,
       age: randomInt(18, 50),
       phoneNo: Math.floor(Math.random() * 10000000000).toString(),
-      uploadedAvatarImageUrl: "",
+      uploadedAvatarImageUrl: faker.helpers.arrayElement(
+        manifestJson["images/avatar"],
+      ),
       role:
         Math.random() > 0.3
           ? "basic"
@@ -283,8 +295,7 @@ async function seed() {
       brochureLink: "",
       courseHeading:
         "Learn how big institutions and banks move the market—and how you can trade with them.",
-      imageLink:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
+      imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),
       originalEnrlomentFee: 14999,
       discountedEnrlomentFee: 4999,
     },
@@ -294,8 +305,7 @@ async function seed() {
       brochureLink: "",
       courseHeading:
         "Master Futures & Options strategies to protect capital and earn consistently.",
-      imageLink:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
+      imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),
       originalEnrlomentFee: 14999,
       discountedEnrlomentFee: 4999,
     },
@@ -305,8 +315,7 @@ async function seed() {
       brochureLink: "",
       courseHeading:
         "Learn how to find strong companies and invest like professionals.",
-      imageLink:
-        "https://cdn.jsdelivr.net/gh/faker-js/assets-person-portrait/male/512/73.jpg",
+      imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),
       originalEnrlomentFee: 14999,
       discountedEnrlomentFee: 4999,
     },
@@ -496,11 +505,11 @@ async function seed() {
   /**
    * COURSE BUYING PROFILES
    */
-  type InsertCourseBuyingProfiles =
-    typeof CourseBuyingProfilesTable.$inferInsert;
+  // type InsertCourseBuyingProfiles =
+  //   typeof CourseBuyingProfilesTable.$inferInsert;
 
-  const insertCourseBuyingProfiles: InsertCourseBuyingProfiles[] =
-    [] satisfies InsertCourseBuyingProfiles[];
+  // const insertCourseBuyingProfiles: InsertCourseBuyingProfiles[] =
+  //   [] satisfies InsertCourseBuyingProfiles[];
 
   async function insertInsertCourseBuyingProfiles() {
     console.log(`---INSERTING COURSE BUYING PROFILES---`);
@@ -508,8 +517,179 @@ async function seed() {
     // await db
     //   .insert(CourseBuyingProfilesTable)
     //   .values(insertCourseBuyingProfiles);
-    insertCourseBuyingProfiles;
     console.log(`---INSERTED COURSE BUYING PROFILES---`);
+  }
+
+  /**
+   * COURSE MODULES
+   */
+
+  type InsertCourseModules = typeof CourseModulesTable.$inferInsert;
+
+  const courseModules: InsertCourseModules[] = [
+    // Institutional Trading
+    {
+      courseId: "institutional-trading",
+      title: "Introduction to Institutional Trading",
+      description: "Basics of how institutions move markets.",
+      appearingOrder: 1,
+    },
+    {
+      courseId: "institutional-trading",
+      title: "Order Blocks & Liquidity",
+      description: "Understanding liquidity zones and smart money traps.",
+      appearingOrder: 2,
+    },
+
+    // FNO Hedging
+    {
+      courseId: "fno-hedging",
+      title: "F&O Basics",
+      description: "Introduction to futures and options.",
+      appearingOrder: 1,
+    },
+    {
+      courseId: "fno-hedging",
+      title: "Hedging Strategies",
+      description: "Protecting capital using options spreads.",
+      appearingOrder: 2,
+    },
+
+    // Fundamental Analysis
+    {
+      courseId: "fundamental-analysis",
+      title: "Financial Statements",
+      description: "Reading balance sheet, P&L and cash flow.",
+      appearingOrder: 1,
+    },
+  ];
+
+  async function insertCourseModulesTable() {
+    console.log("---INSERTING COURSE MODULES---");
+    await db.insert(CourseModulesTable).values(courseModules);
+    console.log("---INSERTED COURSE MODULES---");
+  }
+
+  /**
+   * MODULE VIDEOS
+   */
+
+  type InsertCourseVideo = typeof CourseVideoTable.$inferInsert;
+
+  const courseVideos: InsertCourseVideo[] = [
+    ...([
+      {
+        moduleId: 1,
+        videoURL: faker.helpers.arrayElement(manifestJson["videos/course"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        videoTitle: "Video-Title-1",
+      },
+      {
+        moduleId: 1,
+        videoURL: faker.helpers.arrayElement(manifestJson["videos/course"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        videoTitle: "Video-Title-2",
+        videoDescription: "Description-2",
+      },
+      {
+        moduleId: 2,
+        videoURL: faker.helpers.arrayElement(manifestJson["videos/course"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        videoTitle: "Video-Title-3",
+      },
+    ] satisfies InsertCourseVideo[]),
+    ...Array.from({ length: 20 }).map<InsertCourseVideo>((_, idx) => {
+      return {
+        moduleId: 0,
+        videoURL: faker.helpers.arrayElement(manifestJson["videos/course"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        videoTitle: `Video-Title-${idx + 4}`,
+        videoDescription:
+          Math.random() > 0.5 ? `Video-Description-${idx + 4}` : undefined,
+      };
+    }),
+  ];
+
+  async function insertCourseVideoTable() {
+    const modules = await db.select().from(CourseModulesTable);
+
+    const updatedId = courseVideos.map<InsertCourseVideo>(
+      ({ moduleId, ...rest }) => {
+        return {
+          ...rest,
+          moduleId: faker.helpers.arrayElement(modules.map((m) => m.id)),
+        };
+      },
+    );
+
+    console.log("---INSERTING COURSE VIDEOS---");
+    await db.insert(CourseVideoTable).values(updatedId);
+    console.log("---INSERTED COURSE VIDEOS---");
+  }
+
+  /**
+   * MODULE DOCUMENT
+   */
+
+  type InsertCourseDocument = typeof CourseDocumentTable.$inferInsert;
+
+  const courseDocuments: InsertCourseDocument[] = [
+    ...([
+      {
+        moduleId: 1,
+        documentURL: faker.helpers.arrayElement(manifestJson["document/pdf"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        documentTitle: "Document-Title-1",
+        documentDescription: "Document-Description-1",
+      },
+      {
+        moduleId: 2,
+        documentURL: faker.helpers.arrayElement(manifestJson["document/pdf"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        documentTitle: "Document-Title-2",
+      },
+    ] satisfies InsertCourseDocument[]),
+    ...Array.from({ length: 20 }).map<InsertCourseDocument>((_, idx) => {
+      return {
+        moduleId: 0,
+        documentURL: faker.helpers.arrayElement(manifestJson["document/pdf"]),
+        thumbnailImage: faker.helpers.arrayElement(
+          manifestJson["images/thumbnail"],
+        ),
+        documentTitle: `Document-Title-${idx + 4}`,
+        documentDescription:
+          Math.random() > 0.5 ? `Document-Description-${idx + 4}` : undefined,
+      };
+    }),
+  ];
+
+  async function insertCourseDocumentTable() {
+    const modules = await db.select().from(CourseModulesTable);
+
+    const updatedId = courseDocuments.map<InsertCourseDocument>(
+      ({ moduleId, ...rest }) => {
+        return {
+          ...rest,
+          moduleId: faker.helpers.arrayElement(modules.map((m) => m.id)),
+        };
+      },
+    );
+
+    console.log("---INSERTING COURSE DOCUMENTS---");
+    await db.insert(CourseDocumentTable).values(updatedId);
+    console.log("---INSERTED COURSE DOCUMENTS---");
   }
 
   await insertUserTable();
@@ -522,6 +702,9 @@ async function seed() {
   await insertTestimonialTable();
   await insertContactMessage();
   await insertInsertCourseBuyingProfiles();
+  await insertCourseModulesTable();
+  await insertCourseVideoTable();
+  await insertCourseDocumentTable();
 
   console.log("__________ SEEDING COMPLETED __________");
   process.exit(0);
