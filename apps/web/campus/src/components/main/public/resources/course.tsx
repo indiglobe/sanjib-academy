@@ -9,6 +9,7 @@ import {
   PlayCircle,
   BarChart3,
   FileText,
+  Download,
   LucideIcon,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -28,8 +29,6 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
     totalActivities = totalActivities + m.videos.length + m.documents.length;
   });
 
-  if (!courseDetails) return null;
-
   return (
     <div className={cn("space-y-6 p-4 sm:p-6 lg:p-8")} {...props}>
       {/* Banner */}
@@ -42,9 +41,27 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
         />
       </div>
 
-      {/* Title + Metrics */}
+      {/* Title + Subheading + CTA + Metrics */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <h1 className="text-2xl font-bold">{courseDetails.courseTopic}</h1>
+        <div className="max-w-xl space-y-2">
+          <h1 className="text-2xl font-bold">{courseDetails.courseTopic}</h1>
+
+          {/* Subheading */}
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            {courseDetails.courseHeading}
+          </p>
+
+          {/* Download Brochure Button */}
+          {console.log(courseDetails.brochureLink)!!}
+          <a
+            href={courseDetails.brochureLink}
+            download
+            className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-black/80"
+          >
+            <Download className="size-4" />
+            Download Brochure
+          </a>
+        </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <MetricCard>
@@ -137,21 +154,6 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
                     </MediaSection>
                   )}
                 </div>
-
-                {/* <ModuleCardActions>
-                  <button className="rounded-lg bg-black px-4 py-2 text-sm text-white">
-                    Add activity
-                  </button>
-                  <button className="rounded-lg border px-4 py-2 text-sm">
-                    Upload activity
-                  </button>
-                  <button className="rounded-lg border px-4 py-2 text-sm">
-                    Import activity
-                  </button>
-                  <button className="flex items-center gap-2 rounded-lg border px-4 py-2 text-sm">
-                    <Sparkles className="size-4" /> Create with AI
-                  </button>
-                </ModuleCardActions> */}
               </ModuleCardContent>
             )}
           </ModuleCard>
@@ -160,6 +162,8 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
     </div>
   );
 }
+
+/* rest unchanged */
 
 export function MetricCard({ className, ...props }: ComponentProps<"div">) {
   return (

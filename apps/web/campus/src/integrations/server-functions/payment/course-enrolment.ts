@@ -1,5 +1,5 @@
 import { razorpay } from "@/integrations/razorpay/server";
-import { courseEnrolmentMiddleware } from "@/middleware/course-enrolment";
+import { middleware__courseEnrolment } from "@/middleware/course-enrolment";
 import { courseEnrolmentInputValidator } from "@/utils/zod-schema";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
@@ -8,7 +8,7 @@ import { read__CoursesBoughtByEmailServerFn } from "../querry/course-buying-prof
 export const createCourseEnrolmentRazorpayOrderServerFn = createServerFn({
   method: "POST",
 })
-  .middleware([courseEnrolmentMiddleware])
+  .middleware([middleware__courseEnrolment])
   .inputValidator(zodValidator(courseEnrolmentInputValidator))
   .handler(async ({ context }) => {
     // Destructure returned context

@@ -6,6 +6,10 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/(public)/(landing-pages)/resources/")({
   component: RouteComponent,
 
+  head: () => ({
+    meta: [{ title: "Resources | Sanjib Academy" }],
+  }),
+
   loader: async () => {
     const [offeredCourses, webinars] = await Promise.all([
       read__AllOfferedCoursesServerFn(),

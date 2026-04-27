@@ -23,3 +23,28 @@ services:
       - 8001:8001
     networks:
       - sanjib-academy-dev
+
+  sanjib-academy-dev-phpmyadmin:
+    container_name: sanjib-academy-dev-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "9000:80"
+    environment:
+      PMA_HOST: sanjib-academy-dev-database
+      PMA_PORT: 3306
+    depends_on:
+      - sanjib-academy-dev-database
+    networks:
+      - sanjib-academy-dev
+
+  sanjib-academy-dev-proxy:
+    container_name: sanjib-academy-dev-proxy
+    image: nginx:1.29.8
+    ports:
+      - "3000:80" # access everything via localhost:3000 in dev
+    volumes:
+      - ./../nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # lets nginx reach your host machine
+    networks:
+      - sanjib-academy-dev

@@ -78,59 +78,115 @@ export function CoursesSection({
               `grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6`,
             )}
           >
-            {offeredCourses.map((course) => {
-              return (
-                <Course key={course.id}>
-                  {/* Title */}
-                  <CourseHeading>{course.courseTopic}</CourseHeading>
+            {offeredCourses.length === 0 ? (
+              <div
+                className={cn(
+                  `border-primary-500/40 bg-primary-50 dark:bg-primary-50/10 flex flex-col items-center justify-center gap-5 border py-20 text-center`,
+                )}
+              >
+                {/* Icon / Visual */}
+                <div
+                  className={cn(
+                    `bg-primary-500/10 text-primary-500 flex h-14 w-14 items-center justify-center rounded-full text-xl`,
+                  )}
+                >
+                  📚
+                </div>
 
-                  {/* Description */}
-                  <CourseDescription>{course.courseHeading}</CourseDescription>
+                {/* Heading */}
+                <div
+                  className={cn(
+                    `text-primary-500 dark:text-primary-400 text-lg font-semibold`,
+                  )}
+                >
+                  No Courses Available Yet
+                </div>
 
-                  {/* Advantages */}
-                  <LearningTopicList>
-                    {course.advantages.map((item, i) => (
-                      <LearningTopicItem
-                        key={i}
-                        className="text-muted-foreground flex items-start gap-2 text-sm"
+                {/* Description */}
+                <p
+                  className={cn(
+                    `text-primary-900/70 dark:text-primary-900/70 max-w-md text-sm leading-relaxed`,
+                  )}
+                >
+                  We're currently working on structured programs to help you
+                  master the markets. In the meantime, you can explore our live
+                  webinars to start learning right away.
+                </p>
+
+                {/* CTA */}
+                <Link
+                  to="/resources"
+                  hash="webinars"
+                  hashScrollIntoView
+                  className="mt-2"
+                >
+                  <Button
+                    variant="outline"
+                    className="border-primary-500 text-primary-500 hover:bg-primary-50 rounded-none px-5 py-2 text-sm font-medium"
+                  >
+                    View Upcoming Webinars
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              offeredCourses.map((course) => {
+                return (
+                  <Course key={course.id}>
+                    {/* Title */}
+                    <CourseHeading>{course.courseTopic}</CourseHeading>
+
+                    {/* Description */}
+                    <CourseDescription>
+                      {course.courseHeading}
+                    </CourseDescription>
+
+                    {/* Advantages */}
+                    <LearningTopicList>
+                      {course.advantages.map((item, i) => (
+                        <LearningTopicItem
+                          key={i}
+                          className="text-muted-foreground flex items-start gap-2 text-sm"
+                        >
+                          <span>{item.details}</span>
+                        </LearningTopicItem>
+                      ))}
+                    </LearningTopicList>
+
+                    {/* PRICE SECTION */}
+                    <CoursePricing
+                      discountedPrice={
+                        course.discountedEnrlomentFee ?? undefined
+                      }
+                      actualPrice={course.originalEnrlomentFee}
+                    />
+
+                    {/* CTA BUTTONS */}
+                    <div className="flex gap-2 *:w-full">
+                      <Link
+                        className="flex-1"
+                        tabIndex={-1}
+                        to="/resources/course/$courseId"
+                        params={{ courseId: course.id }}
                       >
-                        <span>{item.details}</span>
-                      </LearningTopicItem>
-                    ))}
-                  </LearningTopicList>
+                        <Button
+                          variant="outline"
+                          className="hover:bg-muted border-primary-500 dark:border-primary-100 text-primary-500 dark:text-foreground w-full rounded-none border px-4 py-2 text-sm font-medium transition"
+                        >
+                          View Details
+                        </Button>
+                      </Link>
 
-                  {/* PRICE SECTION */}
-                  <CoursePricing
-                    discountedPrice={course.discountedEnrlomentFee ?? undefined}
-                    actualPrice={course.originalEnrlomentFee}
-                  />
-
-                  {/* CTA BUTTONS */}
-                  <div className="flex gap-2 *:w-full">
-                    <Link
-                      className="flex-1"
-                      tabIndex={-1}
-                      to="/resources/course/$courseId"
-                      params={{ courseId: course.id }}
-                    >
                       <Button
-                        variant="outline"
-                        className="hover:bg-muted border-primary-500 dark:border-primary-100 text-primary-500 dark:text-foreground w-full rounded-none border px-4 py-2 text-sm font-medium transition"
+                        variant="primary"
+                        className="bg-primary-500 w-full flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
                       >
-                        View Details
+                        Enroll Now
                       </Button>
-                    </Link>
-
-                    <Button
-                      variant="primary"
-                      className="bg-primary-500 w-full flex-1 rounded-none px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                    >
-                      Enroll Now
-                    </Button>
-                  </div>
-                </Course>
-              );
-            })}
+                    </div>
+                  </Course>
+                );
+              })
+            )}
           </div>
         </div>
       </section>
@@ -199,7 +255,10 @@ export function WebinarTable({
         </p>
       </div>
 
-      <div className={cn(`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8`)}>
+      <div
+        id="webinars"
+        className={cn(`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8`)}
+      >
         {/* Empty State */}
         {webinars.length === 0 ? (
           <div

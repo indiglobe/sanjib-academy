@@ -47,7 +47,7 @@ export function CoursesNotFound({
 
         {/* Description */}
         <p className={cn(`text-foreground/70 max-w-lg text-sm sm:text-base`)}>
-          The courses you’re looking for may not exist, are currently
+          The courses you're looking for may not exists or are currently
           unavailable, or the link might be incorrect. You can explore available
           resources or return to the homepage.
         </p>

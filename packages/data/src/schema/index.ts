@@ -67,7 +67,11 @@ export type TableIdentifierToken =
   /**
    * CourseDocumentTable
    */
-  | "CDOC";
+  | "CDOC"
+  /**
+   * WebinarBuyingProfileTable
+   */
+  | "WBPR";
 
 export const metricSuffixEnums = mysqlEnum("metric_suffix", ["+", "%"]);
 export const roleEnums = mysqlEnum("user_role", ["admin", "student", "basic"]);
@@ -85,21 +89,8 @@ export const tableIdentifierToken = mysqlEnum("table_identifier_token", [
   "CMOD",
   "CVID",
   "CDOC",
+  "WBPR",
 ] as [TableIdentifierToken, ...TableIdentifierToken[]]);
-
-// -------------------------
-// UserTable
-// -------------------------
-export const UserTable = mysqlTable("user", {
-  email: varchar("email", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }).notNull(),
-  uploadedAvatarImageUrl: varchar("custom_avatar", { length: 255 }).notNull(),
-  age: int().notNull(),
-  role: roleEnums.notNull().$default(() => "basic"),
-  phoneNo: char({ length: 10 }).notNull(),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("USER"),
-});
 
 // -------------------------
 // BenefitedUserTable
@@ -114,104 +105,6 @@ export const BenefitedUserTable = mysqlTable("benefited_user", {
   benefitedSince: datetime("benefited_since", { mode: "date" }),
 
   tableIdentifierToken: tableIdentifierToken.notNull().default("BUSR"),
-});
-
-// -------------------------
-// MetricsTable
-// -------------------------
-export const MetricsTable = mysqlTable("metric", {
-  id: int("id").primaryKey().autoincrement(),
-  metricsContent: varchar("metric_content", { length: 255 }).notNull(),
-  metricsHeading: varchar("metric_heading", { length: 100 }).notNull(),
-  metricsSuffix: metricSuffixEnums.notNull(),
-  isVisible: boolean("is_visible_to_users")
-    .$default(() => false)
-    .notNull(),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("MTRC"),
-});
-
-// -------------------------
-// FaqTable
-// -------------------------
-export const FaqTable = mysqlTable("faq", {
-  id: int("id").primaryKey().autoincrement(),
-  faqAnswer: varchar("faq_answer", { length: 511 }).notNull(),
-  faqQuestion: varchar("faq_question", { length: 255 }).notNull(),
-  isVisible: boolean("is_visible_to_users")
-    .$default(() => false)
-    .notNull(),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("FAQS"),
-});
-
-// -------------------------
-// WebinarDetailsTable
-// -------------------------
-export const WebinarDetailsTable = mysqlTable("webinar_detail", {
-  id: int("id").primaryKey().autoincrement(),
-  scheduledDate: datetime("webinar_scheduled_date", { mode: "date" }).notNull(),
-  webinarTopic: varchar("webinar_topic", { length: 255 }).notNull(),
-  approxDuration: int("webinar_duration"),
-  actualPrice: int("actual_price").notNull(),
-  discountedPrice: int("discounted_price"),
-  webinarJoiningLink: varchar("webinar_joining_link", {
-    length: 255,
-  }).notNull(),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("WBNR"),
-});
-
-// -------------------------
-// OfferedCoursesTable
-// -------------------------
-export const OfferedCoursesTable = mysqlTable("offered_course", {
-  id: varchar("id", { length: 127 }).primaryKey(),
-  courseTopic: varchar("course_topic", { length: 255 }).notNull(),
-  courseHeading: varchar("course_heading", { length: 255 }).notNull(),
-  brochureLink: varchar("brochure_link", { length: 255 }).notNull(),
-  originalEnrlomentFee: int("original_enrloment_fee").notNull(),
-  discountedEnrlomentFee: int("dicounted_enrloment_fee"),
-  imageLink: varchar("image_link", { length: 255 }).notNull(),
-  imageBase64Data: varchar("image_base64_data", { length: 1000 }),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("OFFC"),
-});
-
-// -------------------------
-// CourseAdvantagesTable
-// -------------------------
-export const CourseAdvantagesTable = mysqlTable("course_advantage", {
-  id: int("id").primaryKey().autoincrement(),
-  details: varchar("details", { length: 127 }).notNull(),
-  isVisible: boolean("is_visible_to_users")
-    .notNull()
-    .$default(() => true),
-  relatedTo: varchar("related_to", { length: 127 })
-    .notNull()
-    .references(() => OfferedCoursesTable.id, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("CADV"),
-});
-
-// -------------------------
-// TestimonialsTable
-// -------------------------
-export const TestimonialsTable = mysqlTable("testimonial", {
-  id: int("id").primaryKey().autoincrement(),
-  testimonialText: varchar("testimonial_text", { length: 512 }).notNull(),
-  authorEmail: varchar("author_email", { length: 255 })
-    .notNull()
-    .references(() => UserTable.email, {
-      onDelete: "cascade",
-      onUpdate: "cascade",
-    }),
-  authorSocialHandle: varchar("social_handle", { length: 127 }).notNull(),
-
-  tableIdentifierToken: tableIdentifierToken.notNull().default("TMNL"),
 });
 
 // -------------------------
@@ -274,6 +167,25 @@ export const CourseBuyingProfilesTable = mysqlTable(
 );
 
 // -------------------------
+// CourseDocumentTable
+// -------------------------
+export const CourseDocumentTable = mysqlTable("course_document", {
+  id: int("id").primaryKey().autoincrement(),
+  documentURL: varchar("document_url", { length: 127 }).notNull(),
+  thumbnailImage: varchar("document_thumbnail_url", { length: 127 }).notNull(),
+  documentTitle: varchar("document_title", { length: 127 }).notNull(),
+  documentDescription: varchar("document_description", { length: 127 }),
+  moduleId: int("module_id")
+    .notNull()
+    .references(() => CourseModulesTable.id, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CDOC"),
+});
+
+// -------------------------
 // CourseModulesTable
 // -------------------------
 export const CourseModulesTable = mysqlTable("course_modules", {
@@ -311,23 +223,166 @@ export const CourseVideoTable = mysqlTable("course_video", {
 });
 
 // -------------------------
-// CourseDocumentTable
+// CourseAdvantagesTable
 // -------------------------
-export const CourseDocumentTable = mysqlTable("course_document", {
+export const CourseAdvantagesTable = mysqlTable("course_advantage", {
   id: int("id").primaryKey().autoincrement(),
-  documentURL: varchar("document_url", { length: 127 }).notNull(),
-  thumbnailImage: varchar("document_thumbnail_url", { length: 127 }).notNull(),
-  documentTitle: varchar("document_title", { length: 127 }).notNull(),
-  documentDescription: varchar("document_description", { length: 127 }),
-  moduleId: int("module_id")
+  details: varchar("details", { length: 127 }).notNull(),
+  isVisible: boolean("is_visible_to_users")
     .notNull()
-    .references(() => CourseModulesTable.id, {
+    .$default(() => true),
+  relatedTo: varchar("related_to", { length: 127 })
+    .notNull()
+    .references(() => OfferedCoursesTable.id, {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
 
-  tableIdentifierToken: tableIdentifierToken.notNull().default("CDOC"),
+  tableIdentifierToken: tableIdentifierToken.notNull().default("CADV"),
 });
+
+// -------------------------
+// FaqTable
+// -------------------------
+export const FaqTable = mysqlTable("faq", {
+  id: int("id").primaryKey().autoincrement(),
+  faqAnswer: varchar("faq_answer", { length: 511 }).notNull(),
+  faqQuestion: varchar("faq_question", { length: 255 }).notNull(),
+  isVisible: boolean("is_visible_to_users")
+    .$default(() => false)
+    .notNull(),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("FAQS"),
+});
+
+// -------------------------
+// MetricsTable
+// -------------------------
+export const MetricsTable = mysqlTable("metric", {
+  id: int("id").primaryKey().autoincrement(),
+  metricsContent: varchar("metric_content", { length: 255 }).notNull(),
+  metricsHeading: varchar("metric_heading", { length: 100 }).notNull(),
+  metricsSuffix: metricSuffixEnums.notNull(),
+  isVisible: boolean("is_visible_to_users")
+    .$default(() => false)
+    .notNull(),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("MTRC"),
+});
+
+// -------------------------
+// OfferedCoursesTable
+// -------------------------
+export const OfferedCoursesTable = mysqlTable("offered_course", {
+  id: varchar("id", { length: 127 }).primaryKey(),
+  courseTopic: varchar("course_topic", { length: 255 }).notNull(),
+  courseHeading: varchar("course_heading", { length: 255 }).notNull(),
+  brochureLink: varchar("brochure_link", { length: 255 }).notNull(),
+  originalEnrlomentFee: int("original_enrloment_fee").notNull(),
+  discountedEnrlomentFee: int("dicounted_enrloment_fee"),
+  imageLink: varchar("image_link", { length: 255 }).notNull(),
+  imageBase64Data: varchar("image_base64_data", { length: 1000 }),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("OFFC"),
+});
+
+// -------------------------
+// TestimonialsTable
+// -------------------------
+export const TestimonialsTable = mysqlTable("testimonial", {
+  id: int("id").primaryKey().autoincrement(),
+  testimonialText: varchar("testimonial_text", { length: 512 }).notNull(),
+  authorEmail: varchar("author_email", { length: 255 })
+    .notNull()
+    .references(() => UserTable.email, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    }),
+  authorSocialHandle: varchar("social_handle", { length: 127 }).notNull(),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("TMNL"),
+});
+
+// -------------------------
+// UserTable
+// -------------------------
+export const UserTable = mysqlTable("user", {
+  email: varchar("email", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  uploadedAvatarImageUrl: varchar("custom_avatar", { length: 255 }).notNull(),
+  age: int().notNull(),
+  role: roleEnums.notNull().$default(() => "basic"),
+  phoneNo: char({ length: 10 }).notNull(),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("USER"),
+});
+
+// -------------------------
+// WebinarBuyingProfileTable
+// -------------------------
+export const WebinarBuyingProfileTable = mysqlTable(
+  "webinar_buying_profiles",
+  {
+    id: int("id").primaryKey().autoincrement(),
+    userEmail: varchar("user_email", { length: 255 })
+      .notNull()
+      .references(() => UserTable.email, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    webinarId: int("webinar_id")
+      .notNull()
+      .references(() => WebinarDetailsTable.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    amountPaid: int("amount_paid").notNull(),
+    isCompleted: boolean("is_completed")
+      .$default(() => false)
+      .notNull(),
+    purchasedAt: timestamp("purchased_at", { mode: "date", fsp: 6 })
+      .$defaultFn(() => new Date())
+      .notNull(),
+    orderId: varchar("order_id", { length: 10 }).notNull(),
+
+    tableIdentifierToken: tableIdentifierToken.notNull().default("WBPR"),
+  },
+  (table) => [
+    uniqueIndex("unique_user_course").on(table.userEmail, table.webinarId),
+  ],
+);
+
+// -------------------------
+// WebinarDetailsTable
+// -------------------------
+export const WebinarDetailsTable = mysqlTable("webinar_detail", {
+  id: int("id").primaryKey().autoincrement(),
+  scheduledDate: datetime("webinar_scheduled_date", { mode: "date" }).notNull(),
+  webinarTopic: varchar("webinar_topic", { length: 255 }).notNull(),
+  approxDuration: int("webinar_duration"),
+  actualPrice: int("actual_price").notNull(),
+  discountedPrice: int("discounted_price"),
+  webinarJoiningLink: varchar("webinar_joining_link", {
+    length: 255,
+  }).notNull(),
+
+  tableIdentifierToken: tableIdentifierToken.notNull().default("WBNR"),
+});
+
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 /**
  * This is used to identify which table the data is from,
@@ -364,6 +419,8 @@ export function identifyTable(tableIdentifierToken: string) {
       return "CourseVideoTable" as const;
     case "CDOC":
       return "CourseDocumentTable" as const;
+    case "WBPR":
+      return "WebinarBuyingProfileTable" as const;
 
     default:
       throw new Error("Provide a valid prefix to identify table name.");

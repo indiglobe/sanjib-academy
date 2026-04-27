@@ -22,7 +22,7 @@ export const Route = createFileRoute("/(authenticated)/(new-users)")({
 
 function RouteComponent() {
   return (
-    <section data-slot={`main-content`} className={cn(`w-full px-4`)}>
+    <section data-slot={`main-content`} className={cn(`w-full`)}>
       <Outlet />
     </section>
   );

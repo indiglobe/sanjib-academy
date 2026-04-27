@@ -104,7 +104,8 @@ Create a `.env` file in the root:
 
 ```env
 BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=
+CAMPUS_BETTER_AUTH_URL=
+STORAGE_BETTER_AUTH_URL=
 
 DATABASE_URL=
 
@@ -123,7 +124,7 @@ CLOUDINARY_API_SECRET=
 DOCKERHUB_USERNAME=
 DOCKERHUB_ACCESS_TOKEN=
 
-VITE_APP_HOST=
+VITE_CAMPUS_APP_HOST=
 ```
 
 ---
@@ -139,7 +140,7 @@ pnpm dev
 Run a specific app:
 
 ```bash
-pnpm --filter campus dev
+pnpm --filter {app-name} dev
 ```
 
 ---

@@ -143,6 +143,10 @@
 }
 
 @layer base {
+  /* * {
+    @apply outline outline-red-500;
+  } */
+
   body {
     @apply bg-background dark:bg-background dark:text-foreground font-brand-primary text-foreground min-h-svh;
   }

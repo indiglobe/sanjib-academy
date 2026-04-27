@@ -3,7 +3,7 @@ import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query
 import * as TanstackQuery from "./integrations/tanstack/querry";
 import { routeTree } from "./routeTree.gen";
 import { fetchSession } from "@/lib/auth/session";
-import { readUserDetailsServerFn as readUserDetails } from "@/integrations/server-functions/querry/users";
+import { read__OneUserServerFn as readUserDetails } from "@/integrations/server-functions/querry/users";
 
 // -----------------------------
 // Types
@@ -22,7 +22,7 @@ export type BeforeLoadRouterContext = Partial<AppRouterContext>;
 // -----------------------------
 // Create router
 // -----------------------------
-export const getRouter = async () => {
+export const getRouter = () => {
   const rqContext = TanstackQuery.getContext();
   const queryClient = rqContext.queryClient;
 

@@ -292,7 +292,7 @@ async function seed() {
     {
       id: "institutional-trading",
       courseTopic: "Institutional Trading",
-      brochureLink: "",
+      brochureLink: faker.helpers.arrayElement(manifestJson["document/pdf"]),
       courseHeading:
         "Learn how big institutions and banks move the market—and how you can trade with them.",
       imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),
@@ -302,7 +302,7 @@ async function seed() {
     {
       id: "fno-hedging",
       courseTopic: "FNO Hedging",
-      brochureLink: "",
+      brochureLink: faker.helpers.arrayElement(manifestJson["document/pdf"]),
       courseHeading:
         "Master Futures & Options strategies to protect capital and earn consistently.",
       imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),
@@ -312,7 +312,7 @@ async function seed() {
     {
       id: "fundamental-analysis",
       courseTopic: "Fundamental Analysis",
-      brochureLink: "",
+      brochureLink: faker.helpers.arrayElement(manifestJson["document/pdf"]),
       courseHeading:
         "Learn how to find strong companies and invest like professionals.",
       imageLink: faker.helpers.arrayElement(manifestJson["images/thumbnail"]),

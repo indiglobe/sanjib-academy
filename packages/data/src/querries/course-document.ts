@@ -19,16 +19,13 @@ export type TCreate__CourseDocument = Omit<
 >;
 
 export const create__CourseDocument = async (data: TCreate__CourseDocument) => {
-  const [created] = await db
-    .insert(CourseDocumentTable)
-    .values(data)
-    .$returningId();
+  await db.insert(CourseDocumentTable).values(data);
 
   return {
     ...data,
-    id: created.id,
+    documentDescription: data.documentDescription ?? null,
     tableIdentifierToken,
-  } satisfies typeof CourseDocumentTable.$inferSelect;
+  } satisfies Omit<typeof CourseDocumentTable.$inferSelect, "id">;
 };
 
 /**

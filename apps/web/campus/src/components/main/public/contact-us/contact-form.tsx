@@ -25,11 +25,15 @@ export default function ConatctForm({
     validators: {
       onSubmit: contactFormSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value, formApi }) => {
       const { email, firstName, lastName, message, phoneNo } = value;
-      return await create__NewContactMessage({
+      const result = await create__NewContactMessage({
         data: { email, firstName, lastName, message, phoneNo },
       });
+
+      if (result) {
+        formApi.reset();
+      }
     },
     formId: "contact-form",
   });

@@ -114,7 +114,10 @@ function SigninForm({ className, ...props }: ComponentProps<"div">) {
     from: "/(guest)/signin/",
   });
 
-  const callbackUrlWithHost = new URL(callbackUrl ?? "", env.VITE_APP_HOST);
+  const callbackUrlWithHost = new URL(
+    callbackUrl ?? "",
+    env.VITE_CAMPUS_APP_HOST,
+  );
 
   Object.entries(restSearchParams).forEach(([key, value]) => {
     callbackUrlWithHost.searchParams.set(key, value);

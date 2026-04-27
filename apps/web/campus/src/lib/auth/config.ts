@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { env } from "@repo/env";
 
+const isProd = process.env.NODE_ENV === "production";
+
 export const auth = betterAuth({
-  baseURL: env.BETTER_AUTH_URL,
+  baseURL: env.CAMPUS_BETTER_AUTH_URL,
   secret: env.BETTER_AUTH_SECRET,
 
   session: {
@@ -18,16 +20,18 @@ export const auth = betterAuth({
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
-      redirectURI: `${env.BETTER_AUTH_URL}/api/auth/callback/google`,
+      redirectURI: `${env.CAMPUS_BETTER_AUTH_URL}/api/auth/callback/google`,
     },
   },
 
   advanced: {
-    useSecureCookies: true,
+    useSecureCookies: isProd,
     defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: true,
+      sameSite: isProd ? "none" : "lax",
+      secure: isProd,
       httpOnly: true,
+      ...(isProd && { domain: ".sanjibacademy.com" }),
+      path: "/",
     },
   },
 });

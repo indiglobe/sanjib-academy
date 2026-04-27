@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/integrations/theme/theme-provider";
 import { cn } from "@/utils/cn";
 import { RootNotFound } from "@/components/main/root-not-found";
 import { RootError } from "@/components/main/root-error";
+import { Toaster } from "@/ui/shadcn/sonner";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -68,7 +69,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           `flex max-w-svw flex-col overflow-x-clip overflow-y-auto`,
         )}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
         <DevTools />
         <Scripts />
       </body>

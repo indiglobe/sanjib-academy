@@ -23,6 +23,7 @@ export const create__CourseVideo = async (data: TCreate__CourseVideo) => {
 
   return {
     ...data,
+    videoDescription: data.videoDescription ?? null,
     tableIdentifierToken,
   } satisfies Omit<typeof CourseVideoTable.$inferSelect, "id">;
 };

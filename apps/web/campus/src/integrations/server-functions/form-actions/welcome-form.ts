@@ -1,26 +1,24 @@
 import { welcomeFormSchema } from "@repo/utils/zod-schema/welcome-form";
 import { createServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { createNewUserServerFn } from "../querry/users";
-import { create__NewProfileServerFn } from "../querry/profile";
-import { redirect } from "@tanstack/react-router";
-import { generateUserNameFromEmail } from "@repo/utils/utility";
+import { create__UserServerFn } from "../querry/users";
 
 export const submitWelcomeFormServerFn = createServerFn({
   method: "POST",
 })
   .inputValidator(zodValidator(welcomeFormSchema))
   .handler(async ({ data }) => {
-    const { phone, email, ...rest } = data;
+    const { phone, email, age, avatarImageUrl, name } = data;
 
-    await createNewUserServerFn({ data });
-
-    await create__NewProfileServerFn({
-      data: { phoneNo: phone.toString(), email, ...rest },
+    const newUser = await create__UserServerFn({
+      data: {
+        age,
+        email,
+        name,
+        uploadedAvatarImageUrl: avatarImageUrl,
+        phoneNo: phone.toString(),
+      },
     });
 
-    throw redirect({
-      to: "/$username/dashboard",
-      params: { username: generateUserNameFromEmail(email) },
-    });
+    return { newUser };
   });

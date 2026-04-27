@@ -453,3 +453,104 @@ export const delete__CourseModuleSchema = z.object({
     id: z.number(),
   }),
 });
+
+export const create__WebinarBuyingProfileSchema = z.object({
+  userEmail: z.string(),
+  webinarId: z.number(),
+  amountPaid: z.number(),
+  isCompleted: z.boolean().optional(),
+  orderId: z.string(),
+});
+
+export const read__OneWebinarBuyingProfileSchema = z.object({
+  identifier: z.object({
+    userEmail: z.string(),
+    webinarId: z.number(),
+  }),
+});
+
+export const update__WebinarBuyingProfileSchema = z.object({
+  identifier: z.object({
+    userEmail: z.string(),
+    webinarId: z.number(),
+  }),
+  dataToUpdate: z.object({
+    amountPaid: z.number().optional(),
+    isCompleted: z.boolean().optional(),
+    purchasedAt: z.date().optional(),
+    orderId: z.string().optional(),
+  }),
+});
+
+export const delete__WebinarBuyingProfileSchema = z.object({
+  identifier: z.object({
+    userEmail: z.string(),
+    webinarId: z.number(),
+  }),
+});
+
+export const create__CourseDocumentSchema = z.object({
+  thumbnailImage: z.string(),
+  moduleId: z.number(),
+  documentURL: z.string(),
+  documentTitle: z.string(),
+  documentDescription: z.string().nullish(),
+});
+
+export const read__OneCourseDocumentSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});
+
+export const update__CourseDocumentSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+  dataToUpdate: z.object({
+    thumbnailImage: z.string().optional(),
+    moduleId: z.number().optional(),
+    documentURL: z.string().optional(),
+    documentTitle: z.string().optional(),
+    documentDescription: z.string().nullish(),
+  }),
+});
+
+export const delete__CourseDocumentSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});
+
+export const create__CourseVideoSchema = z.object({
+  videoURL: z.string(),
+  thumbnailImage: z.string(),
+  videoTitle: z.string(),
+  videoDescription: z.string().nullish(),
+  moduleId: z.number(),
+});
+
+export const read__OneCourseVideoSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});
+
+export const update__CourseVideoSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+  dataToUpdate: z.object({
+    videoURL: z.string().optional(),
+    thumbnailImage: z.string().optional(),
+    videoTitle: z.string().optional(),
+    videoDescription: z.string().nullish(),
+    moduleId: z.number().optional(),
+  }),
+});
+
+export const delete__CourseVideoSchema = z.object({
+  identifier: z.object({
+    id: z.number(),
+  }),
+});

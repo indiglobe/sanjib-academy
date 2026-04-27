@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { ComponentProps, Fragment } from "react";
+import { ComponentProps, Fragment, useEffect } from "react";
 import { Image } from "@unpic/react";
 import { Button } from "@/ui/button";
 import gsap from "gsap";
@@ -49,6 +49,16 @@ import { OfferedCourses } from "./offered-courses";
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
 export default function HomePage() {
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("http://localhost:4000/api/me", {
+        credentials: "include",
+      });
+
+      console.log(await res.json());
+    })();
+  }, []);
+
   return (
     <Main>
       <HeroSection />

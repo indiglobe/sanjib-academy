@@ -24,6 +24,12 @@ export function Navbar({ ...props }: ComponentProps<"nav">) {
     const handleScroll = () => {
       const currentScroll = window.scrollY;
 
+      /**
+       * Adds animation to the navbar, Where it sticks to the top
+       * for small scrolling and hides after long scrolling.
+       * When it is hidden For the slightest scroll in upper direction
+       * again it appears
+       */
       if (currentScroll > lastScroll && currentScroll > 150) {
         gsap.to(navbar, { y: "-120%", duration: 0.4, ease: "power2.out" });
       } else {

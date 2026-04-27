@@ -10,7 +10,7 @@ import { read__OneUserServerFn } from "@/integrations/server-functions/querry/us
  * if the user is not signed in it redirects the user to the signin page
  */
 
-export const courseEnrolmentMiddleware = createMiddleware({
+export const middleware__courseEnrolment = createMiddleware({
   type: "function",
 }).server(
   async ({
@@ -25,14 +25,15 @@ export const courseEnrolmentMiddleware = createMiddleware({
     const parsedData =
       courseEnrolmentInputValidator.safeParse(dataFromServerAction);
 
-    if (parsedData.error) throw Error("Error form `courseEnrolmentMiddleware`");
+    if (parsedData.error)
+      throw Error("Error form `middleware__courseEnrolment`");
 
     let {
       data: { requestInitiatedFrom },
     } = parsedData;
 
     // Make the requestInitiatedFrom as a full URL with host name
-    requestInitiatedFrom = `${env.VITE_APP_HOST}${requestInitiatedFrom}`;
+    requestInitiatedFrom = `${env.VITE_CAMPUS_APP_HOST}${requestInitiatedFrom}`;
 
     // if no session that means the user is not signed in
     // so redirect them to the sign in page

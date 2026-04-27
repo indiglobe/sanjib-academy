@@ -5,7 +5,9 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "db:dev": "turbo db:dev"
+    "build:packages": "turbo build --filter=@repo/*",
+    "db:dev": "turbo db:dev",
+    "ui": "turbo devtools --port 8520"
   },
   "keywords": [],
   "author": "",

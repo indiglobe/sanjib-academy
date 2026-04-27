@@ -4,35 +4,31 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ComponentProps, useEffect, useState } from "react";
 import { Button } from "@/ui/button";
-
-type TimeLeft = {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-};
-
-const calculateTimeLeft = (targetDate: Date): TimeLeft => {
-  const diff = targetDate.getTime() - new Date().getTime();
-
-  if (diff <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-  }
-
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-  };
-};
+import { useServerFn } from "@tanstack/react-start";
+import { createOrderForWebinarServerFn } from "@/integrations/server-functions/payment/webinar-enrolment";
+import { useLocation } from "@tanstack/react-router";
+import { useRazorpayClient } from "@/integrations/razorpay/client";
+import { getRouter } from "@/router";
+import {
+  calculateTimeLeft,
+  generateUserNameFromEmail,
+} from "@repo/utils/utility";
+import { env } from "@repo/env";
 
 export function EventStickyBar({
   className,
   ...props
 }: ComponentProps<"section">) {
+  // tanstack query hook
   const { data: upcomingWebinar } = useMostUpcomingWebinarData();
+  // wrap the server fn to use in client
+  const createOrderForWebinar = useServerFn(createOrderForWebinarServerFn);
+  const location = useLocation();
+  const { createRazorpayInstance } = useRazorpayClient();
 
+  /**
+   * GSAP animation
+   */
   useGSAP(
     () => {
       if (!upcomingWebinar) return;
@@ -49,10 +45,54 @@ export function EventStickyBar({
 
   if (!upcomingWebinar) return null;
 
-  const { actualPrice, discountedPrice, webinarTopic } = upcomingWebinar;
+  // Distructure most upcoming webinar
+  const { actualPrice, discountedPrice, webinarTopic, id } = upcomingWebinar;
 
+  /**
+   * Function to run when the user clicks the webinar buying button
+   */
   async function registerIntoWebinar() {
-    console.log("register");
+    console.log("Hii");
+
+    const orderResponse = await createOrderForWebinar({
+      data: {
+        amount: {
+          paise: 0,
+          rupee: discountedPrice ?? actualPrice,
+        },
+        webinarDetails: { id },
+        requestInitiatedFrom: new URL(
+          location.href,
+          env.VITE_CAMPUS_APP_HOST,
+        ).toString(),
+      },
+    });
+
+    /**
+     * Destructure the order response
+     */
+    const {
+      orderDetails: { amount, id: order_id },
+      user,
+    } = orderResponse;
+
+    // The URL Where the user should go after a successful purchase
+    const redirectUrlAfterSuccessfulPurchase = getRouter().buildLocation({
+      to: "/$username",
+      params: {
+        username: generateUserNameFromEmail(user.email),
+      },
+    }).href;
+
+    const razorpay = createRazorpayInstance({
+      order_id,
+      amount: Number(amount),
+      handler: () => {
+        window.location.href = redirectUrlAfterSuccessfulPurchase;
+      },
+    });
+
+    razorpay.open();
   }
 
   return (
@@ -122,7 +162,7 @@ function CountdownTimer({ className, ...props }: ComponentProps<"div">) {
   const { scheduledDate } = upcomingWebinar;
 
   const target = new Date(scheduledDate);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft(target));
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(target));
 
   const format = (num: number) => String(num).padStart(2, "0");
 

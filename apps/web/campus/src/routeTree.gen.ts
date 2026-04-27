@@ -32,6 +32,7 @@ import { Route as publiclandingPagesAboutUsIndexRouteImport } from './routes/(pu
 import { Route as authenticatednewUsersWelcomeIndexRouteImport } from './routes/(authenticated)/(new-users)/welcome/index'
 import { Route as authenticatedexistingUsersUsernameDashboardIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/dashboard/index'
 import { Route as authenticatedexistingUsersUsernameCoursesIndexRouteImport } from './routes/(authenticated)/(existing-users)/$username/courses/index'
+import { Route as publiclandingPagesResourcesWebinarWebinarIdIndexRouteImport } from './routes/(public)/(landing-pages)/resources/webinar/$webinarId/index'
 import { Route as publiclandingPagesResourcesCourseCourseIdIndexRouteImport } from './routes/(public)/(landing-pages)/resources/course/$courseId/index'
 
 const publicRouteRoute = publicRouteRouteImport.update({
@@ -157,6 +158,12 @@ const authenticatedexistingUsersUsernameCoursesIndexRoute =
     path: '/courses/',
     getParentRoute: () => authenticatedexistingUsersUsernameRouteRoute,
   } as any)
+const publiclandingPagesResourcesWebinarWebinarIdIndexRoute =
+  publiclandingPagesResourcesWebinarWebinarIdIndexRouteImport.update({
+    id: '/resources/webinar/$webinarId/',
+    path: '/resources/webinar/$webinarId/',
+    getParentRoute: () => publiclandingPagesRouteRoute,
+  } as any)
 const publiclandingPagesResourcesCourseCourseIdIndexRoute =
   publiclandingPagesResourcesCourseCourseIdIndexRouteImport.update({
     id: '/resources/course/$courseId/',
@@ -183,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
   '/resources/course/$courseId/': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
+  '/resources/webinar/$webinarId/': typeof publiclandingPagesResourcesWebinarWebinarIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/api/upload-image': typeof ApiUploadImageRoute
@@ -203,6 +211,7 @@ export interface FileRoutesByTo {
   '/$username/courses': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/$username/dashboard': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
   '/resources/course/$courseId': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
+  '/resources/webinar/$webinarId': typeof publiclandingPagesResourcesWebinarWebinarIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -230,6 +239,7 @@ export interface FileRoutesById {
   '/(authenticated)/(existing-users)/$username/courses/': typeof authenticatedexistingUsersUsernameCoursesIndexRoute
   '/(authenticated)/(existing-users)/$username/dashboard/': typeof authenticatedexistingUsersUsernameDashboardIndexRoute
   '/(public)/(landing-pages)/resources/course/$courseId/': typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
+  '/(public)/(landing-pages)/resources/webinar/$webinarId/': typeof publiclandingPagesResourcesWebinarWebinarIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/$username/courses/'
     | '/$username/dashboard/'
     | '/resources/course/$courseId/'
+    | '/resources/webinar/$webinarId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/api/upload-image'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/$username/courses'
     | '/$username/dashboard'
     | '/resources/course/$courseId'
+    | '/resources/webinar/$webinarId'
   id:
     | '__root__'
     | '/(authenticated)'
@@ -298,6 +310,7 @@ export interface FileRouteTypes {
     | '/(authenticated)/(existing-users)/$username/courses/'
     | '/(authenticated)/(existing-users)/$username/dashboard/'
     | '/(public)/(landing-pages)/resources/course/$courseId/'
+    | '/(public)/(landing-pages)/resources/webinar/$webinarId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -471,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authenticatedexistingUsersUsernameCoursesIndexRouteImport
       parentRoute: typeof authenticatedexistingUsersUsernameRouteRoute
     }
+    '/(public)/(landing-pages)/resources/webinar/$webinarId/': {
+      id: '/(public)/(landing-pages)/resources/webinar/$webinarId/'
+      path: '/resources/webinar/$webinarId'
+      fullPath: '/resources/webinar/$webinarId/'
+      preLoaderRoute: typeof publiclandingPagesResourcesWebinarWebinarIdIndexRouteImport
+      parentRoute: typeof publiclandingPagesRouteRoute
+    }
     '/(public)/(landing-pages)/resources/course/$courseId/': {
       id: '/(public)/(landing-pages)/resources/course/$courseId/'
       path: '/resources/course/$courseId'
@@ -550,6 +570,7 @@ interface publiclandingPagesRouteRouteChildren {
   publiclandingPagesContactUsIndexRoute: typeof publiclandingPagesContactUsIndexRoute
   publiclandingPagesResourcesIndexRoute: typeof publiclandingPagesResourcesIndexRoute
   publiclandingPagesResourcesCourseCourseIdIndexRoute: typeof publiclandingPagesResourcesCourseCourseIdIndexRoute
+  publiclandingPagesResourcesWebinarWebinarIdIndexRoute: typeof publiclandingPagesResourcesWebinarWebinarIdIndexRoute
 }
 
 const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren =
@@ -562,6 +583,8 @@ const publiclandingPagesRouteRouteChildren: publiclandingPagesRouteRouteChildren
       publiclandingPagesResourcesIndexRoute,
     publiclandingPagesResourcesCourseCourseIdIndexRoute:
       publiclandingPagesResourcesCourseCourseIdIndexRoute,
+    publiclandingPagesResourcesWebinarWebinarIdIndexRoute:
+      publiclandingPagesResourcesWebinarWebinarIdIndexRoute,
   }
 
 const publiclandingPagesRouteRouteWithChildren =

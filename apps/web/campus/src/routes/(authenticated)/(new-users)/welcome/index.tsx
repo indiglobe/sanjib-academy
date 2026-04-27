@@ -1,4 +1,5 @@
-import WelcomeForm from "@/components/main/authenticated/welcome/welcome-form";
+import { Main } from "@/components/main/authenticated/main";
+import { WelcomeOnboarding } from "@/components/main/authenticated/welcome/welcome-onbording";
 import { fetchSession } from "@/lib/auth/session";
 import { formatName } from "@repo/utils/utility";
 import { createFileRoute } from "@tanstack/react-router";
@@ -22,5 +23,9 @@ export const Route = createFileRoute("/(authenticated)/(new-users)/welcome/")({
 });
 
 function RouteComponent() {
-  return <WelcomeForm />;
+  return (
+    <Main>
+      <WelcomeOnboarding />
+    </Main>
+  );
 }

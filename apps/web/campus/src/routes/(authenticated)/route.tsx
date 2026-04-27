@@ -1,5 +1,5 @@
 // import { authMiddleware } from "@/middleware/auth";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { BeforeLoadRouterContext } from "@/router";
 import { read__OneUserServerFn } from "@/integrations/server-functions/querry/users";
 import { fetchSession } from "@/lib/auth/session";
@@ -39,17 +39,13 @@ export const Route = createFileRoute("/(authenticated)")({
     // Add those details The context to use later
     return { session, userDetails } satisfies BeforeLoadRouterContext;
   },
-
-  // server: {
-  //   middleware: [],
-  // },
 });
 
 function RouteComponent() {
   return (
     <Main className={cn(`flex`)}>
-      {/* <Sidebar />
-      <Outlet /> */}
+      {/* <Sidebar /> */}
+      <Outlet />
     </Main>
   );
 }

@@ -10,7 +10,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     BETTER_AUTH_SECRET: z.string(),
-    BETTER_AUTH_URL: z.string(),
+    CAMPUS_BETTER_AUTH_URL: z.string(),
+    STORAGE_BETTER_AUTH_URL: z.string(),
     RAZOR_PAY_KEY: z.string(),
     RAZOR_PAY_SECRET: z.string(),
     REDIS_URL: z.string(),
@@ -23,7 +24,8 @@ export const env = createEnv({
   clientPrefix: "VITE_",
 
   client: {
-    VITE_APP_HOST: z.string(),
+    VITE_CAMPUS_APP_HOST: z.string(),
+    VITE_STORAGE_APP_HOST: z.string(),
     VITE_RAZOR_PAY_KEY: z.string(),
   },
 
