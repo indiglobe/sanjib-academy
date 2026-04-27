@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth/config";
 import { fromNodeHeaders } from "better-auth/node";
 import express from "express";
+import { authMiddleware } from "@/middlewares/auth.middleware";
 
 const router = express.Router();
 

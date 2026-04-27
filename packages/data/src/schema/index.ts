@@ -75,6 +75,7 @@ export type TableIdentifierToken =
 
 export const metricSuffixEnums = mysqlEnum("metric_suffix", ["+", "%"]);
 export const roleEnums = mysqlEnum("user_role", ["admin", "student", "basic"]);
+export const availabilityEnums = mysqlEnum("availability", ["paid", "free"]);
 export const tableIdentifierToken = mysqlEnum("table_identifier_token", [
   "BUSR",
   "CADV",
@@ -181,6 +182,7 @@ export const CourseDocumentTable = mysqlTable("course_document", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
+  availability: availabilityEnums.default("paid").notNull(),
 
   tableIdentifierToken: tableIdentifierToken.notNull().default("CDOC"),
 });
@@ -218,6 +220,7 @@ export const CourseVideoTable = mysqlTable("course_video", {
       onDelete: "cascade",
       onUpdate: "cascade",
     }),
+  availability: availabilityEnums.default("paid").notNull(),
 
   tableIdentifierToken: tableIdentifierToken.notNull().default("CVID"),
 });

@@ -52,7 +52,6 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
           </p>
 
           {/* Download Brochure Button */}
-          {console.log(courseDetails.brochureLink)!!}
           <a
             href={courseDetails.brochureLink}
             download
@@ -63,13 +62,14 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
           </a>
         </div>
 
+        {/* course metric content */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <MetricCard>
             <MetricCardIcon className="bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300">
               <BookOpen className="size-5" />
             </MetricCardIcon>
             <MetricCardContent>
-              <MetricCardLabel>Total Modules</MetricCardLabel>
+              <MetricCardLabel>Total Course Modules</MetricCardLabel>
               <MetricCardValue>{courseModules.length}</MetricCardValue>
             </MetricCardContent>
           </MetricCard>
@@ -94,76 +94,103 @@ export function CourseDetails({ className, ...props }: ComponentProps<"div">) {
             </MetricCardContent>
           </MetricCard>
         </div>
+        {/* course metric content */}
       </div>
 
-      {/* Modules */}
+      {/* CourseModules */}
       <div className="space-y-4">
         {courseModules.map((module, idx) => (
-          <ModuleCard
+          <CourseModule
             key={module.id}
             value={module.courseId}
             defaultOpen={idx + 1 === 1}
           >
-            <ModuleCardHeader>
-              <ModuleCardTitle>
+            <CourseModuleHeader>
+              <CourseModuleTitle>
                 {idx + 1}. {module.title}
-              </ModuleCardTitle>
-            </ModuleCardHeader>
+              </CourseModuleTitle>
+            </CourseModuleHeader>
 
-            {module.description && (
-              <ModuleCardContent>
-                <ModuleCardDescription>
-                  {module.description}
-                </ModuleCardDescription>
+            <CourseModuleDescription>
+              {module.description}
+            </CourseModuleDescription>
 
-                <div className={cn(`flex gap-4`)}>
-                  {module.videos.length > 0 && (
-                    <ModuleCardIncludes>
-                      <ModuleCardIncludeItem
-                        icon={PlayCircle}
-                        label={`${module.videos.length} Videos`}
-                      />
-                    </ModuleCardIncludes>
-                  )}
+            {/* MODULE ASSET OVERVIEW */}
+            <div className={cn(`flex gap-4`)}>
+              {module.videos.length > 0 && (
+                <CourseModuleAssetOverview>
+                  <CourseModuleAssetLabel>
+                    <span>
+                      <PlayCircle size={4} />
+                    </span>
+                    <span>{`${module.videos.length} Videos`}</span>
+                  </CourseModuleAssetLabel>
+                </CourseModuleAssetOverview>
+              )}
 
-                  {module.documents.length > 0 && (
-                    <ModuleCardIncludes>
-                      <ModuleCardIncludeItem
-                        icon={FileText}
-                        label={`${module.documents.length} Readings`}
-                      />
-                    </ModuleCardIncludes>
-                  )}
-                </div>
+              {module.documents.length > 0 && (
+                <CourseModuleAssetOverview>
+                  <CourseModuleAssetLabel>
+                    <span>
+                      <FileText size={4} />
+                    </span>
+                    <span>{`${module.documents.length} Readings`}</span>
+                  </CourseModuleAssetLabel>
+                </CourseModuleAssetOverview>
+              )}
+            </div>
 
-                {/* MEDIA GRID */}
-                <div className={cn(`mt-4 space-y-6`)}>
-                  {module.videos.length > 0 && (
-                    <MediaSection title="Videos">
-                      {module.videos.map((v) => (
-                        <VideoListItem key={v.id} video={v} />
-                      ))}
-                    </MediaSection>
-                  )}
+            <CourseModuleContent>
+              {/* module content starts where the module asset detail thumbnails are present */}
+              {/* MEDIA GRID */}
+              <div className={cn(`mt-4 space-y-2`)}>
+                {module.videos.length > 0 && (
+                  <ModuleMediaItemList>
+                    {module.videos.map((v) => (
+                      <Media>
+                        <Thumbnail src={v.thumbnailImage} />
+                        <MediaMetadata>
+                          <MediaTitle>{v.videoTitle}</MediaTitle>
+                          {v.videoDescription && (
+                            <MediaDescription>
+                              {v.videoDescription}
+                            </MediaDescription>
+                          )}
+                          <MediaType>Video</MediaType>
+                        </MediaMetadata>
+                      </Media>
+                    ))}
+                  </ModuleMediaItemList>
+                )}
 
-                  {module.documents.length > 0 && (
-                    <MediaSection title="Documents">
-                      {module.documents.map((d) => (
-                        <DocumentListItem key={d.id} document={d} />
-                      ))}
-                    </MediaSection>
-                  )}
-                </div>
-              </ModuleCardContent>
-            )}
-          </ModuleCard>
+                {module.documents.length > 0 && (
+                  <ModuleMediaItemList>
+                    {module.documents.map((d) => (
+                      <Media>
+                        <Thumbnail src={d.thumbnailImage} />
+                        <MediaMetadata>
+                          <MediaTitle>{d.documentTitle}</MediaTitle>
+                          {d.documentDescription && (
+                            <MediaDescription>
+                              {d.documentDescription}
+                            </MediaDescription>
+                          )}
+                          <MediaType>Document</MediaType>
+                        </MediaMetadata>
+                      </Media>
+                    ))}
+                  </ModuleMediaItemList>
+                )}
+              </div>
+              {/* module content ends where the module asset detail thumbnails are present */}
+            </CourseModuleContent>
+          </CourseModule>
         ))}
       </div>
+      {/* CourseModules */}
     </div>
   );
 }
-
-/* rest unchanged */
 
 export function MetricCard({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -201,7 +228,7 @@ export function MetricCardValue({ className, ...props }: ComponentProps<"p">) {
   return <p className={cn("text-lg font-semibold", className)} {...props} />;
 }
 
-export function ModuleCard({
+export function CourseModule({
   value,
   defaultOpen,
   className,
@@ -215,6 +242,7 @@ export function ModuleCard({
 } & ComponentProps<typeof AccordionItem>) {
   return (
     <Accordion
+      data-slot={`course-module`}
       type="single"
       collapsible
       defaultValue={defaultOpen ? value : undefined}
@@ -233,13 +261,14 @@ export function ModuleCard({
   );
 }
 
-export function ModuleCardHeader({
+export function CourseModuleHeader({
   className,
   children,
   ...props
 }: ComponentProps<"div">) {
   return (
     <div
+      data-slot={`course-module-header`}
       className={cn("flex w-full items-start justify-between", className)}
       {...props}
     >
@@ -248,13 +277,14 @@ export function ModuleCardHeader({
   );
 }
 
-export function ModuleCardTitle({
+export function CourseModuleTitle({
   className,
   children,
   ...props
 }: ComponentProps<typeof AccordionTrigger>) {
   return (
     <AccordionTrigger
+      data-slot={`course-module-title`}
       noIcon
       className={cn(
         "flex w-full items-start gap-3 p-0 hover:no-underline",
@@ -269,13 +299,14 @@ export function ModuleCardTitle({
   );
 }
 
-export function ModuleCardContent({
+export function CourseModuleContent({
   className,
   children,
   ...props
 }: ComponentProps<"div">) {
   return (
     <AccordionContent
+      data-slot={`course-module-content`}
       className={cn("mt-4 border-t pt-4", className)}
       {...props}
     >
@@ -284,19 +315,20 @@ export function ModuleCardContent({
   );
 }
 
-export function ModuleCardDescription({
+export function CourseModuleDescription({
   className,
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
+      data-slot={`course-module-description`}
       className={cn("text-sm text-zinc-600 dark:text-zinc-400", className)}
       {...props}
     />
   );
 }
 
-export function ModuleCardIncludes({
+export function CourseModuleAssetOverview({
   className,
   ...props
 }: ComponentProps<"div">) {
@@ -305,22 +337,22 @@ export function ModuleCardIncludes({
   );
 }
 
-export function ModuleCardIncludeItem({
-  icon: Icon,
-  label,
-}: {
-  icon: React.ElementType;
-  label: string;
-}) {
+export function CourseModuleAssetLabel({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <Icon className="size-4" />
-      {label}
-    </div>
+    <div
+      className={cn(
+        "text-foreground/70 flex items-center gap-2 text-sm",
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
-export function ModuleCardActions({
+export function CourseModuleActions({
   className,
   ...props
 }: ComponentProps<"div">) {
@@ -434,7 +466,7 @@ function MediaContent({
   );
 }
 
-export function VideoListItem({
+export function VideoItem({
   video,
 }: {
   video: {
@@ -499,32 +531,92 @@ export function DocumentListItem({
   );
 }
 
-export function MediaSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+export function ModuleMediaItemList({
+  className,
+  ...props
+}: ComponentProps<"div">) {
   return (
-    <div className={cn(`space-y-3`)}>
-      <div className={cn(`flex items-center justify-between`)}>
-        <p
-          className={cn(
-            `text-primary-900 dark:text-primary-100 text-sm font-medium`,
-          )}
-        >
-          {title}
-        </p>
+    <div
+      data-slot={`module-media-item-list`}
+      className={cn(`space-y-2`, className)}
+      {...props}
+    />
+  );
+}
 
-        <span
-          className={cn(
-            `bg-primary-200/60 dark:bg-primary-800/60 ml-3 h-px flex-1`,
-          )}
-        />
-      </div>
+// refractor
 
-      <div className={cn(`space-y-2`)}>{children}</div>
+export function Media({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        `group border-primary-500/40 dark:border-primary-500/40 bg-primary-100/30 dark:bg-primary-100/10 hover:bg-primary-100/70 dark:hover:bg-primary-100/30 flex items-start gap-4 rounded-lg border p-3 transition`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function Thumbnail({
+  className,
+  src,
+  ...props
+}: ComponentProps<"div"> & Pick<ComponentProps<typeof Image>, "src">) {
+  return (
+    <div
+      className={cn(`h-16 w-28 overflow-clip rounded-sm`, className)}
+      {...props}
+    >
+      <Image
+        layout="fullWidth"
+        src={src}
+        className={cn(
+          `h-full w-full object-cover transition group-hover:scale-105`,
+        )}
+      />
     </div>
+  );
+}
+
+export function MediaTitle({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p
+      className={cn(
+        `text-primary-500 dark:text-primary-900 text-sm font-medium`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function MediaDescription({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p
+      className={cn(
+        `text-primary-500/60 dark:text-primary-900/60 line-clamp-2 text-xs`,
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function MediaMetadata({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div className={cn(`flex flex-1 flex-col gap-1`, className)} {...props} />
+  );
+}
+
+export function MediaType({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p
+      className={cn(
+        `text-primary-700 dark:text-primary-300 mt-auto mb-0 text-xs`,
+        className,
+      )}
+      {...props}
+    />
   );
 }

@@ -15,10 +15,12 @@ export const authMiddleware = async (
     headers: fromNodeHeaders(req.headers),
   });
 
-  if (!session) {
-    const error = new AuthError();
-    next(error);
-  }
+  console.log(session);
+
+  // if (!session) {
+  //   const error = new AuthError();
+  //   next(error);
+  // }
 
   next();
 };

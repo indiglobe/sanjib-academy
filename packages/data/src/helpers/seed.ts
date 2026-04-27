@@ -79,7 +79,7 @@ async function seed() {
   ] as InsertUser[];
 
   // THIS IS EXTRA USERS DELETE IT LATER
-  const __dummyUsers = Array.from({ length: 2000 }, (_, idx) => {
+  const __dummyUsers = Array.from({ length: 200 }, (_, idx) => {
     const name = faker.person.fullName();
     return {
       email: `${name.split(" ").join(`_${idx}_`)}@email.com`,

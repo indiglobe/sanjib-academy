@@ -138,3 +138,17 @@ export const courseEnrolmentInputValidator = z.object({
 export type TCourseEnrolmentInputValidator = z.infer<
   typeof courseEnrolmentInputValidator
 >;
+
+/**
+ * Search params allowed for the `course-video` page
+ */
+export const courseVideoRouteSearchParams = z.object({
+  source: z.url(),
+});
+
+/**
+ * Inferred type for `course-video` search schema
+ */
+export type CourseVideoRouteSearchParams = z.infer<
+  typeof courseVideoRouteSearchParams
+>;
