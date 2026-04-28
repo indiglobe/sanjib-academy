@@ -116,7 +116,7 @@ function SigninForm({ className, ...props }: ComponentProps<"div">) {
 
   const callbackUrlWithHost = new URL(
     callbackUrl ?? "",
-    env.VITE_CAMPUS_APP_HOST,
+    import.meta.env.VITE_CAMPUS_APP_HOST,
   );
 
   Object.entries(restSearchParams).forEach(([key, value]) => {

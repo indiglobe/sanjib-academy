@@ -4,8 +4,8 @@ import { env } from "@repo/env";
 const isProd = process.env.NODE_ENV === "production";
 
 export const auth = betterAuth({
-  baseURL: env.CAMPUS_BETTER_AUTH_URL,
-  secret: env.BETTER_AUTH_SECRET,
+  baseURL: process.env.CAMPUS_BETTER_AUTH_URL,
+  secret: process.env.BETTER_AUTH_SECRET,
 
   session: {
     cookieCache: {
@@ -18,9 +18,9 @@ export const auth = betterAuth({
 
   socialProviders: {
     google: {
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-      redirectURI: `${env.CAMPUS_BETTER_AUTH_URL}/api/auth/callback/google`,
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      redirectURI: `${process.env.CAMPUS_BETTER_AUTH_URL}/api/auth/callback/google`,
     },
   },
 

@@ -27,7 +27,7 @@ export function useRazorpayClient() {
   const { Razorpay, error, isLoading } = useRazorpay();
 
   const DEFAULT_OPTIONS: DefaultRazorpayOptions = {
-    key: env.VITE_RAZOR_PAY_KEY,
+    key: import.meta.env.VITE_RAZOR_PAY_KEY,
     currency: "INR",
     name: "Sanjib Academy",
     theme: {

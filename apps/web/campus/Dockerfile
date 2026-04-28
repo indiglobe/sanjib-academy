@@ -12,6 +12,7 @@ COPY apps/web/socket/package.json ./apps/web/socket/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
+COPY packages/local-assets/package.json ./packages/local-assets/package.json
 
 # Install pnpm and all dependencies (dev + prod)
 RUN corepack enable
@@ -57,6 +58,7 @@ ENV \
 RUN pnpm build \
   --filter @repo/env \
   --filter @repo/data \
+  --filter @repo/local-assets \
   --filter @repo/utils
 
 # re-install to add local workspace dependencies files to projects
@@ -84,13 +86,15 @@ COPY apps/web/socket/package.json ./apps/web/socket/package.json
 COPY packages/env/package.json ./packages/env/package.json
 COPY packages/data/package.json ./packages/data/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
+COPY packages/local-assets/package.json ./packages/local-assets/package.json
 
 # Copy built output from builder
 COPY --from=builder /app/apps/web/campus/dist ./apps/web/campus/dist
-COPY --from=builder /app/apps/web/socket/dist ./apps/web/socket/dist
+# COPY --from=builder /app/apps/web/socket/dist ./apps/web/socket/dist
 COPY --from=builder /app/packages/env/dist ./packages/env/dist
 COPY --from=builder /app/packages/data/dist ./packages/data/dist
 COPY --from=builder /app/packages/utils/dist ./packages/utils/dist
+# COPY --from=builder /app/packages/local-assets/dist ./packages/local-assets/dist
 
 # # install prod deps
 RUN pnpm install --prod

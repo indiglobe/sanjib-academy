@@ -190,7 +190,8 @@ export default function RefundPolicy({
               📞 Phone: <a href="tel:+919876543210">987 654 3210</a>
             </li>
             <li>
-              🌐 Website: <a href={env.VITE_CAMPUS_APP_HOST}>Sanjib Academy</a>
+              🌐 Website:{" "}
+              <a href={import.meta.env.VITE_CAMPUS_APP_HOST}>Sanjib Academy</a>
             </li>
           </ul>
         </section>

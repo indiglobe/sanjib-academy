@@ -53,7 +53,7 @@ export function WebinarDetailsSection({
         webinarDetails: { id },
         requestInitiatedFrom: new URL(
           location.href,
-          env.VITE_CAMPUS_APP_HOST,
+          import.meta.env.VITE_CAMPUS_APP_HOST,
         ).toString(),
       },
     });

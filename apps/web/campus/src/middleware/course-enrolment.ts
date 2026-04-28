@@ -33,7 +33,7 @@ export const middleware__courseEnrolment = createMiddleware({
     } = parsedData;
 
     // Make the requestInitiatedFrom as a full URL with host name
-    requestInitiatedFrom = `${env.VITE_CAMPUS_APP_HOST}${requestInitiatedFrom}`;
+    requestInitiatedFrom = `${import.meta.env.VITE_CAMPUS_APP_HOST}${requestInitiatedFrom}`;
 
     // if no session that means the user is not signed in
     // so redirect them to the sign in page

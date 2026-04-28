@@ -69,5 +69,7 @@ function runtimeEnv() {
     Object.assign(env, import.meta.env);
   }
 
+  console.log(env);
+
   return env;
 }
